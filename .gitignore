@@ -1,0 +1,9 @@
+bin
+lib
+
+cmd/ptc
+
+*.def
+*.out
+*.sst
+*.o

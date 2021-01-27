@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# note: you need to paste your password a bunch of times
+
+# change this
+netid=16tlcb
+server=linux1.caslab.queensu.ca
+
+dirs_to_copy="
+    /caslab_linux/caslab/lib/pt
+    /caslab_linux/caslab/lib/ssl
+    /opt/caslab/lib/pt
+    /opt/caslab/lib/ssl
+"
+
+files_to_copy="
+    /caslab_linux/caslab/bin/ptc
+    /caslab_linux/caslab/bin/pti
+"
+
+for dir in $dirs_to_copy; do
+    sudo mkdir -p $dir
+    sudo rsync -r -e ssh \
+        ${netid}@${server}:$dir/ $dir
+done
+
+sudo mkdir -p /caslab_linux/caslab/bin
+for file in $files_to_copy; do
+    sudo scp ${netid}@${server}:$file $file
+done
+
+# copy into the regular place,
+# modifying $PATH seemed too annoying
+sudo cp /caslab_linux/caslab/bin/ptc /usr/local/bin/ptc
+sudo cp /caslab_linux/caslab/bin/pti /usr/local/bin/pti
