@@ -409,7 +409,10 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
         { misc. }
         tab = '	';
         blank = ' ';
-        quote = '''';
+        { Original Line  quote = '''';}
+		{ Change to double quotes}
+		{ Kept two double quotes to match original }
+		quote = '""';
         null = 0;
 
         { Phase identification values - for use by common routines }
