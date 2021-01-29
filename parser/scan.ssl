@@ -50,9 +50,9 @@ Output :
         %   separated from user defined identifiers by the Screener.
         %   This Scanner treats them all as identifiers.
         % pDiv old PT keyword 
-        firstKeywordToken = pDiv
         % pMod old PT keyword
         pOr
+        firstKeywordToken = pOr
         pAnd
         pNot
         pThen
@@ -191,12 +191,7 @@ Scan :
             | ',':
                 .pComma
             | ':':
-                [
-                    | '=':
-                        .pColonEquals
-                    | *:
-                        .pColon
-                ]
+                .pColon
             | lDigit:
                 oBufferSave
                 @Integer
