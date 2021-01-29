@@ -7,3 +7,5 @@ cmd/ptc
 *.out
 *.sst
 *.o
+
+test/**/*.output
