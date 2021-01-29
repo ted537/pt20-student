@@ -17,6 +17,7 @@ var
 if
 while
 repeat
+% new like keywords
 choose
 elseif
 fun
