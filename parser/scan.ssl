@@ -49,9 +49,9 @@ Output :
         %   Tokens pDiv through pRepeat are keywords which will be 
         %   separated from user defined identifiers by the Screener.
         %   This Scanner treats them all as identifiers.
-        pDiv 
+        % pDiv old PT keyword 
         firstKeywordToken = pDiv
-        pMod
+        % pMod old PT keyword
         pOr
         pAnd
         pNot
@@ -59,21 +59,34 @@ Output :
         pElse
         pOf
         pEnd
-        pUntil
-        pDo
-        pArray
+        % pUntil old PT keyword
+        % pDo old PT keyword
+        % pArray old PT keyword
         pFile
-        pProgram
-        pConst
+        % pProgram old PT keyword
+        % pConst old PT keyword
         pVar
-        pType
-        pProcedure
-        pBegin
+        % pType old PT keyword
+        % pProcedure old PT keyword
+        % pBegin old PT keyword
         pIf
-        pCase
+        % pCase old PT keyword
         pWhile
         pRepeat
-        lastKeywordToken = pRepeat
+
+        % new like keywords
+        pChoose
+        pElseIf
+        pFun
+        pIs
+        pLike
+        pPkg
+        pPublic
+        pUsing
+        pVal
+        pWhen
+
+        lastKeywordToken = pWhen
 
         % Scanner tokens -
         %   These are the tokens actually recognized by the Scanner itself.
@@ -93,7 +106,7 @@ Output :
         pPlus
         pMinus
         pStar
-        pColonEquals
+        % pColonEquals old PT token
         pDot
         pComma
         pSemicolon
@@ -108,8 +121,24 @@ Output :
         pRightParen
         pLeftBracket
         pRightBracket
+        % new like tokens
+        pSlash
+        pPercent
+        pHash
+        pOrBar
+        pDoubleOrBar
+        pPlusEquals
+        pMinusEquals
+        pStarEquals
+        pSlashEquals
+        pPercentEquals
+        pDoubleEquals
+        % from both like and PT
         pDotDot
+
+
         lastSyntaxToken = pDotDot;
+
 
 Error :
         eIllegalChar = 5
