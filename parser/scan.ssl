@@ -106,7 +106,7 @@ Output :
         pPlus
         pMinus
         pStar
-        pColonEquals
+        % pColonEquals old PT token
         pDot
         pComma
         pSemicolon
@@ -121,7 +121,22 @@ Output :
         pRightParen
         pLeftBracket
         pRightBracket
+        % new like tokens
+        pSlash
+        pPercent
+        pHash
+        pOrBar
+        pDoubleOrBar
+        pPlusEquals
+        pMinusEquals
+        pStarEquals
+        pSlashEquals
+        pPercentEquals
+        pDoubleEquals
+        % from both like and PT
         pDotDot
+
+
         lastSyntaxToken = pDotDot;
 
 
