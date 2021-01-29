@@ -86,7 +86,7 @@ Output :
         pVal
         pWhen
 
-        lastKeywordToken = pRepeat
+        lastKeywordToken = pWhen
 
         % Scanner tokens -
         %   These are the tokens actually recognized by the Scanner itself.
