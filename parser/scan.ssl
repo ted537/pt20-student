@@ -35,12 +35,13 @@ Input :
         lRightBracket   ']'
         lLeftBrace      '{'
         lRightBrace     '}'
-        { new Like input tokens }
+        % new Like input tokens
         lSlash          '/'
         lPercent        '%'
         lHash           '#'
         lBang           '!'
         lOrBar          '|'
+        % end of new like input tokens
         lBlank
         lIllegal
         lNewLine
