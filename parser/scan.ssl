@@ -73,6 +73,19 @@ Output :
         % pCase old PT keyword
         pWhile
         pRepeat
+
+        % new like keywords
+        pChoose
+        pElseIf
+        pFun
+        pIs
+        pLike
+        pPkg
+        pPublic
+        pUsing
+        pVal
+        pWhen
+
         lastKeywordToken = pRepeat
 
         % Scanner tokens -
@@ -110,6 +123,7 @@ Output :
         pRightBracket
         pDotDot
         lastSyntaxToken = pDotDot;
+
 
 Error :
         eIllegalChar = 5
