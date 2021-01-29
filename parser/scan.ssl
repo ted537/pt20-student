@@ -49,9 +49,9 @@ Output :
         %   Tokens pDiv through pRepeat are keywords which will be 
         %   separated from user defined identifiers by the Screener.
         %   This Scanner treats them all as identifiers.
-        pDiv 
+        % pDiv old PT keyword 
         firstKeywordToken = pDiv
-        pMod
+        % pMod old PT keyword
         pOr
         pAnd
         pNot
@@ -59,18 +59,18 @@ Output :
         pElse
         pOf
         pEnd
-        pUntil
-        pDo
-        pArray
+        % pUntil old PT keyword
+        % pDo old PT keyword
+        % pArray old PT keyword
         pFile
-        pProgram
-        pConst
+        % pProgram old PT keyword
+        % pConst old PT keyword
         pVar
-        pType
-        pProcedure
-        pBegin
+        % pType old PT keyword
+        % pProcedure old PT keyword
+        % pBegin old PT keyword
         pIf
-        pCase
+        % pCase old PT keyword
         pWhile
         pRepeat
         lastKeywordToken = pRepeat
