@@ -16,6 +16,7 @@ dirs_to_copy="
 files_to_copy="
     /caslab_linux/caslab/bin/ptc
     /caslab_linux/caslab/bin/pti
+    /caslab_linux/caslab/bin/ssltrace
 "
 
 for dir in $dirs_to_copy; do
@@ -25,12 +26,13 @@ for dir in $dirs_to_copy; do
 done
 
 sudo mkdir -p /caslab_linux/caslab/bin
-for file in $files_to_copy; do
+for file in $files_to_copy; do 3
     sudo scp ${netid}@${server}:$file $file
 done
 
 # get tools on PATH via symbolic links
 sudo ln -s /caslab_linux/caslab/bin/ptc /usr/local/bin/ptc
 sudo ln -s /caslab_linux/caslab/bin/pti /usr/local/bin/pti
+sudo ln -s /caslab_linux/caslab/bin/ssltrace /usr/local/bin/ssltrace
 sudo ln -s /opt/caslab/lib/pt /usr/local/lib/pt
-sudo ln -s /opt/caslab/lib/ssl /usr/local/lib/ssl
+sudo ln -s /opt/caslab/lib/ssl /usr/local/lib/sslr
