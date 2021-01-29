@@ -272,8 +272,12 @@ StringLiteral :
         % Assemble a literal string token
 
         {[
+			% Doesn't this already support null strings 
+			% Input sequence (lQuote, lQuote, *) would give output of null string?
             | lQuote:
                 [
+					% Pascal allows strings to have quotes in them by using double quotes
+					% Example: Writeln('I''m here'); //prints: I'm here
                     | lQuote:
                         oBufferSave
                     | *:
