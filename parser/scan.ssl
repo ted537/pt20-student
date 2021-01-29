@@ -25,7 +25,7 @@ Input :
         lDot            '.'
         lComma          ','
         lSemicolon      ';'
-        lQuote
+        lQuote          '"'
         lBackslash
         lLeftAngle      '<'
         lRightAngle     '>'
@@ -35,6 +35,12 @@ Input :
         lRightBracket   ']'
         lLeftBrace      '{'
         lRightBrace     '}'
+        { new Like input tokens }
+        lSlash          '/'
+        lPercent        '%'
+        lHash           '#'
+        lBang           '!'
+        lOrBar          '|'
         lBlank
         lIllegal
         lNewLine
