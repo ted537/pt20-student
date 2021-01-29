@@ -29,7 +29,8 @@ for file in $files_to_copy; do
     sudo scp ${netid}@${server}:$file $file
 done
 
-# copy into the regular place,
-# modifying $PATH seemed too annoying
-sudo cp /caslab_linux/caslab/bin/ptc /usr/local/bin/ptc
-sudo cp /caslab_linux/caslab/bin/pti /usr/local/bin/pti
+# get tools on PATH via symbolic links
+sudo ln -s /caslab_linux/caslab/bin/ptc /usr/local/bin/ptc
+sudo ln -s /caslab_linux/caslab/bin/pti /usr/local/bin/pti
+sudo ln -s /opt/caslab/lib/pt /usr/local/lib/pt
+sudo ln -s /opt/caslab/lib/ssl /usr/local/lib/ssl
