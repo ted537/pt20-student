@@ -1,5 +1,7 @@
 test_cases="
     parser/string-literal
+    
+    parser/keyword/remove-array
 "
 
 # generate outputs
