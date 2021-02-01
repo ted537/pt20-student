@@ -26,7 +26,7 @@ for dir in $dirs_to_copy; do
 done
 
 sudo mkdir -p /caslab_linux/caslab/bin
-for file in $files_to_copy; do 3
+for file in $files_to_copy; do
     sudo scp ${netid}@${server}:$file $file
 done
 
