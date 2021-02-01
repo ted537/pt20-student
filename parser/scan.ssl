@@ -205,13 +205,28 @@ Scan :
                     | *:
                 ]
             | '=':
-                .pEquals
+                [
+                    | '=':
+                        .pDoubleEquals
+                    | *:
+                        .pEquals
+                ]
             | '+':
-                .pPlus
+                [
+                    | '=':
+                        .pPlusEquals
+                    | *:
+                        .pPlus
+                ]
             | lQuote:
                 @StringLiteral
             | '-':
-                .pMinus
+                [
+                    | '=':
+                        .pMinusEquals
+                    | *:
+                        .pMinus
+                ]
             | '.':
                 [
                     | '.':
@@ -241,11 +256,34 @@ Scan :
 						@Comment
 					| '*':
 						@AlternateComment
-					| *:
-						.pSlash
+					| '=':
+						.pSlashEquals
+                    | *:
+                        .pSlash
 				]
             | '*':
-                .pStar
+                [
+                    | '=':
+                        .pStarEquals
+                    | *:
+                        .pStar
+                ]
+            | '%':
+                [
+                    | '=':
+                        .pPercentEquals
+                    | *:
+                        .pPercent
+                ]
+            | '#':
+                .pHash
+            | '|':
+                [
+                    | '|':
+                        .pDoubleOrBar
+                    | *:
+                        .pOrBar
+                ]
             | lNewPage:
             | lEndFile:
                 .pEndFile
