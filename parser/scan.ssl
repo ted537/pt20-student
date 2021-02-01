@@ -251,13 +251,13 @@ Scan :
                         .pGreater
                 ]
             | '/':
-				[
-					| '/':
-						@Comment
-					| '*':
-						@AlternateComment
-					| '=':
-						.pSlashEquals
+		[
+		    | '/':
+			@Comment
+		    | '*':
+			@AlternateComment
+		    | '=':
+			.pSlashEquals
                     | *:
                         .pSlash
 				]
