@@ -1,8 +1,6 @@
 test_cases="
-    parser/string-literal
+    scanner/string-literal
     
-    parser/keyword/remove-array
-    parser/keyword/add-choose
 "
 
 # generate outputs
