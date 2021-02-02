@@ -132,6 +132,7 @@ Output :
         pSlash
         pPercent
         pHash
+        pBang
         pOrBar
         pDoubleOrBar
         pPlusEquals
@@ -277,6 +278,8 @@ Scan :
                 ]
             | '#':
                 .pHash
+            | '!':
+                .pBang
             | '|':
                 [
                     | '|':
