@@ -1,0 +1,16 @@
+% Output obtained by running:
+% ssltrace "ptc -o1 -t1 -L lib/pt new_like_tokens_test.pt" lib/pt/scan.def -e
+
+ .pSlash
+ .pPercent
+ .pHash
+ .pBang
+ .pOrBar
+ .pDoubleOrBar
+ .pPlusEquals
+ .pMinusEquals
+ .pStarEquals
+ .pSlashEquals
+ .pPercentEquals
+ .pDoubleEquals
+ .pEndFile
