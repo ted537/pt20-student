@@ -145,16 +145,17 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
         pSlash = 44;
         pPercent = 45;
         pHash = 46;
-        pOrBar = 47;
-        pDoubleOrBar = 48;
-        pPlusEquals = 49;
-        pMinusEquals = 50;
-        pStarEquals = 51;
-        pSlashEquals = 52;
-        pPercentEquals = 53;
-        pDoubleEquals = 54;
-        pDotDot = 55;
-        lastSyntaxToken = 55;
+        pBang = 47;
+        pOrBar = 48;
+        pDoubleOrBar = 49;
+        pPlusEquals = 50;
+        pMinusEquals = 51;
+        pStarEquals = 52;
+        pSlashEquals = 53;
+        pPercentEquals = 54;
+        pDoubleEquals = 55;
+        pDotDot = 56;
+        lastSyntaxToken = 56;
 
         { Input/Output Tokens }
 
@@ -171,17 +172,18 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
 
         { S/SL Rule Table Addresses } {
         Scan = 0;
-        Identifier = 203;
-        AlternateComment = 316;
-        Integer = 220;
-        StringLiteral = 235;
-        Comment = 287;
+        Identifier = 293;
+        Integer = 310;
+        StringLiteral = 325;
+        Comment = 377;
+        AlternateComment = 400;
         }
 
         { S/SL Table Parameters }
-        sslTblSize = 352;
+        sslTblSize = 436;
         minSslTableValue = -32767;
         maxSslTableValue = 32767;
+
 
 { ===== End of contents of scan.def }
 

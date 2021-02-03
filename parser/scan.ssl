@@ -132,6 +132,7 @@ Output :
         pSlash
         pPercent
         pHash
+        pBang
         pOrBar
         pDoubleOrBar
         pPlusEquals
@@ -205,13 +206,28 @@ Scan :
                     | *:
                 ]
             | '=':
-                .pEquals
+                [
+                    | '=':
+                        .pDoubleEquals
+                    | *:
+                        .pEquals
+                ]
             | '+':
-                .pPlus
+                [
+                    | '=':
+                        .pPlusEquals
+                    | *:
+                        .pPlus
+                ]
             | lQuote:
                 @StringLiteral
             | '-':
-                .pMinus
+                [
+                    | '=':
+                        .pMinusEquals
+                    | *:
+                        .pMinus
+                ]
             | '.':
                 [
                     | '.':
@@ -236,16 +252,41 @@ Scan :
                         .pGreater
                 ]
             | '/':
-				[
-					| '/':
-						@Comment
-					| '*':
-						@AlternateComment
-					| *:
-						.pSlash
+		[
+		    | '/':
+			@Comment
+		    | '*':
+			@AlternateComment
+		    | '=':
+			.pSlashEquals
+                    | *:
+                        .pSlash
 				]
             | '*':
-                .pStar
+                [
+                    | '=':
+                        .pStarEquals
+                    | *:
+                        .pStar
+                ]
+            | '%':
+                [
+                    | '=':
+                        .pPercentEquals
+                    | *:
+                        .pPercent
+                ]
+            | '#':
+                .pHash
+            | '!':
+                .pBang
+            | '|':
+                [
+                    | '|':
+                        .pDoubleOrBar
+                    | *:
+                        .pOrBar
+                ]
             | lNewPage:
             | lEndFile:
                 .pEndFile
