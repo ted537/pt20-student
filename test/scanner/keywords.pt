@@ -1,4 +1,4 @@
-// old keywords
+"old keywords"
 array
 begin
 case
@@ -11,7 +11,7 @@ program
 type
 until
 
-// new keywords
+"new keywords"
 choose
 elseif
 fun
@@ -22,15 +22,3 @@ public
 using
 val
 when
-
-// old IO names
-write
-writeln
-read
-readln
-
-// new IO names
-put
-putln
-get
-getln

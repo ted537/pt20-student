@@ -1,0 +1,60 @@
+  .pStringLiteral
+  % Output token text 'old keywords'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'array'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'begin'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'case'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'const'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'div'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'do'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'mod'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'procedure'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'program'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'type'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'until'
+ .pNewLine
+ .pNewLine
+  .pStringLiteral
+  % Output token text 'new keywords'
+ .pNewLine
+  .pIdentifier (screened to pChoose)
+ .pNewLine
+  .pIdentifier (screened to pElseIf)
+ .pNewLine
+  .pIdentifier (screened to pFun)
+ .pNewLine
+  .pIdentifier (screened to pIs)
+ .pNewLine
+  .pIdentifier (screened to pLike)
+ .pNewLine
+  .pIdentifier (screened to pPkg)
+ .pNewLine
+  .pIdentifier (screened to pPublic)
+ .pNewLine
+  .pIdentifier (screened to pUsing)
+ .pNewLine
+  .pIdentifier (screened to pVal)
+ .pNewLine
+  .pIdentifier (screened to pWhen)
+ .pEndFile
