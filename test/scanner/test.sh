@@ -1,6 +1,6 @@
 test_cases="
     scanner/string-literal
-    
+    scanner/keywords
 "
 
 # generate outputs

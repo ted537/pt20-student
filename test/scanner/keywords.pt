@@ -1,0 +1,36 @@
+// old keywords
+array
+begin
+case
+const
+div
+do
+mod
+procedure
+program
+type
+until
+
+// new keywords
+choose
+elseif
+fun
+is
+like
+pkg
+public
+using
+val
+when
+
+// old IO names
+write
+writeln
+read
+readln
+
+// new IO names
+put
+putln
+get
+getln
