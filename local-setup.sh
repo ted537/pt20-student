@@ -16,6 +16,7 @@ dirs_to_copy="
 files_to_copy="
     /caslab_linux/caslab/bin/ptc
     /caslab_linux/caslab/bin/pti
+    /caslab_linux/caslab/bin/ssl
     /caslab_linux/caslab/bin/ssltrace
 "
 
@@ -33,6 +34,8 @@ done
 # get tools on PATH via symbolic links
 sudo ln -s /caslab_linux/caslab/bin/ptc /usr/local/bin/ptc
 sudo ln -s /caslab_linux/caslab/bin/pti /usr/local/bin/pti
+sudo ln -s /caslab_linux/caslab/bin/ssl /usr/local/bin/ssl
 sudo ln -s /caslab_linux/caslab/bin/ssltrace /usr/local/bin/ssltrace
 sudo ln -s /opt/caslab/lib/pt /usr/local/lib/pt
-sudo ln -s /opt/caslab/lib/ssl /usr/local/lib/sslr
+
+mkdir lib bin
