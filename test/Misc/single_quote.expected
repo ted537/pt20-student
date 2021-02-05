@@ -1,0 +1,10 @@
+ % Output obtained by running
+ ssltrace "ptc -o1 -t1 -L lib/pt test/single_quote.pt" lib/pt/scan.def -e
+ 
+ 
+ #eIllegalChar
+  .pIdentifier
+  % Output token text 'hello'
+ #eIllegalChar
+ .pNewLine
+ .pEndFile
