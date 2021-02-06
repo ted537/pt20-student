@@ -1,6 +1,0 @@
-% Output obtained by running
-ssltrace "ptc -o1 -t1 -L lib/pt test/null_string.pt" lib/pt/scan.def -e  
-  
-  .pStringLiteral
-  % Output token text ''
- .pEndFile
