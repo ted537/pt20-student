@@ -1,6 +1,3 @@
- % Obtained by running 
-  ssltrace "ptc -o1 -t1 -L lib/pt test/valid_string.pt" lib/pt/scan.def -e
-
   .pStringLiteral
   % Output token text 'hello'
  .pEndFile
