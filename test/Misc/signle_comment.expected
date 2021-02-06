@@ -1,0 +1,4 @@
+ % Output obtained by running
+ ssltrace "ptc -o1 -t1 -L lib/pt test/single_comment.pt" lib/pt/scan.def -e
+ 
+  .pEndFile
