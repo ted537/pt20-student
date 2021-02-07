@@ -10,4 +10,5 @@
  .pSlashEquals
  .pPercentEquals
  .pDoubleEquals
+ .pNewLine
  .pEndFile
