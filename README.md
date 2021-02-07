@@ -1,9 +1,8 @@
-# Installation (ubuntnu)
+# Local Setup
 
-Download the relevant files from CASLAB by using `./local-setup.sh`
+Linux systems should be able to mimic CASLAB via this [link](https://drive.google.com/file/d/11o54MOxG701VUkKtPImMkCZmIiStxfto/view?usp=sharing).
+`sudo apt install gcc-multilib` may also be required due to a `-m32` flag.
 
-If you get an error about gcc, then run
-`sudo apt-get install gcc-multilib`.
+# Testing
 
-When running make, DO NOT run `make install`, as this will overwrite the
-stable binaries for `ptc` and `pti`. 
+Run `./test-all.sh`

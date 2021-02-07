@@ -1,2 +1,0 @@
-#!/bin/bash
-../bin/ptc -I -L ../lib/pt $*
