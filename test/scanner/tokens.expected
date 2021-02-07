@@ -1,0 +1,13 @@
+ .pSlash
+ .pPercent
+ .pHash
+ .pBang
+ .pOrBar
+ .pDoubleOrBar
+ .pPlusEquals
+ .pMinusEquals
+ .pStarEquals
+ .pSlashEquals
+ .pPercentEquals
+ .pDoubleEquals
+ .pEndFile
