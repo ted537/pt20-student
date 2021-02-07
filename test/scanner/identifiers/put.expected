@@ -1,4 +1,4 @@
-.pIdentifier
-% Output token text 'put'
-.pNewLine
-.pEndFile
+  .pIdentifier
+  % Output token text 'put'
+ .pNewLine
+ .pEndFile

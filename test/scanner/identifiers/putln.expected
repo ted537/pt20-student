@@ -1,4 +1,4 @@
-.pIdentifier
-% Output token text 'putin'
-.pNewLine
-.pEndFile
+  .pIdentifier
+  % Output token text 'putln'
+ .pNewLine
+ .pEndFile
