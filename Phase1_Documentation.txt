@@ -1,0 +1,123 @@
+In stdIdentifiers, in the language keywords section:
+Added new Like keywords.
+choose
+elseif
+fun
+is
+like
+pkg
+public
+using
+val
+when
+As a result of these changes, the input section of parser.ssl and the output section of scan.ssl had to be changed to match the addition of the new like keywords. These changes were made to reflect the keywords used in Like.
+
+In stdIdentifiers, in the language keywords section:
+Removed keywords used in Pascal but not in Like.
+array
+begin
+case
+const
+div
+do
+mod
+procedure
+program
+type
+until
+As a result of these changes, the input section of parser.ssl and the output section of scan.ssl had to be changed to match the addition of the new like keywords. These changes were made as these keywords were no longer used in Like.
+
+In stdIdentifiers, in the predeclared procedures section:
+Added new Like identifiers and removed old Pascal identifiers
+Added:
+get
+getln
+put
+putln
+Removed:
+read
+readln
+write
+writeln
+This change was made to reflect the specfications of the Like language
+
+In scan.ssl, in the StringLiteral rule:
+Updated StringLiteral and lQuote to accept double quotes (") to represent a string instead of single quotes (') in Pascal. Done by changing symbolic synonym of lquote to "
+lQuote          '"'
+This was done as Like string literals are defined by double quotes, not single quotes like in Pascal.
+
+In scan.ssl, in the scan rule:
+Added a choice to '/' to account for new comment structure. If a double slash or slash and star are found, create a comment.
+| '/':
+    [
+        | '/':
+	    @Comment
+	| '*':
+	    @AlternateComment
+	| '=':
+	    .pSlashEquals
+        | *:
+            .pSlash
+    ]
+Another addition that needed to be made to account for this change was updating @AlternateComment. @Comment could stay the same as the structure of a comment was the same. This choice had to be added to accept the new comment structure of Like
+
+In scan.ssl, in the AlternateComment rule:
+updated AlternateComment to check for */ to end the comment intead of *) as in Pascal to reflect new Like comment structure.
+AlternateComment :
+    {[
+        | '*':
+            [
+                | '/':
+                    >
+                | *:
+            ]
+    ...
+This addition allows the scanner to accept the new comments for Like.
+
+
+In scan.ssl, in the input section:
+Added input characters lSlash, lPercent, lHash, lBang, lOrBar along with their matching string literal synonyms (e.g. lSlash          '/').
+As a result of these additions, the initialize procedure in parser.pt needed to be changed
+These were added as these characters are new to the Like language.
+
+In scan.ssl, in the output section:
+Added output tokens for the new Like characters.
+	pSlash
+        pPercent
+        pHash
+        pBang
+        pOrBar
+        pDoubleOrBar
+        pPlusEquals
+        pMinusEquals
+        pStarEquals
+        pSlashEquals
+        pPercentEquals
+        pDoubleEquals
+As a result of these additions, the scan rule in scan.ssl needed to be updated
+These were added as these are new output tokens to the Like language
+
+In scan.ssl, in the scan rule
+Updated choices to look for new input characters (e.g. lSlash) and the provided output keyword. Sample code shown below:
+| '|':
+    [
+        | '|':
+            .pDoubleOrBar
+           | *:
+            .pOrBar
+    ]
+This update was necessary for the scan rule to recognize all new Like characters and multicharacter tokens such as (%= as pPercentEquals)
+
+In parser.pt, semantic operations section contained within comments for pasted content of scan.def
+Pasted the contents of scan.def from running make scanner after adding all new input and output tokens to scan.ssl. 
+This is so the parser knows of all characters that are being recognized and output from scan.ssl
+
+In parser.pt, in the procedure Initialize section
+The charClassMap definition was updated with the new Like characters as shown below
+	    charClassMap[ord('/')] := lSlash;
+            charClassMap[ord('%')] := lPercent;
+            charClassMap[ord('#')] := lHash;
+            charClassMap[ord('!')] := lBang;
+            charClassMap[ord('|')] := lOrBar;
+This is so the character class map for all symbolic synonyms is corrected mapped to the input token as defined for the Like language
+
