@@ -1,0 +1,35 @@
+All test cases are contained in the /test/scanner directory
+Each test case has a .pt and .expected file
+	The .pt file is the PT Pascal program run to test a specific case
+	The .expected file is the expected output from this test case
+All test cases were ran and gave their expected output which can be seen in the .expected file
+
+multi_comment.pt	
+	Test that the new Like comments of form (/*  comment  */) were recognized by the scanner
+	
+single_comment.pt
+	Test that the new Like comments of form (// hello) were recognized by the scanner
+	
+The .pt files in /test/scanner/identifiers tests that the new Like identifiers are recognized
+A new Like keyword is tested in get.pt
+	The output shows that it is recognized as an identifier
+An old PT Pascal keyword (ex. write) is still recognized as an identifier
+
+
+null_string.pt
+	Test that null strings are allowed in Like scanner
+	
+single_quote.pt
+	Test that old string syntax ('hello') is no longer recognized by scanner
+	
+string_literal.pt and valid_string.pt
+	Test that new string syntax ("hello") is recognized by scanner
+
+keywords.pt
+	Test both old and new keywords
+	Old keywords are recognized just as identifiers and are not screened to anything
+	New keywords are recognized as keywords and are screened (ex. choose is screened to pChoose)
+	
+tokens.pt
+	Tests all the new tokens added in Like (ex. +=)
+	Check that each token is recognized (ex. += is recognized as .pPlusEquals)
