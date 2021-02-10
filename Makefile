@@ -2,6 +2,7 @@
 # Usage:  make 
 
 all:
+	mkdir -p bin lib/pt
 	cd cmd; make $(ACTION)
 	cd parser; make $(ACTION)
 	cd semantic; make $(ACTION)
@@ -10,6 +11,7 @@ all:
 	cd ptam; make $(ACTION)
 
 scanner:
+	mkdir -p bin lib/pt
 	cd cmd; make $(ACTION)
 	cd parser; make scanner
 
