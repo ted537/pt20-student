@@ -162,7 +162,8 @@ Output :
 rules
 
 Program : 
-		.sEndOfFile;
+		.sProgram
+		.sEnd;
 
 %         'program'  .sProgram
 %         % program name
@@ -574,4 +575,4 @@ Program :
 %             | *:
 %         ];
 % 
-% end
+end
