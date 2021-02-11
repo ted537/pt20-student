@@ -115,15 +115,15 @@ Output :
         sParmEnd
         sConst
         % sType old PT token
-		% new Like tokens
-		sPackage
-		sPublic
-		sConcatenate
-		sRepeatString
-		sSubstring
-		sLength
-		sInitialValue
-		sCaseElse
+        % new Like tokens
+        sPackage
+        sPublic
+        sConcatenate
+        sRepeatString
+        sSubstring
+        sLength
+        sInitialValue
+        sCaseElse
 
         sVar
         sProcedure
