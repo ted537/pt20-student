@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-# Given a test case such as "test/scanner/keywords",
-# generates "test/scanner/keywords.output"
-# and compares it to "test/scanner/keywords.expected"
+# Given a test case such as "test/parser/keywords",
+# generates "test/parser/keywords.output"
+# and compares it to "test/parser/keywords.expected"
 
 test_case=$1
 
-ptc_command="./bin/ptc -o1 -t1 -L lib/pt $test_case.pt"
+ptc_command="./bin/ptc -o2 -t2 -L lib/pt $test_case.pt"
 # write stdout to file, ignore stderr
-ssltrace "$ptc_command" lib/pt/scan.def -e \
+ssltrace "$ptc_command" lib/pt/parser.def -e \
     > $test_case.output \
     2> /dev/null
 
