@@ -127,6 +127,9 @@ parser.consistency: scan.sst parser.sst parser.pt
 	    echo "ERROR: Parser semantic token definitions out of date. Update parser.pt with new definitions from parser.def." ; \
 	    exit 7 ; \
 	fi
+
+parser.pt: parser.template.pt scan.sst parser.sst parser.def scan.def
+	../include.sh parser.template.pt > parser.pt
 	
 parser: parser.out parser.sst parser.def scan.sst scan.def stdIdentifiers
 	/bin/cp parser.out parser.sst parser.def scan.sst scan.def stdIdentifiers ../lib/pt
