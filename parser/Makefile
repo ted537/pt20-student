@@ -128,7 +128,10 @@ parser.consistency: scan.sst parser.sst parser.pt
 	    exit 7 ; \
 	fi
 
-parser.pt: parser.template.pt scan.sst parser.sst parser.def scan.def
+parser.def: parser.sst
+scan.def: scan.sst
+
+parser.pt: parser.template.pt parser.def scan.def
 	../include.sh parser.template.pt > parser.pt
 	
 parser: parser.out parser.sst parser.def scan.sst scan.def stdIdentifiers
