@@ -4,6 +4,7 @@ bin
 lib
 
 cmd/ptc
+parser/parser.pt
 
 *.def
 *.out
