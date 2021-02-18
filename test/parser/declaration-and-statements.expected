@@ -1,0 +1,6 @@
+ sProgram
+ sIdentifier <identifier index for 'output'>
+ sParmEnd
+ sBegin
+    stringLiteral "DeclarationAndStatements"
+ sEnd

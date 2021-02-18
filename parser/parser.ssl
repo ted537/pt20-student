@@ -172,8 +172,24 @@ Output :
 rules
 
 Program : 
-		.sProgram
-		.sEnd;
+        .sProgram
+        @Block
+        ;
+Block:
+        .sBegin
+        {
+            [
+                | pIdentifier:
+                    @AssignmentOrCallStmtOrVariableDeclaration
+                % put other statements here
+                | *:
+                    .sNullStmt
+                    >
+            ]
+        }
+        .sEnd;
+
+AssignmentOrCallStmtOrVariableDeclaration: ;
 
 %         'program'  .sProgram
 %         % program name
