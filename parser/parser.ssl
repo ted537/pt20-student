@@ -192,33 +192,33 @@ Program :
 %         .sParmEnd
 %         ';'  @Block  '.';
 
-% Block :
-%         % Strictly speaking, standard Pascal requires that declarations
-%         % appear only in the order consts, types, vars, procedures.
-%         % We allow arbitrary intermixing of these instead to preserve
-%         % programmer sanity.
-%         {[
-%             | 'const':
-%                 .sConst
-%                 @ConstantDefinitions
-%             | 'type':
-%                 .sType
-%                 @TypeDefinitions
-%             | 'var':
-%                 .sVar
-%                 @VariableDeclarations
-%             | 'procedure':
-%                 .sProcedure
-%                 % procedure name
-%                 pIdentifier  .sIdentifier
-%                 @ProcedureHeading
-%                 @Block  ';'
-%             | *:
-%                 >
-%         ]}
-%         'begin'
-%         @BeginStmt;
-% 
+Block :
+        % Strictly speaking, standard Pascal requires that declarations
+        % appear only in the order consts, types, vars, procedures.
+        % We allow arbitrary intermixing of these instead to preserve
+        % programmer sanity.
+        {[
+            | 'val':
+                .sConst
+                @ConstantDefinitions
+            | 'type':
+                .sType
+                @TypeDefinitions
+            | 'var':
+                .sVar
+                @VariableDeclarations
+            | 'procedure':
+                .sProcedure
+                % procedure name
+                pIdentifier  .sIdentifier
+                @ProcedureHeading
+                @Block  ';'
+            | *:
+                >
+        ]}
+        'begin'
+        @BeginStmt;
+
 % ConstantDefinitions :
 %         % Accept one or more named constant definitions
 %         pIdentifier  .sIdentifier
@@ -230,29 +230,42 @@ Program :
 %             | *:
 %                 >
 %         ]};
-% 
-% ConstantValue :
-%         [
-%             | pInteger:
-%                 .sInteger
-%             | pIdentifier:
-%                 .sIdentifier
-%             | '-':
-%                 @UnsignedIntegerConstant
-%                 .sNegate
-%             | '+':
-%                 @UnsignedIntegerConstant
-%             | pStringLiteral:
-%                 .sStringLiteral
-%         ];
-% 
-% UnsignedIntegerConstant :
-%         [
-%             | pIdentifier:
-%                 .sIdentifier
-%             | pInteger:
-%                 .sInteger
-%         ];
+
+ConstantDefinitions :
+        % Accept one or more named constant definitions
+        pIdentifier  .sIdentifier
+        '=' @ConstantValue
+        {[
+            | ',': % multiple constant definitions
+                pIdentifier .sIdentifier
+                '=' @ConstantValue
+            | *:
+                >
+        ]}
+        ';'; % must end in a semicolon
+
+ConstantValue :
+        [
+            | pInteger:
+                .sInteger
+            | pIdentifier:
+                .sIdentifier
+            | '-':
+                @UnsignedIntegerConstant
+                .sNegate
+            | '+':
+                @UnsignedIntegerConstant
+            | pStringLiteral:
+                .sStringLiteral
+        ];
+
+UnsignedIntegerConstant :
+        [
+            | pIdentifier:
+                .sIdentifier
+            | pInteger:
+                .sInteger
+        ];
 % 
 % TypeDefinitions :
 %         % Accept one or more named type definitions.
