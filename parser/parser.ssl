@@ -99,6 +99,7 @@ Input :
         pSlashEquals '/='
         pPercentEquals '%='
         pDoubleEquals '=='
+        
         pDotDot '..'
         lastSyntaxToken = pDotDot;
 
@@ -165,6 +166,7 @@ Output :
         sAnd
         sNot
         sNewLine
+
         sEndOfFile
         lastSemanticToken = sEndOfFile;
 
@@ -173,6 +175,7 @@ rules
 
 Program : 
         .sProgram
+        @UsingStatement
         @Block
         ;
 Block:
@@ -183,13 +186,23 @@ Block:
                     @AssignmentOrCallStmtOrVariableDeclaration
                 % put other statements here
                 | *:
-                    .sNullStmt
                     >
             ]
         }
         .sEnd;
 
 AssignmentOrCallStmtOrVariableDeclaration: ;
+
+UsingStatement:
+    pIdentifier .sIdentifier
+    {[
+        | pIdentifier:
+            .sIdentifier
+        | *:
+            >
+    ]}
+    .sParmEnd
+    ;
 
 %         'program'  .sProgram
 %         % program name
