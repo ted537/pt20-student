@@ -1,0 +1,3 @@
+fun flag (f : integer; var set : boolean) is
+		DeclarationsOrStatement
+	end;
