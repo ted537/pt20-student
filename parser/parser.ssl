@@ -198,12 +198,20 @@ Block :
         % We allow arbitrary intermixing of these instead to preserve
         % programmer sanity.
         {[
+            | 'public': % optional public value
+                [
+                    | 'val':
+                        .sConst
+                        @ConstantDefinitions
+            .sPublic % this isn't in the right spot right now
+                    | 'var':
+                        .sVar
+                        @VariableDeclarations
+            .sPublic 
+                ]
             | 'val':
                 .sConst
                 @ConstantDefinitions
-            | 'type':
-                .sType
-                @TypeDefinitions
             | 'var':
                 .sVar
                 @VariableDeclarations
@@ -218,18 +226,6 @@ Block :
         ]}
         'begin'
         @BeginStmt;
-
-% ConstantDefinitions :
-%         % Accept one or more named constant definitions
-%         pIdentifier  .sIdentifier
-%         '=' @ConstantValue ';'
-%         {[
-%             | pIdentifier:
-%                 .sIdentifier
-%                 '=' @ConstantValue ';'
-%             | *:
-%                 >
-%         ]};
 
 ConstantDefinitions :
         % Accept one or more named constant definitions
@@ -267,48 +263,51 @@ UnsignedIntegerConstant :
                 .sInteger
         ];
 
-TypeDefinitions :
-        % Accept one or more named type definitions.
-        pIdentifier  .sIdentifier
-        '='  @TypeBody  ';'
-        {[
-            | pIdentifier:
-                .sIdentifier
-                '='  @TypeBody  ';'
-            | *:
-                >
-        ]};
+% DEPRECATED RULE
+% TypeDefinitions :
+%         % Accept one or more named type definitions.
+%         pIdentifier  .sIdentifier
+%         '='  @TypeBody  ';'
+%         {[
+%             | pIdentifier:
+%                 .sIdentifier
+%                 '='  @TypeBody  ';'
+%             | *:
+%                 >
+%         ]};
 
-TypeBody :
-        [
-            | 'array':
-                .sArray
-                '['  @SimpleType  ']'
-                'of'  @SimpleType
-            | 'file':
-                .sFile
-                'of'  @SimpleType
-            | *:
-                @SimpleType
-        ];
+% DEPRECATED RULE
+% TypeBody :
+%         [
+%             | 'array':
+%                 .sArray
+%                 '['  @SimpleType  ']'
+%                 'of'  @SimpleType
+%             | 'file':
+%                 .sFile
+%                 'of'  @SimpleType
+%             | *:
+%                 @SimpleType
+%         ];
 
-SimpleType :
-        % A simple type is a named type (possibly predefined)
-        % or a subrange type specification
-        [
-            | pIdentifier:
-                .sIdentifier
-                [
-                    | '..':
-                        .sRange         %% this may be unnecessary
-                        @OptionallySignedIntegerConstant
-                    | *:
-                ]
-            | *:
-                @OptionallySignedIntegerConstant
-                '..'  .sRange
-                @OptionallySignedIntegerConstant
-        ];
+% DEPRECATED RULE
+% SimpleType :
+%         % A simple type is a named type (possibly predefined)
+%         % or a subrange type specification
+%         [
+%             | pIdentifier:
+%                 .sIdentifier
+%                 [
+%                     | '..':
+%                         .sRange         %% this may be unnecessary
+%                         @OptionallySignedIntegerConstant
+%                     | *:
+%                 ]
+%             | *:
+%                 @OptionallySignedIntegerConstant
+%                 '..'  .sRange
+%                 @OptionallySignedIntegerConstant
+%         ];
 
 OptionallySignedIntegerConstant :
         [
@@ -322,16 +321,38 @@ OptionallySignedIntegerConstant :
         ];
 
 VariableDeclarations :
-        % Accept one or more variable declarations.
+        % Accept only one variable declaration
         pIdentifier  .sIdentifier
-        ':'  @TypeBody  ';'
-        {[
-            | pIdentifier:
-                .sIdentifier
-                ':'  @TypeBody  ';'
-            | *:
-                >
-        ]};
+        @ValueorLike  ';';
+
+LikeClause :
+    [
+        | '[':
+            pInteger ']' ':'
+            [
+                | 'file':
+                    .sFile
+                    .sInteger
+                    pLike .sLike
+                    @ConstantValue
+                | pLike:
+                    .sArray
+                    .sInteger
+                    .sLike
+                    @ConstantValue
+            ]
+        | ':':
+            pLike .sLike
+            @ConstantValue
+    ];
+
+ValueorLike :
+    [
+        | '=':
+            % Expression, not sure what this means
+        | ':', '[':
+            @LikeClause
+    ];
 
 ProcedureHeading :
         % Accept zero or more procedure formal parameter declarations.
