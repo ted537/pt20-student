@@ -207,12 +207,22 @@ Program :
 %             | 'var':
 %                 .sVar
 %                 @VariableDeclarations
-%             | 'procedure':
+			  % Change 'procedure' to new Like keyword 'fun'
+%             | 'fun':
+				  % Everything else here stays the same
 %                 .sProcedure
 %                 % procedure name
 %                 pIdentifier  .sIdentifier
 %                 @ProcedureHeading
 %                 @Block  ';'
+			  | 'public':
+				.sProcedure
+				% procedure name
+				pIdentifier .sIdentifier
+				.sPublic
+				@ProcedureHeading
+				% Not exactly sure what this line does
+				@Block ';'
 %             | *:
 %                 >
 %         ]}
