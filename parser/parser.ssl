@@ -215,7 +215,7 @@ Program :
 %                 pIdentifier  .sIdentifier
 %                 @ProcedureHeading
 				  % Change to Like is keyword instead of semicolon ending
-%                 @Block  ' is'
+%                 %@Block  ' is'
 			  | 'public':
 				.sProcedure
 				% procedure name
@@ -224,7 +224,7 @@ Program :
 				@ProcedureHeading
 				% Not exactly sure what this line does
 				% Change to Like is keyword instead of semicolon ending
-				@Block ' is'
+				%@Block ' is'
 %             | *:
 %                 >
 %         ]}
