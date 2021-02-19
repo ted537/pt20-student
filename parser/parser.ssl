@@ -214,7 +214,8 @@ Program :
 %                 % procedure name
 %                 pIdentifier  .sIdentifier
 %                 @ProcedureHeading
-%                 @Block  ';'
+				  % Change to Like is keyword instead of semicolon ending
+%                 @Block  ' is'
 			  | 'public':
 				.sProcedure
 				% procedure name
@@ -222,7 +223,8 @@ Program :
 				.sPublic
 				@ProcedureHeading
 				% Not exactly sure what this line does
-				@Block ';'
+				% Change to Like is keyword instead of semicolon ending
+				@Block ' is'
 %             | *:
 %                 >
 %         ]}
@@ -355,7 +357,8 @@ Program :
 %                 ')'
 %             | *:
 %         ]
-%         ';'
+		  % Change to Like is keyword instead of semicolon ending
+%         ' is'
 %         .sParmEnd;
 % 
 % Statement :
