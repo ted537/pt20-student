@@ -194,10 +194,12 @@ Block:
 AssignmentOrCallStmtOrVariableDeclaration: ;
 
 UsingStatement:
-    pIdentifier .sIdentifier
+    pUsing pIdentifier .sIdentifier
     {[
         | pIdentifier:
             .sIdentifier
+        | pComma:
+            
         | *:
             >
     ]}
