@@ -213,12 +213,17 @@ Program :
 %                 pIdentifier  .sIdentifier
 %                 @ProcedureHeading
 %                 @Block  ';'
+%             | 'pkg':
+%		  .sPackage
+%                 % package name
+%                 pIdentifier .sIdentifier
+%		  @Block ' is'
 %             | *:
 %                 >
 %         ]}
 %         'begin'
 %         @BeginStmt;
-% 
+%  
 % ConstantDefinitions :
 %         % Accept one or more named constant definitions
 %         pIdentifier  .sIdentifier
