@@ -228,7 +228,9 @@ Block :
             | *:
                 >
         ]}
-        'begin'
+		% Remove 'begin' here since it no longer exists in Like
+		% Maybe replace it with the new line character
+        % 'begin'
         @BeginStmt;
 
 ConstantDefinitions :
@@ -334,6 +336,7 @@ VariableDeclarations :
 
 ProcedureHeading :
         % Accept zero or more procedure formal parameter declarations.
+		% Need to change the way variables are declared here in the header
         [
             | '(':
                 {
@@ -357,8 +360,10 @@ ProcedureHeading :
                 ')'
             | *:
         ]
-		  % Change to Like is keyword instead of semicolon ending
-        ' is'
+		% Change to Like is keyword instead of semicolon ending
+        % Remove this because the is is covered in the @Block
+		% The end should just be the closing bracket ')'
+		%' is'
         .sParmEnd;
 
 Statement :
@@ -597,5 +602,4 @@ IdentifierExtension :
                 .sParmEnd
             | *:
         ];
-
 end
