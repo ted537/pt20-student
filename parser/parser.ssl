@@ -176,7 +176,7 @@ rules
 
 Program : 
         .sProgram
-        % @UsingStatement
+        @UsingStatement
         @Block
         ;
 Block:
