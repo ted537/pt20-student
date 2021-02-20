@@ -247,6 +247,7 @@ ConstantDefinitions :
         '=' @ConstantValue
         {[
             | ',': % multiple constant definitions
+                .sConst
                 pIdentifier .sIdentifier
                 '=' @ConstantValue
             | *:
