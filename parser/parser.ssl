@@ -221,6 +221,7 @@ UsingStatement:
         | *:
             >
     ]}
+    ';'
     .sParmEnd
     ;
 
