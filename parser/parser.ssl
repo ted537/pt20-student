@@ -223,22 +223,22 @@ UsingStatement:
     .sParmEnd
     ;
 
-        'program'  .sProgram
-        % program name
-        pIdentifier
-        % program parameters
-        '('
-        {
-            pIdentifier  .sIdentifier
-            [
-                | ',':
-                | *:
-                    >
-            ]
-        }
-        ')'
-        .sParmEnd
-        ';'  @Block  '.';
+%        'program'  .sProgram
+%        % program name
+%        pIdentifier
+%        % program parameters
+%        '('
+%        {
+%            pIdentifier  .sIdentifier
+%            [
+%                | ',':
+%                | *:
+%                    >
+%            ]
+%        }
+%        ')'
+%        .sParmEnd
+%        ';'  @Block  '.';
 
 ConstantDefinitions :
         % Accept one or more named constant definitions
