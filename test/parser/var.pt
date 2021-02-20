@@ -1,3 +1,4 @@
+using input, output;
 var x = 5;
 var y: like x;
 var y: like 1;

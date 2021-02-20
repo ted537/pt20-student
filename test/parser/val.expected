@@ -1,14 +1,18 @@
-.sProgram
-.sBegin
-.sConst
-.sIdentifier
-.sInteger
-% .sNewLine
-.sConst
-.sIdentifier
-.sInteger
-.sConst
-.sIdentifier
-.sInteger
-% .sNewLine
-.sEnd
+ .sProgram
+  .sIdentifier
+  .sIdentifier
+  % .sNewLine
+  .sParmEnd
+  .sBegin
+  .sConst
+   .sIdentifier
+    .sInteger
+   % .sNewLine
+  .sConst
+   .sIdentifier
+    .sInteger
+   .sConst
+   .sIdentifier
+    .sInteger
+   % .sNewLine
+  .sEnd
