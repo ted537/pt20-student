@@ -185,6 +185,23 @@ Block:
                 | pIdentifier:
                     @AssignmentOrCallStmtOrVariableDeclaration
                 % put other statements here
+                | 'public': % optional public value
+                    [
+                        | 'val':
+                            .sConst
+                            @ConstantDefinitions
+                            .sPublic % this isn't in the right spot right now
+                        | 'var':
+                            .sVar
+                            @VariableDeclarations
+                            .sPublic 
+                    ]
+                | 'val':
+                    .sConst
+                    @ConstantDefinitions
+                | 'var':
+                    .sVar
+                    @VariableDeclarations
                 | *:
                     >
             ]
@@ -223,41 +240,6 @@ UsingStatement:
         .sParmEnd
         ';'  @Block  '.';
 
-Block :
-        % Strictly speaking, standard Pascal requires that declarations
-        % appear only in the order consts, types, vars, procedures.
-        % We allow arbitrary intermixing of these instead to preserve
-        % programmer sanity.
-        {[
-            | 'public': % optional public value
-                [
-                    | 'val':
-                        .sConst
-                        @ConstantDefinitions
-            .sPublic % this isn't in the right spot right now
-                    | 'var':
-                        .sVar
-                        @VariableDeclarations
-            .sPublic 
-                ]
-            | 'val':
-                .sConst
-                @ConstantDefinitions
-            | 'var':
-                .sVar
-                @VariableDeclarations
-            | 'procedure':
-                .sProcedure
-                % procedure name
-                pIdentifier  .sIdentifier
-                @ProcedureHeading
-                @Block  ';'
-            | *:
-                >
-        ]}
-        'begin'
-        @BeginStmt;
-
 ConstantDefinitions :
         % Accept one or more named constant definitions
         pIdentifier  .sIdentifier
@@ -293,6 +275,51 @@ UnsignedIntegerConstant :
             | pInteger:
                 .sInteger
         ];
+
+OptionallySignedIntegerConstant :
+        [
+            | '-':
+                @UnsignedIntegerConstant
+                .sNegate
+            | '+':
+                @UnsignedIntegerConstant
+            | *:
+                @UnsignedIntegerConstant
+        ];
+
+VariableDeclarations :
+        % Accept only one variable declaration
+        pIdentifier  .sIdentifier
+        @ValueorLike  ';';
+
+LikeClause :
+    [
+        | '[':
+            pInteger ']' ':'
+            [
+                | 'file':
+                    .sFile
+                    .sInteger
+                    pLike .sLike
+                    @ConstantValue
+                | pLike:
+                    .sArray
+                    .sInteger
+                    .sLike
+                    @ConstantValue
+            ]
+        | ':':
+            pLike .sLike
+            @ConstantValue
+    ];
+
+ValueorLike :
+    [
+        | '=':
+            @Expression
+        | ':', '[':
+            @LikeClause
+    ];
 
 % DEPRECATED RULE
 % TypeDefinitions :
@@ -340,228 +367,184 @@ UnsignedIntegerConstant :
 %                 @OptionallySignedIntegerConstant
 %         ];
 
-OptionallySignedIntegerConstant :
-        [
-            | '-':
-                @UnsignedIntegerConstant
-                .sNegate
-            | '+':
-                @UnsignedIntegerConstant
-            | *:
-                @UnsignedIntegerConstant
-        ];
-
-VariableDeclarations :
-        % Accept only one variable declaration
-        pIdentifier  .sIdentifier
-        @ValueorLike  ';';
-
-LikeClause :
-    [
-        | '[':
-            pInteger ']' ':'
-            [
-                | 'file':
-                    .sFile
-                    .sInteger
-                    pLike .sLike
-                    @ConstantValue
-                | pLike:
-                    .sArray
-                    .sInteger
-                    .sLike
-                    @ConstantValue
-            ]
-        | ':':
-            pLike .sLike
-            @ConstantValue
-    ];
-
-ValueorLike :
-    [
-        | '=':
-            % Expression, not sure what this means
-        | ':', '[':
-            @LikeClause
-    ];
-
-ProcedureHeading :
-        % Accept zero or more procedure formal parameter declarations.
-        [
-            | '(':
-                {
-                    % formal parameter identifier
-                    [
-                        | 'var':
-                            pIdentifier  .sIdentifier
-                            .sVar
-                        | *:
-                            pIdentifier  .sIdentifier
-                    ]
-                    ':'
-                    % type identifier
-                    pIdentifier  .sIdentifier
-                    [
-                        | ';':
-                        | *:
-                            >
-                    ]
-                }
-                ')'
-            | *:
-        ]
-        ';'
-        .sParmEnd;
-
-Statement :
-        [
-            | pIdentifier:
-                @AssignmentOrCallStmt
-            | 'begin':
-                @BeginStmt
-            | 'if':
-                @IfStmt
-            | 'while':
-                @WhileStmt
-            | 'case':
-                @CaseStmt
-            | 'repeat':
-                @RepeatStmt
-            | *:
-                .sNullStmt
-        ];
-
-AssignmentOrCallStmt :
-        [
-            | ':=':
-                .sAssignmentStmt
-                .sIdentifier    % identifier accepted in the Statement rule
-                @Expression
-                .sExpnEnd
-            | '[':
-                .sAssignmentStmt
-                .sIdentifier
-                .sSubscript
-                @Expression
-                .sExpnEnd
-                ']'  ':='
-                @Expression
-                .sExpnEnd
-            | *:
-                @CallStmt
-        ];
-
-CallStmt :
-        .sCallStmt
-        .sIdentifier    % procedure identifier accepted in the Statement rule
-        % accept zero or more actual parameters
-        [
-            | '(':
-                {
-                    @Expression
-                    .sExpnEnd
-                    % allow a field width specification to occur in calls
-                    % to the standard procedures write and writeln
-                    [
-                        | ':':
-                            .sFieldWidth
-                            @Expression
-                            .sExpnEnd
-                        | *:
-                    ]
-                    [
-                        | ',':
-                        | *:
-                            >
-                    ]
-                }
-                ')'
-            | *:        % no actual parameters
-        ]
-        .sParmEnd;
-
-BeginStmt :
-        .sBegin
-        {
-            @Statement
-            [
-                | ';':
-                | 'end':
-                    .sEnd
-                    >
-            ]
-        };
-
-IfStmt :
-        .sIfStmt
-        @Expression
-        .sExpnEnd
-        'then'  .sThen
-        @Statement
-        [
-            | 'else':
-                .sElse
-                @Statement
-            | *:
-        ];
-
-CaseStmt :
-        .sCaseStmt
-        @Expression
-        .sExpnEnd
-        'of'
-        @CaseAlternative
-        {[
-            | ';':
-                % since case alternatives cannot be null, allow
-                % for the common situation of an extra semicolon
-                % at the end of the list of case alternatives.
-                [
-                    | 'end':
-                        >
-                    | *:
-                        @CaseAlternative
-                ]
-            | 'end':
-                >
-        ]}
-        .sCaseEnd;
-
-CaseAlternative :
-        % A case alternative is a statement labelled by
-        % one or more optionally signed integer constants
-
-        {
-            @OptionallySignedIntegerConstant
-            [
-                | ',':
-                | *:
-                    >
-            ]
-        }
-        .sLabelEnd
-        ':'  @Statement;
-
-WhileStmt :
-        .sWhileStmt
-        @Expression
-        .sExpnEnd
-        'do'
-        @Statement;
-
-RepeatStmt :
-        .sRepeatStmt
-        {
-            @Statement
-            [
-                | ';':
-                | 'until':
-                    .sRepeatEnd
-                    >
-            ]
-        }
-        @Expression
-        .sExpnEnd;
+% ProcedureHeading :
+%         % Accept zero or more procedure formal parameter declarations.
+%         [
+%             | '(':
+%                 {
+%                     % formal parameter identifier
+%                     [
+%                         | 'var':
+%                             pIdentifier  .sIdentifier
+%                             .sVar
+%                         | *:
+%                             pIdentifier  .sIdentifier
+%                     ]
+%                     ':'
+%                     % type identifier
+%                     pIdentifier  .sIdentifier
+%                     [
+%                         | ';':
+%                         | *:
+%                             >
+%                     ]
+%                 }
+%                 ')'
+%             | *:
+%         ]
+%         ';'
+%         .sParmEnd;
+% 
+% Statement :
+%         [
+%             | pIdentifier:
+%                 @AssignmentOrCallStmt
+%             | 'begin':
+%                 @BeginStmt
+%             | 'if':
+%                 @IfStmt
+%             | 'while':
+%                 @WhileStmt
+%             | 'case':
+%                 @CaseStmt
+%             | 'repeat':
+%                 @RepeatStmt
+%             | *:
+%                 .sNullStmt
+%         ];
+% 
+% AssignmentOrCallStmt :
+%         [
+%             | ':=':
+%                 .sAssignmentStmt
+%                 .sIdentifier    % identifier accepted in the Statement rule
+%                 @Expression
+%                 .sExpnEnd
+%             | '[':
+%                 .sAssignmentStmt
+%                 .sIdentifier
+%                 .sSubscript
+%                 @Expression
+%                 .sExpnEnd
+%                 ']'  ':='
+%                 @Expression
+%                 .sExpnEnd
+%             | *:
+%                 @CallStmt
+%         ];
+% 
+% CallStmt :
+%         .sCallStmt
+%         .sIdentifier    % procedure identifier accepted in the Statement rule
+%         % accept zero or more actual parameters
+%         [
+%             | '(':
+%                 {
+%                     @Expression
+%                     .sExpnEnd
+%                     % allow a field width specification to occur in calls
+%                     % to the standard procedures write and writeln
+%                     [
+%                         | ':':
+%                             .sFieldWidth
+%                             @Expression
+%                             .sExpnEnd
+%                         | *:
+%                     ]
+%                     [
+%                         | ',':
+%                         | *:
+%                             >
+%                     ]
+%                 }
+%                 ')'
+%             | *:        % no actual parameters
+%         ]
+%         .sParmEnd;
+% 
+% BeginStmt :
+%         .sBegin
+%         {
+%             @Statement
+%             [
+%                 | ';':
+%                 | 'end':
+%                     .sEnd
+%                     >
+%             ]
+%         };
+% 
+% IfStmt :
+%         .sIfStmt
+%         @Expression
+%         .sExpnEnd
+%         'then'  .sThen
+%         @Statement
+%         [
+%             | 'else':
+%                 .sElse
+%                 @Statement
+%             | *:
+%         ];
+% 
+% CaseStmt :
+%         .sCaseStmt
+%         @Expression
+%         .sExpnEnd
+%         'of'
+%         @CaseAlternative
+%         {[
+%             | ';':
+%                 % since case alternatives cannot be null, allow
+%                 % for the common situation of an extra semicolon
+%                 % at the end of the list of case alternatives.
+%                 [
+%                     | 'end':
+%                         >
+%                     | *:
+%                         @CaseAlternative
+%                 ]
+%             | 'end':
+%                 >
+%         ]}
+%         .sCaseEnd;
+% 
+% CaseAlternative :
+%         % A case alternative is a statement labelled by
+%         % one or more optionally signed integer constants
+% 
+%         {
+%             @OptionallySignedIntegerConstant
+%             [
+%                 | ',':
+%                 | *:
+%                     >
+%             ]
+%         }
+%         .sLabelEnd
+%         ':'  @Statement;
+% 
+% WhileStmt :
+%         .sWhileStmt
+%         @Expression
+%         .sExpnEnd
+%         'do'
+%         @Statement;
+% 
+% RepeatStmt :
+%         .sRepeatStmt
+%         {
+%             @Statement
+%             [
+%                 | ';':
+%                 | 'until':
+%                     .sRepeatEnd
+%                     >
+%             ]
+%         }
+%         @Expression
+%         .sExpnEnd;
+%
 
 Expression :
         @SimpleExpression
