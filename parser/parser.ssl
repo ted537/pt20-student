@@ -125,6 +125,7 @@ Output :
         sLength
         sInitialValue
         sCaseElse
+        sLike
 
         sVar
         sProcedure
