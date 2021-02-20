@@ -1,3 +1,2 @@
-using output;
 val x = 5;
 val x = 5, y = 10;

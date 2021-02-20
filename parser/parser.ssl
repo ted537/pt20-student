@@ -183,6 +183,12 @@ Block:
         .sBegin
         {
             [
+                | pVal :
+                    .sConst
+                    @ConstantDefinitions
+                | pVar :
+                    .sVar
+                    @VariableDeclarations
                 | pIdentifier:
                     @AssignmentOrCallStmtOrVariableDeclaration
                 % put other statements here
@@ -197,12 +203,6 @@ Block:
                             @VariableDeclarations
                             .sPublic 
                     ]
-                | 'val':
-                    .sConst
-                    @ConstantDefinitions
-                | 'var':
-                    .sVar
-                    @VariableDeclarations
                 | *:
                     >
             ]
