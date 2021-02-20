@@ -589,9 +589,9 @@ Term :
         {[
             | '*':
                 @Factor  .sMultiply
-            | 'div':
+            | '/':
                 @Factor  .sDivide
-            | 'mod':
+            | '%':
                 @Factor  .sModulus
             | 'and':
                 .sInfixAnd  @Factor  .sAnd
