@@ -231,23 +231,6 @@ UsingStatement:
     .sParmEnd
     ;
 
-%        'program'  .sProgram
-%        % program name
-%        pIdentifier
-%        % program parameters
-%        '('
-%        {
-%            pIdentifier  .sIdentifier
-%            [
-%                | ',':
-%                | *:
-%                    >
-%            ]
-%        }
-%        ')'
-%        .sParmEnd
-%        ';'  @Block  '.';
-
 PublicConstantDefinitions :
         % Accept one or more named constant definitions
         pIdentifier  .sIdentifier .sPublic
@@ -348,52 +331,6 @@ ValueorLike :
         | *:
             @LikeClause
     ];
-
-% DEPRECATED RULE
-% TypeDefinitions :
-%         % Accept one or more named type definitions.
-%         pIdentifier  .sIdentifier
-%         '='  @TypeBody  ';'
-%         {[
-%             | pIdentifier:
-%                 .sIdentifier
-%                 '='  @TypeBody  ';'
-%             | *:
-%                 >
-%         ]};
-
-% DEPRECATED RULE
-% TypeBody :
-%         [
-%             | 'array':
-%                 .sArray
-%                 '['  @SimpleType  ']'
-%                 'of'  @SimpleType
-%             | 'file':
-%                 .sFile
-%                 'of'  @SimpleType
-%             | *:
-%                 @SimpleType
-%         ];
-
-% DEPRECATED RULE
-% SimpleType :
-%         % A simple type is a named type (possibly predefined)
-%         % or a subrange type specification
-%         [
-%             | pIdentifier:
-%                 .sIdentifier
-%                 [
-%                     | '..':
-%                         .sRange         %% this may be unnecessary
-%                         @OptionallySignedIntegerConstant
-%                     | *:
-%                 ]
-%             | *:
-%                 @OptionallySignedIntegerConstant
-%                 '..'  .sRange
-%                 @OptionallySignedIntegerConstant
-%         ];
 
 % ProcedureHeading :
 %         % Accept zero or more procedure formal parameter declarations.
