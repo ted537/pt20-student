@@ -191,6 +191,11 @@ Block:
                     @VariableDeclarations
                 | pIdentifier:
                     @AssignmentOrCallStmtOrVariableDeclaration
+		| pPkg:
+		    .sPackage
+		    % package name
+		    pIdentifier .sIdentifier
+		    @Block 'is'
                 % put other statements here
                 | 'public': % optional public value
                     [
