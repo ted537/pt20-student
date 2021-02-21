@@ -12,7 +12,7 @@ def without_comment(line):
 def normalize(text):
     """ Use for less picky expected comparison """
     stripped_lines = (
-        ' '.join(without_comment(line).split())
+        ' '.join(without_comment(line).strip().split())
         for line in text.split('\n')
     )
     non_empty_lines = (
