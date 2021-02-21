@@ -191,6 +191,11 @@ Block:
                     @VariableDeclarations
                 | pIdentifier:
                     @AssignmentOrCallStmtOrVariableDeclaration
+		| pPkg:
+		    .sPackage
+		    % package name
+		    pIdentifier .sIdentifier
+		    @Block 'is'
                 % put other statements here
 				| 'fun':
 					.sProcedure
@@ -201,12 +206,10 @@ Block:
                     [
                         | 'val':
                             .sConst
-                            @ConstantDefinitions
-                            .sPublic % this isn't in the right spot right now
+                            @PublicConstantDefinitions
                         | 'var':
                             .sVar
-                            @VariableDeclarations
-                            .sPublic 
+                            @PublicVariableDeclarations
 						% Public functions 
 						| 'fun':
 							.sProcedure
@@ -236,6 +239,38 @@ UsingStatement:
     ';'
     .sParmEnd
     ;
+
+%        'program'  .sProgram
+%        % program name
+%        pIdentifier
+%        % program parameters
+%        '('
+%        {
+%            pIdentifier  .sIdentifier
+%            [
+%                | ',':
+%                | *:
+%                    >
+%            ]
+%        }
+%        ')'
+%        .sParmEnd
+%        ';'  @Block  '.';
+
+PublicConstantDefinitions :
+        % Accept one or more named constant definitions
+        pIdentifier  .sIdentifier .sPublic
+        '=' @ConstantValue
+        {[
+            | ',': % multiple constant definitions
+                .sConst
+                pIdentifier .sIdentifier .sPublic
+                '=' @ConstantValue
+            | *:
+                >
+        ]}
+        ';'; % must end in a semicolon
+
 ConstantDefinitions :
         % Accept one or more named constant definitions
         pIdentifier  .sIdentifier
@@ -287,6 +322,11 @@ OptionallySignedIntegerConstant :
 VariableDeclarations :
         % Accept only one variable declaration
         pIdentifier  .sIdentifier
+        @ValueorLike  ';';
+
+PublicVariableDeclarations :
+        % Accept only one variable declaration
+        pIdentifier  .sIdentifier .sPublic
         @ValueorLike  ';';
 
 LikeClause :
@@ -342,7 +382,7 @@ ValueorLike :
     [
         | '=':
             @Expression
-        | ':', '[':
+        | *:
             @LikeClause
     ];
 
