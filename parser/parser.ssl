@@ -198,7 +198,7 @@ Block:
 					.sProcedure
 					pIdentifier .sIdentifier
 					@ProcedureHeading
-					'is' @Block 
+					@Block 
                 | 'public': % optional public value
                     [
                         | 'val':
@@ -213,7 +213,7 @@ Block:
 							pIdentifier .sIdentifier
 							.sPublic
 							@ProcedureHeading
-							'is' @Block 
+							@Block 
                     ]
                 | *:
                     >
