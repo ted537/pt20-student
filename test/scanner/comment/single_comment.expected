@@ -1,2 +1,3 @@
- .pNewLine
- .pEndFile
+# comment should result in no symbols
+.pNewLine
+.pEndFile

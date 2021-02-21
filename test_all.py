@@ -4,8 +4,23 @@ from subprocess import check_output, DEVNULL
 from functools import partial
 import pytest
 
-from ssltrace import scanner_ssltrace, parser_ssltrace, normalize
+from ssltrace import scanner_ssltrace, parser_ssltrace
 
+def without_comment(line):
+    return line.split('#')[0]
+
+def normalize(text):
+    """ Use for less picky expected comparison """
+    stripped_lines = (
+        ' '.join(without_comment(line).split())
+        for line in text.split('\n')
+    )
+    non_empty_lines = (
+        line
+        for line in stripped_lines
+        if len(line)>0
+    )
+    return '\n'.join(non_empty_lines)
 
 def assert_expected_matches_output(path, output):
     """ Compare expected to output, ignoring minor whitespace differences """

@@ -1,15 +1,6 @@
 from subprocess import check_output, DEVNULL
 from pathlib import Path
 
-def normalize(text):
-    """ Strip whitespace to make expected comparison less picky """
-    all_lines = (
-        ' '.join(line.strip().split())
-        for line in text.split('\n')
-    )
-    non_empty_lines = filter(bool,all_lines)
-    return '\n'.join(non_empty_lines)
-
 class SslTracer:
     """ Configured ssltrace wrapper which saves and returns output """
     def __init__(self, extension, def_filename, o, t):
@@ -30,7 +21,7 @@ class SslTracer:
             'ssltrace',ptc_command,self.def_filename,'-e',
         ], stderr=DEVNULL)
 
-        filtered_trace = normalize(raw_trace.decode('ascii'))
+        filtered_trace = raw_trace.decode('ascii')
         self.save(path,filtered_trace)
         return filtered_trace
 
