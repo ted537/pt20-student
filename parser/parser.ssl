@@ -191,12 +191,8 @@ Block:
                     @VariableDeclarations
                 | pIdentifier:
                     @AssignmentOrCallStmtOrVariableDeclaration
-		| pPkg:
-		    .sPackage
-		    % package name
-		    pIdentifier .sIdentifier
-		    @Block 'is'
-                % put other statements here
+                | pPkg:
+                    @Package
                 | 'public': % optional public value
                     [
                         | 'val':
@@ -211,6 +207,13 @@ Block:
             ]
         }
         .sEnd;
+
+Package:
+    .sPackage
+    % package name
+    pIdentifier .sIdentifier
+    'is' @Block
+    ;
 
 AssignmentOrCallStmtOrVariableDeclaration: ;
 

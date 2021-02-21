@@ -1,12 +1,12 @@
  .sProgram
- .sIdentifier
- .sIdentifier
- % .sNewLine
- .sParmEnd
- .sBegin
- .sPackage
- .sIdentifier
+  .sIdentifier
+  .sIdentifier
+  % .sNewLine
+  .sParmEnd
   .sBegin
+   .sPackage
+   .sIdentifier
+   % .sNewLine
+    .sBegin
+    .sEnd
   .sEnd
- % .sNewLine
- .sEnd
