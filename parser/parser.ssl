@@ -181,45 +181,46 @@ Program :
         ;
 Block:
         .sBegin
-        {
-            [
-                | pVal :
-                    .sConst
-                    @ConstantDefinitions
-                | pVar :
-                    .sVar
-                    @VariableDeclarations
-                | pIdentifier:
-                    @AssignmentOrCallStmtOrVariableDeclaration
-                | pPkg:
-                    @Package
-                % put other statements here
-				| 'fun':
-					.sProcedure
-					pIdentifier .sIdentifier
-					@ProcedureHeading
-					@Block 
-                | 'public': % optional public value
-                    [
-                        | 'val':
-                            .sConst
-                            @PublicConstantDefinitions
-                        | 'var':
-                            .sVar
-                            @PublicVariableDeclarations
-						% Public functions 
-						| 'fun':
-							.sProcedure
-							pIdentifier .sIdentifier
-							.sPublic
-							@ProcedureHeading
-							@Block 
-                    ]
-                | *:
-                    >
-            ]
-        }
+        {[
+            | pVal :
+                .sConst
+                @ConstantDefinitions
+            | pVar :
+                .sVar
+                @VariableDeclarations
+            | pIdentifier:
+                @AssignmentOrCallStmtOrVariableDeclaration
+            | pPkg:
+                @Package
+            | 'fun':
+                .sProcedure
+                pIdentifier .sIdentifier
+                @ProcedureHeading
+                @Block 
+            | 'public': % optional public value
+                @Public
+            | *:
+                >
+        ]}
         .sEnd;
+
+Public:
+    [
+        | 'val':
+            .sConst
+            @PublicConstantDefinitions
+        | 'var':
+            .sVar
+            @PublicVariableDeclarations
+        % Public functions 
+        | 'fun':
+            .sProcedure
+            pIdentifier .sIdentifier
+            .sPublic
+            @ProcedureHeading
+            @Block 
+    ]
+    ;
 
 Package:
     .sPackage
