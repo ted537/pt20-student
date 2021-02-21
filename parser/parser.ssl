@@ -125,6 +125,7 @@ Output :
         sLength
         sInitialValue
         sCaseElse
+        sLike
 
         sVar
         sProcedure
@@ -182,9 +183,26 @@ Block:
         .sBegin
         {
             [
+                | pVal :
+                    .sConst
+                    @ConstantDefinitions
+                | pVar :
+                    .sVar
+                    @VariableDeclarations
                 | pIdentifier:
                     @AssignmentOrCallStmtOrVariableDeclaration
                 % put other statements here
+                | 'public': % optional public value
+                    [
+                        | 'val':
+                            .sConst
+                            @ConstantDefinitions
+                            .sPublic % this isn't in the right spot right now
+                        | 'var':
+                            .sVar
+                            @VariableDeclarations
+                            .sPublic 
+                    ]
                 | *:
                     >
             ]
@@ -203,88 +221,110 @@ UsingStatement:
         | *:
             >
     ]}
+    ';'
     .sParmEnd
     ;
 
-%         'program'  .sProgram
-%         % program name
-%         pIdentifier
-%         % program parameters
-%         '('
-%         {
-%             pIdentifier  .sIdentifier
-%             [
-%                 | ',':
-%                 | *:
-%                     >
-%             ]
-%         }
-%         ')'
-%         .sParmEnd
-%         ';'  @Block  '.';
+%        'program'  .sProgram
+%        % program name
+%        pIdentifier
+%        % program parameters
+%        '('
+%        {
+%            pIdentifier  .sIdentifier
+%            [
+%                | ',':
+%                | *:
+%                    >
+%            ]
+%        }
+%        ')'
+%        .sParmEnd
+%        ';'  @Block  '.';
 
-% Block :
-%         % Strictly speaking, standard Pascal requires that declarations
-%         % appear only in the order consts, types, vars, procedures.
-%         % We allow arbitrary intermixing of these instead to preserve
-%         % programmer sanity.
-%         {[
-%             | 'const':
-%                 .sConst
-%                 @ConstantDefinitions
-%             | 'type':
-%                 .sType
-%                 @TypeDefinitions
-%             | 'var':
-%                 .sVar
-%                 @VariableDeclarations
-%             | 'procedure':
-%                 .sProcedure
-%                 % procedure name
-%                 pIdentifier  .sIdentifier
-%                 @ProcedureHeading
-%                 @Block  ';'
-%             | *:
-%                 >
-%         ]}
-%         'begin'
-%         @BeginStmt;
-% 
-% ConstantDefinitions :
-%         % Accept one or more named constant definitions
-%         pIdentifier  .sIdentifier
-%         '=' @ConstantValue ';'
-%         {[
-%             | pIdentifier:
-%                 .sIdentifier
-%                 '=' @ConstantValue ';'
-%             | *:
-%                 >
-%         ]};
-% 
-% ConstantValue :
-%         [
-%             | pInteger:
-%                 .sInteger
-%             | pIdentifier:
-%                 .sIdentifier
-%             | '-':
-%                 @UnsignedIntegerConstant
-%                 .sNegate
-%             | '+':
-%                 @UnsignedIntegerConstant
-%             | pStringLiteral:
-%                 .sStringLiteral
-%         ];
-% 
-% UnsignedIntegerConstant :
-%         [
-%             | pIdentifier:
-%                 .sIdentifier
-%             | pInteger:
-%                 .sInteger
-%         ];
-% 
+ConstantDefinitions :
+        % Accept one or more named constant definitions
+        pIdentifier  .sIdentifier
+        '=' @ConstantValue
+        {[
+            | ',': % multiple constant definitions
+                .sConst
+                pIdentifier .sIdentifier
+                '=' @ConstantValue
+            | *:
+                >
+        ]}
+        ';'; % must end in a semicolon
+
+ConstantValue :
+        [
+            | pInteger:
+                .sInteger
+            | pIdentifier:
+                .sIdentifier
+            | '-':
+                @UnsignedIntegerConstant
+                .sNegate
+            | '+':
+                @UnsignedIntegerConstant
+            | pStringLiteral:
+                .sStringLiteral
+        ];
+
+UnsignedIntegerConstant :
+        [
+            | pIdentifier:
+                .sIdentifier
+            | pInteger:
+                .sInteger
+        ];
+
+OptionallySignedIntegerConstant :
+        [
+            | '-':
+                @UnsignedIntegerConstant
+                .sNegate
+            | '+':
+                @UnsignedIntegerConstant
+            | *:
+                @UnsignedIntegerConstant
+        ];
+
+VariableDeclarations :
+        % Accept only one variable declaration
+        pIdentifier  .sIdentifier
+        @ValueorLike  ';';
+
+LikeClause :
+    [
+        | '[':
+            pInteger ']' ':'
+            [
+                | 'file':
+                    .sFile
+                    .sInteger
+                    pLike .sLike
+                    @ConstantValue
+                | pLike:
+                    .sArray
+                    .sInteger
+                    .sLike
+                    @ConstantValue
+            ]
+        | ':':
+            pLike .sLike
+            @ConstantValue
+    ];
+
+ValueorLike :
+    [
+        | '=':
+            @Expression
+        | ':', '[':
+            @LikeClause
+    ];
+
+% DEPRECATED RULE
 % TypeDefinitions :
 %         % Accept one or more named type definitions.
 %         pIdentifier  .sIdentifier
@@ -296,7 +336,8 @@ UsingStatement:
 %             | *:
 %                 >
 %         ]};
-% 
+
+% DEPRECATED RULE
 % TypeBody :
 %         [
 %             | 'array':
@@ -309,7 +350,8 @@ UsingStatement:
 %             | *:
 %                 @SimpleType
 %         ];
-% 
+
+% DEPRECATED RULE
 % SimpleType :
 %         % A simple type is a named type (possibly predefined)
 %         % or a subrange type specification
@@ -327,30 +369,7 @@ UsingStatement:
 %                 '..'  .sRange
 %                 @OptionallySignedIntegerConstant
 %         ];
-% 
-% OptionallySignedIntegerConstant :
-%         [
-%             | '-':
-%                 @UnsignedIntegerConstant
-%                 .sNegate
-%             | '+':
-%                 @UnsignedIntegerConstant
-%             | *:
-%                 @UnsignedIntegerConstant
-%         ];
-% 
-% VariableDeclarations :
-%         % Accept one or more variable declarations.
-%         pIdentifier  .sIdentifier
-%         ':'  @TypeBody  ';'
-%         {[
-%             | pIdentifier:
-%                 .sIdentifier
-%                 ':'  @TypeBody  ';'
-%             | *:
-%                 >
-%         ]};
-% 
+
 % ProcedureHeading :
 %         % Accept zero or more procedure formal parameter declarations.
 %         [
@@ -528,92 +547,93 @@ UsingStatement:
 %         }
 %         @Expression
 %         .sExpnEnd;
-% 
-% Expression :
-%         @SimpleExpression
-%         [
-%             | '=':
-%                 @SimpleExpression  .sEq
-%             | '<>':
-%                 @SimpleExpression  .sNE
-%             | '<':
-%                 @SimpleExpression  .sLT
-%             | '<=':
-%                 @SimpleExpression  .sLE
-%             | '>':
-%                 @SimpleExpression  .sGT
-%             | '>=':
-%                 @SimpleExpression  .sGE
-%             | *:
-%         ];
-% 
-% SimpleExpression :
-%         [
-%             | '+':
-%                 @Term
-%             | '-':
-%                 @Term  .sNegate
-%             | *:
-%                 @Term
-%         ]
-%         {[
-%             | '+':
-%                 @Term  .sAdd
-%             | '-':
-%                 @Term  .sSubtract
-%             | 'or':
-%                 .sInfixOr  @Term  .sOr
-%             | *:
-%                 >
-%         ]};
-% 
-% Term :
-%         @Factor
-%         {[
-%             | '*':
-%                 @Factor  .sMultiply
-%             | 'div':
-%                 @Factor  .sDivide
-%             | 'mod':
-%                 @Factor  .sModulus
-%             | 'and':
-%                 .sInfixAnd  @Factor  .sAnd
-%             | *:
-%                 >
-%         ]};
-% 
-% Factor :
-%         [
-%             | pIdentifier:
-%                 .sIdentifier
-%                 @IdentifierExtension
-%             | pInteger:
-%                 .sInteger
-%             | '(':
-%                 @Expression  ')'
-%             | 'not':
-%                 @Factor
-%                 .sNot
-%             | pStringLiteral:
-%                 .sStringLiteral
-%             | 'file':
-%                 .sFile '(' @Expression ')'
-%                 .sExpnEnd
-%         ];
-% 
-% IdentifierExtension :
-%         % Handle subscripts and function actual parameter lists
-%         [
-%             | '[':
-%                 .sSubscript
-%                 @Expression  ']'
-%                 .sExpnEnd
-%             | '(':
-%                 .sParmBegin
-%                 @Expression  ')'
-%                 .sExpnEnd
-%                 .sParmEnd
-%             | *:
-%         ];
-% 
+%
+
+Expression :
+        @SimpleExpression
+        [
+            | '=':
+                @SimpleExpression  .sEq
+            | '<>':
+                @SimpleExpression  .sNE
+            | '<':
+                @SimpleExpression  .sLT
+            | '<=':
+                @SimpleExpression  .sLE
+            | '>':
+                @SimpleExpression  .sGT
+            | '>=':
+                @SimpleExpression  .sGE
+            | *:
+        ];
+
+SimpleExpression :
+        [
+            | '+':
+                @Term
+            | '-':
+                @Term  .sNegate
+            | *:
+                @Term
+        ]
+        {[
+            | '+':
+                @Term  .sAdd
+            | '-':
+                @Term  .sSubtract
+            | 'or':
+                .sInfixOr  @Term  .sOr
+            | *:
+                >
+        ]};
+
+Term :
+        @Factor
+        {[
+            | '*':
+                @Factor  .sMultiply
+            | '/':
+                @Factor  .sDivide
+            | '%':
+                @Factor  .sModulus
+            | 'and':
+                .sInfixAnd  @Factor  .sAnd
+            | *:
+                >
+        ]};
+
+Factor :
+        [
+            | pIdentifier:
+                .sIdentifier
+                @IdentifierExtension
+            | pInteger:
+                .sInteger
+            | '(':
+                @Expression  ')'
+            | 'not':
+                @Factor
+                .sNot
+            | pStringLiteral:
+                .sStringLiteral
+            | 'file':
+                .sFile '(' @Expression ')'
+                .sExpnEnd
+        ];
+
+IdentifierExtension :
+        % Handle subscripts and function actual parameter lists
+        [
+            | '[':
+                .sSubscript
+                @Expression  ']'
+                .sExpnEnd
+            | '(':
+                .sParmBegin
+                @Expression  ')'
+                .sExpnEnd
+                .sParmEnd
+            | *:
+        ];
+
 end
