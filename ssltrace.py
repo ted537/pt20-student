@@ -11,6 +11,7 @@ def normalize(text):
     return '\n'.join(non_empty_lines)
 
 class SslTracer:
+    """ Configured ssltrace wrapper which saves and returns output """
     def __init__(self, extension, def_filename, o, t):
         self.extension = extension
         self.def_filename = def_filename
