@@ -11,4 +11,5 @@ Will Macdonald - 20051603 - 16wjgm
 
 # Testing
 
-Run `./test-all.sh`
+Run `pytest`.
+If not setup yet, run `pip3 install pytest`.
