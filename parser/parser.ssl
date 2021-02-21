@@ -192,6 +192,11 @@ Block:
                 | pIdentifier:
                     @AssignmentOrCallStmtOrVariableDeclaration
                 % put other statements here
+				| 'fun':
+					.sProcedure
+					pIdentifier .sIdentifier
+					@ProcedureHeading
+					@Block ' is'
                 | 'public': % optional public value
                     [
                         | 'val':
@@ -202,6 +207,12 @@ Block:
                             .sVar
                             @VariableDeclarations
                             .sPublic 
+						% Public functions 
+						| 'fun':
+							.sProcedure
+							pIdentifier .sIdentifier
+							@ProcedureHeading
+							@Block ' is'
                     ]
                 | *:
                     >
@@ -224,24 +235,6 @@ UsingStatement:
     ';'
     .sParmEnd
     ;
-
-%        'program'  .sProgram
-%        % program name
-%        pIdentifier
-%        % program parameters
-%        '('
-%        {
-%            pIdentifier  .sIdentifier
-%            [
-%                | ',':
-%                | *:
-%                    >
-%            ]
-%        }
-%        ')'
-%        .sParmEnd
-%        ';'  @Block  '.';
-
 ConstantDefinitions :
         % Accept one or more named constant definitions
         pIdentifier  .sIdentifier
@@ -316,6 +309,33 @@ LikeClause :
             @ConstantValue
     ];
 
+ProcedureHeading :
+        % Accept zero or more procedure formal parameter declarations.
+        [
+            | '(':
+                {
+                    % formal parameter identifier
+                    [
+                        | 'var':
+                            pIdentifier  .sIdentifier
+                            .sVar
+                        | *:
+                            pIdentifier  .sIdentifier
+                    ]
+                    ':'
+                    % type identifier
+                    pIdentifier  .sIdentifier
+                    [
+                        | ';':
+                        | *:
+                            >
+                    ]
+                }
+                ')'
+            | *:
+        ]
+        .sParmEnd;
+
 ValueorLike :
     [
         | '=':
@@ -370,33 +390,7 @@ ValueorLike :
 %                 @OptionallySignedIntegerConstant
 %         ];
 
-% ProcedureHeading :
-%         % Accept zero or more procedure formal parameter declarations.
-%         [
-%             | '(':
-%                 {
-%                     % formal parameter identifier
-%                     [
-%                         | 'var':
-%                             pIdentifier  .sIdentifier
-%                             .sVar
-%                         | *:
-%                             pIdentifier  .sIdentifier
-%                     ]
-%                     ':'
-%                     % type identifier
-%                     pIdentifier  .sIdentifier
-%                     [
-%                         | ';':
-%                         | *:
-%                             >
-%                     ]
-%                 }
-%                 ')'
-%             | *:
-%         ]
-%         ';'
-%         .sParmEnd;
+
 % 
 % Statement :
 %         [
