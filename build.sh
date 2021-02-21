@@ -1,0 +1,3 @@
+cd parser
+make
+cd ..
