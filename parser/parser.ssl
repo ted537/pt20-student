@@ -197,6 +197,11 @@ Block:
 		    pIdentifier .sIdentifier
 		    @Block 'is'
                 % put other statements here
+				| 'fun':
+					.sProcedure
+					pIdentifier .sIdentifier
+					@ProcedureHeading
+					@Block 'is'
                 | 'public': % optional public value
                     [
                         | 'val':
@@ -205,6 +210,13 @@ Block:
                         | 'var':
                             .sVar
                             @PublicVariableDeclarations
+						% Public functions 
+						| 'fun':
+							.sProcedure
+							pIdentifier .sIdentifier
+							.sPublic
+							@ProcedureHeading
+							@Block 'is'
                     ]
                 | *:
                     >
@@ -338,6 +350,34 @@ LikeClause :
             @ConstantValue
     ];
 
+ProcedureHeading :
+        % Accept zero or more procedure formal parameter declarations.
+        [
+            | '(':
+                {
+                    % formal parameter identifier
+                    [
+                        | 'var':
+                            pIdentifier  .sIdentifier
+                            .sVar
+                        | *:
+                            pIdentifier  .sIdentifier
+                    ]
+                    ':'
+                    % type identifier
+                    pIdentifier  .sIdentifier
+                    [
+                        | ';':
+                        | *:
+                            >
+                    ]
+                }
+                ')'
+            | *:
+        ]
+		'is'
+        .sParmEnd;
+
 ValueorLike :
     [
         | '=':
@@ -392,33 +432,7 @@ ValueorLike :
 %                 @OptionallySignedIntegerConstant
 %         ];
 
-% ProcedureHeading :
-%         % Accept zero or more procedure formal parameter declarations.
-%         [
-%             | '(':
-%                 {
-%                     % formal parameter identifier
-%                     [
-%                         | 'var':
-%                             pIdentifier  .sIdentifier
-%                             .sVar
-%                         | *:
-%                             pIdentifier  .sIdentifier
-%                     ]
-%                     ':'
-%                     % type identifier
-%                     pIdentifier  .sIdentifier
-%                     [
-%                         | ';':
-%                         | *:
-%                             >
-%                     ]
-%                 }
-%                 ')'
-%             | *:
-%         ]
-%         ';'
-%         .sParmEnd;
+
 % 
 % Statement :
 %         [
