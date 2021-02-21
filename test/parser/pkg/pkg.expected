@@ -1,8 +1,8 @@
-.sProgram
+ .sProgram
  .sIdentifier
  .sIdentifier
  % .sNewLine
- .sParamEnd
+ .sParmEnd
  .sBegin
  .sPackage
  .sIdentifier
