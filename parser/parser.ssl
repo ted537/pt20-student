@@ -201,12 +201,10 @@ Block:
                     [
                         | 'val':
                             .sConst
-                            @ConstantDefinitions
-                            .sPublic % this isn't in the right spot right now
+                            @PublicConstantDefinitions
                         | 'var':
                             .sVar
-                            @VariableDeclarations
-                            .sPublic 
+                            @PublicVariableDeclarations
                     ]
                 | *:
                     >
@@ -246,6 +244,20 @@ UsingStatement:
 %        ')'
 %        .sParmEnd
 %        ';'  @Block  '.';
+
+PublicConstantDefinitions :
+        % Accept one or more named constant definitions
+        pIdentifier  .sIdentifier .sPublic
+        '=' @ConstantValue
+        {[
+            | ',': % multiple constant definitions
+                .sConst
+                pIdentifier .sIdentifier .sPublic
+                '=' @ConstantValue
+            | *:
+                >
+        ]}
+        ';'; % must end in a semicolon
 
 ConstantDefinitions :
         % Accept one or more named constant definitions
@@ -300,6 +312,11 @@ VariableDeclarations :
         pIdentifier  .sIdentifier
         @ValueorLike  ';';
 
+PublicVariableDeclarations :
+        % Accept only one variable declaration
+        pIdentifier  .sIdentifier .sPublic
+        @ValueorLike  ';';
+
 LikeClause :
     [
         | '[':
@@ -325,7 +342,7 @@ ValueorLike :
     [
         | '=':
             @Expression
-        | ':', '[':
+        | *:
             @LikeClause
     ];
 
