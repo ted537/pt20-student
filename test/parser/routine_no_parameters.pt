@@ -1,0 +1,4 @@
+using input, output;
+fun flag is
+	var x = 5;
+end;
