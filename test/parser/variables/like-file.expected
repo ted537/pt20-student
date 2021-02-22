@@ -6,8 +6,9 @@
   .sBegin
   .sVar
    .sIdentifier
+   .sArray
+   .sInteger
      .sFile
-     .sInteger
      .sLike
       .sInteger
   .sEnd

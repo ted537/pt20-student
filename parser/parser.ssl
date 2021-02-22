@@ -315,19 +315,6 @@ PublicVariableDeclaration :
         % Accept only one variable declaration
         .sVar @identifier .sPublic @ValueorLike  ';';
 
-LikeClause :
-    [
-        | '[':
-            pInteger ']' ':'
-            [
-                | 'file': .sFile .sInteger @like @ConstantValue
-                | pLike: .sArray .sInteger .sLike @ConstantValue
-            ]
-        | ':':
-            pLike .sLike
-            @ConstantValue
-    ];
-
 ProcedureHeading :
         % Accept zero or more procedure formal parameter declarations.
         [
@@ -357,13 +344,20 @@ ProcedureHeading :
         .sParmEnd;
 
 ValueorLike :
+        [
+            | '=': @Expression
+            | '[': .sArray @ConstantValue ']' ':' @LikeClause
+            | ':': @LikeClause
+        ];
+
+
+OptionalFile:
     [
-        | '=':
-            @Expression
-        | *:
-            @LikeClause
+        | 'file': .sFile
     ];
 
+LikeClause:
+    @OptionalFile @like @ConstantValue;
 
 % 
 % Statement :
