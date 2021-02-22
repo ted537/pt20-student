@@ -275,25 +275,19 @@ ConstantDefinitions :
 
 ConstantValue :
         [
-            | pInteger:
-                .sInteger
-            | pIdentifier:
-                .sIdentifier
-            | '-':
-                @UnsignedIntegerConstant
-                .sNegate
-            | '+':
-                @UnsignedIntegerConstant
-            | pStringLiteral:
-                .sStringLiteral
+            | pInteger: .sInteger
+            | pStringLiteral: .sStringLiteral
+            | pIdentifier: .sIdentifier
+            | '-': @UnsignedIntegerConstant .sNegate
+            | '+': @UnsignedIntegerConstant
+            | *: #eUnexpectedToken
         ];
 
 UnsignedIntegerConstant :
         [
-            | pIdentifier:
-                .sIdentifier
-            | pInteger:
-                .sInteger
+            | pIdentifier: .sIdentifier
+            | pInteger: .sInteger
+            | *: #eUnexpectedToken
         ];
 
 OptionallySignedIntegerConstant :
