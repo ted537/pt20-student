@@ -305,33 +305,29 @@ PublicVariableDeclaration :
         % Accept only one variable declaration
         .sVar @identifier .sPublic @ValueorLike  ';';
 
+ParameterDeclaration:
+    [
+        | 'var': @identifier .sVar
+        | pIdentifier: .sIdentifier
+        | *: #eUnexpectedToken
+    ];
+
+ProcedureParameters:
+    @ParameterDeclaration
+    {[
+        | ';': >
+        | ',': @ParameterDeclaration
+        | *: #eUnexpectedToken
+    ]};
+
+OptionalProcedureParameters:
+    [
+        | '(': @ProcedureParameters
+        | *: 
+    ];
+
 ProcedureHeading :
-        % Accept zero or more procedure formal parameter declarations.
-        [
-            | '(':
-                {
-                    % formal parameter identifier
-                    [
-                        | 'var':
-                            pIdentifier  .sIdentifier
-                            .sVar
-                        | *:
-                            pIdentifier  .sIdentifier
-                    ]
-                    ':'
-                    % type identifier
-                    pIdentifier  .sIdentifier
-                    [
-                        | ';':
-                        | *:
-                            >
-                    ]
-                }
-                ')'
-            | *:
-        ]
-		'is'
-        .sParmEnd;
+        @OptionalProcedureParameters 'is' .sParmEnd;
 
 ValueorLike :
         [
