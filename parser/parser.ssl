@@ -202,10 +202,7 @@ DeclarationOrStatement:
             | pPkg:
                 @Package
             | 'fun':
-                .sProcedure
-                pIdentifier .sIdentifier
-                @ProcedureHeading
-                @Block 
+                @Procedure
             | 'public': % optional public value
                 @Public
             | *:
@@ -214,21 +211,21 @@ DeclarationOrStatement:
         ]
         ;
 
+Procedure:
+    .sProcedure @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
+
+PublicProcedure:
+    .sProcedure @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
+
 Public:
     [
         | 'val':
             @PublicConstantDefinitions
         | 'var':
             @PublicVariableDeclaration
-        % Public functions 
         | 'fun':
-            .sProcedure
-            pIdentifier .sIdentifier
-            .sPublic
-            @ProcedureHeading
-            @Block 
-    ]
-    ;
+            @PublicProcedure
+    ];
 
 Package:
     .sPackage @identifier 'is' @Block;
@@ -305,12 +302,15 @@ PublicVariableDeclaration :
         % Accept only one variable declaration
         .sVar @identifier .sPublic @ValueorLike  ';';
 
-ParameterDeclaration:
+ParameterIdentifier:
     [
         | 'var': @identifier .sVar
         | pIdentifier: .sIdentifier
         | *: #eUnexpectedToken
     ];
+
+ParameterDeclaration:
+    @ParameterIdentifier ':' @LikeClause;
 
 ProcedureParameters:
     @ParameterDeclaration
@@ -325,9 +325,6 @@ OptionalProcedureParameters:
         | '(': @ProcedureParameters
         | *: 
     ];
-
-ProcedureHeading :
-        @OptionalProcedureParameters 'is' .sParmEnd;
 
 ValueorLike :
         [
