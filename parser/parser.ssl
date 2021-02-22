@@ -194,7 +194,6 @@ Block:
 DeclarationOrStatement:
         [
             | pVal :
-                .sConst
                 @ConstantDefinitions
             | pVar :
                 .sVar
@@ -261,6 +260,9 @@ UsingStatement:
 Identifier: 
     pIdentifier .sIdentifier;
 
+ConstantDefinition:
+    .sConst @Identifier '=' @ConstantValue;
+
 PublicConstantDefinition:
     .sConst @Identifier .sPublic '=' @ConstantValue;
 
@@ -274,18 +276,12 @@ PublicConstantDefinitions :
         ]};
 
 ConstantDefinitions :
-        % Accept one or more named constant definitions
-        pIdentifier  .sIdentifier
-        '=' @ConstantValue
+        @ConstantDefinition
         {[
-            | ',': % multiple constant definitions
-                .sConst
-                pIdentifier .sIdentifier
-                '=' @ConstantValue
-            | *:
-                >
-        ]}
-        ';'; % must end in a semicolon
+            | ',': @ConstantDefinition % comma separates more definitions
+            | ';': >
+            | *: #eUnexpectedToken
+        ]};
 
 ConstantValue :
         [
