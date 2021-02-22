@@ -267,14 +267,11 @@ PublicConstantDefinition:
 PublicConstantDefinitions :
         @PublicConstantDefinition
         {[
-            | ',': % multiple constant definitions
-                .sConst
-                pIdentifier .sIdentifier .sPublic
-                '=' @ConstantValue
-            | *:
-                >
-        ]}
-        ';'; % must end in a semicolon
+            | ',': @PublicConstantDefinition % comma separates more definitions
+            | ';': >
+            | *: #eUnexpectedToken
+
+        ]};
 
 ConstantDefinitions :
         % Accept one or more named constant definitions
