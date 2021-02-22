@@ -233,33 +233,28 @@ Public:
     ;
 
 Package:
-    .sPackage
-    % package name
-    pIdentifier .sIdentifier
-    'is'
-    @Block
-    ;
+    .sPackage @identifier 'is' @Block;
 
 AssignmentOrCallStmtOrVariableDeclaration: ;
 
 UsingStatement:
-    pUsing @Identifier
+    pUsing @identifier
     {[
-        | ',': @Identifier
+        | ',': @identifier
         | ';': >
         | *: #eUnexpectedToken
     ]}
     .sParmEnd
     ;
 
-Identifier: 
+identifier: 
     pIdentifier .sIdentifier;
 
 ConstantDefinition:
-    .sConst @Identifier '=' @ConstantValue;
+    .sConst @identifier '=' @ConstantValue;
 
 PublicConstantDefinition:
-    .sConst @Identifier .sPublic '=' @ConstantValue;
+    .sConst @identifier .sPublic '=' @ConstantValue;
 
 PublicConstantDefinitions :
         @PublicConstantDefinition
