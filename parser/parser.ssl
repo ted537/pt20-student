@@ -292,13 +292,9 @@ UnsignedIntegerConstant :
 
 OptionallySignedIntegerConstant :
         [
-            | '-':
-                @UnsignedIntegerConstant
-                .sNegate
-            | '+':
-                @UnsignedIntegerConstant
-            | *:
-                @UnsignedIntegerConstant
+            | '-': @UnsignedIntegerConstant .sNegate
+            | '+': @UnsignedIntegerConstant
+            | *: @UnsignedIntegerConstant
         ];
 
 VariableDeclaration :
