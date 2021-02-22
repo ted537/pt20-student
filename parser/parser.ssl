@@ -212,10 +212,12 @@ DeclarationOrStatement:
         ;
 
 Procedure:
-    .sProcedure @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
+    .sProcedure 
+    @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
 
 PublicProcedure:
-    .sProcedure @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
+    .sProcedure 
+    @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
 
 Public:
     [
