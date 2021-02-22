@@ -181,48 +181,53 @@ Program :
         ;
 Block:
         .sBegin
-        {
-            [
-                | pVal :
-                    .sConst
-                    @ConstantDefinitions
-                | pVar :
-                    .sVar
-                    @VariableDeclarations
-                | pIdentifier:
-                    @AssignmentOrCallStmtOrVariableDeclaration
-		| pPkg:
-		    .sPackage
-		    % package name
-		    pIdentifier .sIdentifier
-		    @Block 'is'
-                % put other statements here
-		| 'fun':
-		   .sProcedure
-		   pIdentifier .sIdentifier
-		   @ProcedureHeading
-		   @Block 'is'
-                | 'public': % optional public value
-                    [
-                        | 'val':
-                            .sConst
-                            @PublicConstantDefinitions
-                        | 'var':
-                            .sVar
-                            @PublicVariableDeclarations
-			    % Public functions 
-		  	    | 'fun':
-			    .sProcedure
-			    pIdentifier .sIdentifier
-			    .sPublic
-			    @ProcedureHeading
-			    @Block 'is'
-                    ]
-                | *:
-                    >
-            ]
-        }
+        {[
+            | pVal :
+                .sConst
+                @ConstantDefinitions
+            | pVar :
+                .sVar
+                @VariableDeclarations
+            | pIdentifier:
+                @AssignmentOrCallStmtOrVariableDeclaration
+            | pPkg:
+                @Package
+            | 'fun':
+                .sProcedure
+                pIdentifier .sIdentifier
+                @ProcedureHeading
+                @Block 
+            | 'public': % optional public value
+                @Public
+            | *:
+                >
+        ]}
         .sEnd;
+
+Public:
+    [
+        | 'val':
+            .sConst
+            @PublicConstantDefinitions
+        | 'var':
+            .sVar
+            @PublicVariableDeclarations
+        % Public functions 
+        | 'fun':
+            .sProcedure
+            pIdentifier .sIdentifier
+            .sPublic
+            @ProcedureHeading
+            @Block 
+    ]
+    ;
+
+Package:
+    .sPackage
+    % package name
+    pIdentifier .sIdentifier
+    'is' @Block
+    ;
 
 AssignmentOrCallStmtOrVariableDeclaration: ;
 
@@ -239,23 +244,6 @@ UsingStatement:
     ';'
     .sParmEnd
     ;
-
-%        'program'  .sProgram
-%        % program name
-%        pIdentifier
-%        % program parameters
-%        '('
-%        {
-%            pIdentifier  .sIdentifier
-%            [
-%                | ',':
-%                | *:
-%                    >
-%            ]
-%        }
-%        ')'
-%        .sParmEnd
-%        ';'  @Block  '.';
 
 PublicConstantDefinitions :
         % Accept one or more named constant definitions
@@ -385,52 +373,6 @@ ValueorLike :
         | *:
             @LikeClause
     ];
-
-% DEPRECATED RULE
-% TypeDefinitions :
-%         % Accept one or more named type definitions.
-%         pIdentifier  .sIdentifier
-%         '='  @TypeBody  ';'
-%         {[
-%             | pIdentifier:
-%                 .sIdentifier
-%                 '='  @TypeBody  ';'
-%             | *:
-%                 >
-%         ]};
-
-% DEPRECATED RULE
-% TypeBody :
-%         [
-%             | 'array':
-%                 .sArray
-%                 '['  @SimpleType  ']'
-%                 'of'  @SimpleType
-%             | 'file':
-%                 .sFile
-%                 'of'  @SimpleType
-%             | *:
-%                 @SimpleType
-%         ];
-
-% DEPRECATED RULE
-% SimpleType :
-%         % A simple type is a named type (possibly predefined)
-%         % or a subrange type specification
-%         [
-%             | pIdentifier:
-%                 .sIdentifier
-%                 [
-%                     | '..':
-%                         .sRange         %% this may be unnecessary
-%                         @OptionallySignedIntegerConstant
-%                     | *:
-%                 ]
-%             | *:
-%                 @OptionallySignedIntegerConstant
-%                 '..'  .sRange
-%                 @OptionallySignedIntegerConstant
-%         ];
 
 
 % 
