@@ -245,8 +245,10 @@ UsingStatement:
     .sParmEnd
     ;
 
-identifier: 
-    pIdentifier .sIdentifier;
+% lowercase rules indicate simple passthroughs
+identifier: pIdentifier .sIdentifier;
+like: pLike .sLike;
+
 
 ConstantDefinition:
     .sConst @identifier '=' @ConstantValue;
@@ -318,16 +320,8 @@ LikeClause :
         | '[':
             pInteger ']' ':'
             [
-                | 'file':
-                    .sFile
-                    .sInteger
-                    pLike .sLike
-                    @ConstantValue
-                | pLike:
-                    .sArray
-                    .sInteger
-                    .sLike
-                    @ConstantValue
+                | 'file': .sFile .sInteger @like @ConstantValue
+                | pLike: .sArray .sInteger .sLike @ConstantValue
             ]
         | ':':
             pLike .sLike
