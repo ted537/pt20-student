@@ -197,11 +197,11 @@ Block:
 		    pIdentifier .sIdentifier
 		    @Block 'is'
                 % put other statements here
-				| 'fun':
-					.sProcedure
-					pIdentifier .sIdentifier
-					@ProcedureHeading
-					@Block 'is'
+		| 'fun':
+		   .sProcedure
+		   pIdentifier .sIdentifier
+		   @ProcedureHeading
+		   @Block 'is'
                 | 'public': % optional public value
                     [
                         | 'val':
@@ -210,13 +210,13 @@ Block:
                         | 'var':
                             .sVar
                             @PublicVariableDeclarations
-						% Public functions 
-						| 'fun':
-							.sProcedure
-							pIdentifier .sIdentifier
-							.sPublic
-							@ProcedureHeading
-							@Block 'is'
+			    % Public functions 
+		  	    | 'fun':
+			    .sProcedure
+			    pIdentifier .sIdentifier
+			    .sPublic
+			    @ProcedureHeading
+			    @Block 'is'
                     ]
                 | *:
                     >
