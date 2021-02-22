@@ -219,7 +219,6 @@ DeclarationOrStatement:
 Public:
     [
         | 'val':
-            .sConst
             @PublicConstantDefinitions
         | 'var':
             .sVar
@@ -259,10 +258,14 @@ UsingStatement:
     .sParmEnd
     ;
 
+Identifier: 
+    pIdentifier .sIdentifier;
+
+PublicConstantDefinition:
+    .sConst @Identifier .sPublic '=' @ConstantValue;
+
 PublicConstantDefinitions :
-        % Accept one or more named constant definitions
-        pIdentifier  .sIdentifier .sPublic
-        '=' @ConstantValue
+        @PublicConstantDefinition
         {[
             | ',': % multiple constant definitions
                 .sConst
