@@ -208,6 +208,8 @@ DeclarationOrStatement:
                 @Block 
             | 'public': % optional public value
                 @Public
+            | *:
+                ?
         ]
         ;
 
@@ -233,7 +235,8 @@ Package:
     .sPackage
     % package name
     pIdentifier .sIdentifier
-    'is' pNewLine @Block
+    'is'
+    @Block
     ;
 
 AssignmentOrCallStmtOrVariableDeclaration: ;
