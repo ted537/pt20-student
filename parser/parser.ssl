@@ -243,16 +243,11 @@ Package:
 AssignmentOrCallStmtOrVariableDeclaration: ;
 
 UsingStatement:
-    pUsing pIdentifier .sIdentifier
+    pUsing @Identifier
     {[
-        | pIdentifier:
-            .sIdentifier
-        | pComma:
-            
-        | ';':
-            >
-        | *:
-            #eUnexpectedToken
+        | ',': @Identifier
+        | ';': >
+        | *: #eUnexpectedToken
     ]}
     .sParmEnd
     ;
