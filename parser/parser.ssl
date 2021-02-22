@@ -354,6 +354,7 @@ ValueorLike :
 OptionalFile:
     [
         | 'file': .sFile
+        | *: 
     ];
 
 LikeClause:
