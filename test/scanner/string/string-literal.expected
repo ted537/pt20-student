@@ -1,3 +1,4 @@
   .pStringLiteral
   % Output token text 'kj'
+  .pAlmostEndFile
  .pEndFile
