@@ -172,6 +172,8 @@ Output :
         sEndOfFile
         lastSemanticToken = sEndOfFile;
 
+Error:
+        eUnexpectedToken;
 
 rules
 
@@ -210,6 +212,7 @@ DeclarationOrStatement:
                 @Public
             | *:
                 ?
+                #eUnexpectedToken
         ]
         ;
 
@@ -248,10 +251,11 @@ UsingStatement:
             .sIdentifier
         | pComma:
             
-        | *:
+        | ';':
             >
+        | *:
+            #eUnexpectedToken
     ]}
-    ';'
     .sParmEnd
     ;
 
