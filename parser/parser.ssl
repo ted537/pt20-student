@@ -67,6 +67,7 @@ Input :
         % Non-compound tokens - 
         %   These tokens simply represent themselves.
         pNewLine
+        pAlmostEndFile
         pEndFile
         pPlus                   '+'
         pMinus                  '-'
@@ -199,7 +200,9 @@ Block:
                 @Block 
             | 'public': % optional public value
                 @Public
-            | *:
+            | 'end':
+                ';' >
+            | pAlmostEndFile:
                 >
         ]}
         .sEnd;

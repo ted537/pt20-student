@@ -109,6 +109,7 @@ Output :
         % Non-compound tokens - 
         %   These tokens simply represent themselves.
         pNewLine
+        pAlmostEndFile
         pEndFile
         pPlus
         pMinus
@@ -289,6 +290,7 @@ Scan :
                 ]
             | lNewPage:
             | lEndFile:
+                .pAlmostEndFile
                 .pEndFile
                 >
             | *:
