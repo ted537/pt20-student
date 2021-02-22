@@ -183,6 +183,14 @@ Program :
 Block:
         .sBegin
         {[
+            | pAlmostEndFile: >
+            | 'end': ';' >
+            | *: @DeclarationOrStatement
+        ]}
+        .sEnd;
+
+DeclarationOrStatement:
+        [
             | pVal :
                 .sConst
                 @ConstantDefinitions
@@ -200,12 +208,8 @@ Block:
                 @Block 
             | 'public': % optional public value
                 @Public
-            | 'end':
-                ';' >
-            | pAlmostEndFile:
-                >
-        ]}
-        .sEnd;
+        ]
+        ;
 
 Public:
     [
@@ -229,7 +233,7 @@ Package:
     .sPackage
     % package name
     pIdentifier .sIdentifier
-    'is' @Block
+    'is' pNewLine @Block
     ;
 
 AssignmentOrCallStmtOrVariableDeclaration: ;
