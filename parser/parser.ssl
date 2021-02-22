@@ -242,10 +242,6 @@ UsingStatement:
     .sParmEnd
     ;
 
-% lowercase rules indicate simple passthroughs
-identifier: pIdentifier .sIdentifier;
-like: pLike .sLike;
-
 
 ConstantDefinition:
     .sConst @identifier '=' @ConstantValue;
@@ -320,12 +316,6 @@ ProcedureParameters:
         | *: #eUnexpectedToken
     ]};
 
-OptionalProcedureParameters:
-    [
-        | '(': @ProcedureParameters
-        | *: 
-    ];
-
 ValueorLike :
         [
             | '=': @Expression
@@ -333,6 +323,14 @@ ValueorLike :
             | ':': @LikeClause
         ];
 
+LikeClause:
+    @OptionalFile @like @ConstantValue;
+
+% VERY SIMPLE RULES BELOW
+
+% lowercase rules indicate simple passthroughs
+identifier: pIdentifier .sIdentifier;
+like: pLike .sLike;
 
 OptionalFile:
     [
@@ -340,8 +338,12 @@ OptionalFile:
         | *: 
     ];
 
-LikeClause:
-    @OptionalFile @like @ConstantValue;
+
+OptionalProcedureParameters:
+    [
+        | '(': @ProcedureParameters
+        | *: 
+    ];
 
 % 
 % Statement :
