@@ -196,8 +196,7 @@ DeclarationOrStatement:
             | pVal :
                 @ConstantDefinitions
             | pVar :
-                .sVar
-                @VariableDeclarations
+                @VariableDeclaration
             | pIdentifier:
                 @AssignmentOrCallStmtOrVariableDeclaration
             | pPkg:
@@ -220,8 +219,7 @@ Public:
         | 'val':
             @PublicConstantDefinitions
         | 'var':
-            .sVar
-            @PublicVariableDeclarations
+            @PublicVariableDeclaration
         % Public functions 
         | 'fun':
             .sProcedure
@@ -307,15 +305,13 @@ OptionallySignedIntegerConstant :
                 @UnsignedIntegerConstant
         ];
 
-VariableDeclarations :
+VariableDeclaration :
         % Accept only one variable declaration
-        pIdentifier  .sIdentifier
-        @ValueorLike  ';';
+        .sVar @identifier @ValueorLike  ';';
 
-PublicVariableDeclarations :
+PublicVariableDeclaration :
         % Accept only one variable declaration
-        pIdentifier  .sIdentifier .sPublic
-        @ValueorLike  ';';
+        .sVar @identifier .sPublic @ValueorLike  ';';
 
 LikeClause :
     [
