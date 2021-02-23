@@ -211,6 +211,7 @@ IfBlock:
     {[
         | 'end': ';' .sEnd >
         | 'else': .sEnd .sElse @Block >
+        | 'elseif': .sEnd .sElse .sBegin @IfStatement .sEnd >
         | *: @DeclarationOrStatement
     ]};
     
