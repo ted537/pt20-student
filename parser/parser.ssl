@@ -193,23 +193,22 @@ Block:
 
 DeclarationOrStatement:
         [
-            | pVal :
-                @ConstantDefinitions
-            | pVar :
-                @VariableDeclaration
-            | pIdentifier:
-                @AssignmentOrCallStmtOrVariableDeclaration
-            | pPkg:
-                @Package
-            | 'fun':
-                @Procedure
-            | 'public': % optional public value
-                @Public
+            | pVal : @ConstantDefinitions
+            | pVar : @VariableDeclaration
+            | pIdentifier: @AssignmentOrCallStmtOrVariableDeclaration
+            | pPkg: @Package
+            | 'fun': @Procedure
+            | 'public': @Public
+            | pIf: @IfStatement
             | *:
                 ?
                 #eUnexpectedToken
         ]
         ;
+
+IfStatement:
+    .sIfStmt @Expression .sExpnEnd @then @Block
+    ;
 
 Procedure:
     .sProcedure 
@@ -333,6 +332,7 @@ LikeClause:
 % lowercase rules indicate simple passthroughs
 identifier: pIdentifier .sIdentifier;
 like: pLike .sLike;
+then: pThen .sThen;
 
 OptionalFile:
     [
@@ -502,7 +502,7 @@ OptionalProcedureParameters:
 Expression :
         @SimpleExpression
         [
-            | '=':
+            | '==':
                 @SimpleExpression  .sEq
             | '<>':
                 @SimpleExpression  .sNE
