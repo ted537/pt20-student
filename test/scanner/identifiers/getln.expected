@@ -1,4 +1,5 @@
   .pIdentifier
   % Output token text 'getln'
  .pNewLine
+ .pAlmostEndFile
  .pEndFile

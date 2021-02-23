@@ -1,4 +1,5 @@
   .pIdentifier
   % Output token text 'readin'
  .pNewLine
+ .pAlmostEndFile
  .pEndFile

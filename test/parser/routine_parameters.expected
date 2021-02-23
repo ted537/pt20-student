@@ -1,22 +1,24 @@
  .sProgram
-  .sIdentifier
-  .sIdentifier
+   .sIdentifier
+   .sIdentifier
   % .sNewLine
   .sParmEnd
   .sBegin
-  .sProcedure
-  .sIdentifier
-   .sIdentifier
-   .sIdentifier
-   .sIdentifier
-   .sVar
-   .sIdentifier
-   % .sNewLine
-   .sParmEnd
-   .sBegin
-   .sVar
-    .sIdentifier
+    .sProcedure
+     .sIdentifier
+        .sIdentifier
+         .sLike
          .sInteger
+         .sIdentifier
+        .sVar
+         .sLike
+         .sStringLiteral
     % .sNewLine
-   .sEnd
+    .sParmEnd
+     .sBegin
+       .sVar
+        .sIdentifier
+            .sInteger
+       % .sNewLine
+     .sEnd
   .sEnd

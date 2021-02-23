@@ -67,6 +67,7 @@ Input :
         % Non-compound tokens - 
         %   These tokens simply represent themselves.
         pNewLine
+        pAlmostEndFile
         pEndFile
         pPlus                   '+'
         pMinus                  '-'
@@ -171,6 +172,8 @@ Output :
         sEndOfFile
         lastSemanticToken = sEndOfFile;
 
+Error:
+        eUnexpectedToken;
 
 rules
 
@@ -182,198 +185,167 @@ Program :
 Block:
         .sBegin
         {[
+            | pAlmostEndFile: >
+            | 'end': ';' >
+            | *: @DeclarationOrStatement
+        ]}
+        .sEnd;
+
+DeclarationOrStatement:
+        [
             | pVal :
-                .sConst
                 @ConstantDefinitions
             | pVar :
-                .sVar
-                @VariableDeclarations
+                @VariableDeclaration
             | pIdentifier:
                 @AssignmentOrCallStmtOrVariableDeclaration
             | pPkg:
                 @Package
             | 'fun':
-                .sProcedure
-                pIdentifier .sIdentifier
-                @ProcedureHeading
-                @Block 
+                @Procedure
             | 'public': % optional public value
                 @Public
             | *:
-                >
-        ]}
-        .sEnd;
+                ?
+                #eUnexpectedToken
+        ]
+        ;
+
+Procedure:
+    .sProcedure 
+    @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
+
+PublicProcedure:
+    .sProcedure 
+    @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
 
 Public:
     [
         | 'val':
-            .sConst
             @PublicConstantDefinitions
         | 'var':
-            .sVar
-            @PublicVariableDeclarations
-        % Public functions 
+            @PublicVariableDeclaration
         | 'fun':
-            .sProcedure
-            pIdentifier .sIdentifier
-            .sPublic
-            @ProcedureHeading
-            @Block 
-    ]
-    ;
+            @PublicProcedure
+    ];
 
 Package:
-    .sPackage
-    % package name
-    pIdentifier .sIdentifier
-    'is' @Block
-    ;
+    .sPackage @identifier 'is' @Block;
 
 AssignmentOrCallStmtOrVariableDeclaration: ;
 
 UsingStatement:
-    pUsing pIdentifier .sIdentifier
+    pUsing @identifier
     {[
-        | pIdentifier:
-            .sIdentifier
-        | pComma:
-            
-        | *:
-            >
+        | ',': @identifier
+        | ';': >
+        | *: #eUnexpectedToken
     ]}
-    ';'
     .sParmEnd
     ;
 
+
+ConstantDefinition:
+    .sConst @identifier '=' @ConstantValue;
+
+PublicConstantDefinition:
+    .sConst @identifier .sPublic '=' @ConstantValue;
+
 PublicConstantDefinitions :
-        % Accept one or more named constant definitions
-        pIdentifier  .sIdentifier .sPublic
-        '=' @ConstantValue
+        @PublicConstantDefinition
         {[
-            | ',': % multiple constant definitions
-                .sConst
-                pIdentifier .sIdentifier .sPublic
-                '=' @ConstantValue
-            | *:
-                >
-        ]}
-        ';'; % must end in a semicolon
+            | ',': @PublicConstantDefinition % comma separates more definitions
+            | ';': >
+            | *: #eUnexpectedToken
+
+        ]};
 
 ConstantDefinitions :
-        % Accept one or more named constant definitions
-        pIdentifier  .sIdentifier
-        '=' @ConstantValue
+        @ConstantDefinition
         {[
-            | ',': % multiple constant definitions
-                .sConst
-                pIdentifier .sIdentifier
-                '=' @ConstantValue
-            | *:
-                >
-        ]}
-        ';'; % must end in a semicolon
+            | ',': @ConstantDefinition % comma separates more definitions
+            | ';': >
+            | *: #eUnexpectedToken
+        ]};
 
 ConstantValue :
         [
-            | pInteger:
-                .sInteger
-            | pIdentifier:
-                .sIdentifier
-            | '-':
-                @UnsignedIntegerConstant
-                .sNegate
-            | '+':
-                @UnsignedIntegerConstant
-            | pStringLiteral:
-                .sStringLiteral
+            | pInteger: .sInteger
+            | pStringLiteral: .sStringLiteral
+            | pIdentifier: .sIdentifier
+            | '-': @UnsignedIntegerConstant .sNegate
+            | '+': @UnsignedIntegerConstant
+            | *: #eUnexpectedToken
         ];
 
 UnsignedIntegerConstant :
         [
-            | pIdentifier:
-                .sIdentifier
-            | pInteger:
-                .sInteger
+            | pIdentifier: .sIdentifier
+            | pInteger: .sInteger
+            | *: #eUnexpectedToken
         ];
 
 OptionallySignedIntegerConstant :
         [
-            | '-':
-                @UnsignedIntegerConstant
-                .sNegate
-            | '+':
-                @UnsignedIntegerConstant
-            | *:
-                @UnsignedIntegerConstant
+            | '-': @UnsignedIntegerConstant .sNegate
+            | '+': @UnsignedIntegerConstant
+            | *: @UnsignedIntegerConstant
         ];
 
-VariableDeclarations :
+VariableDeclaration :
         % Accept only one variable declaration
-        pIdentifier  .sIdentifier
-        @ValueorLike  ';';
+        .sVar @identifier @ValueorLike  ';';
 
-PublicVariableDeclarations :
+PublicVariableDeclaration :
         % Accept only one variable declaration
-        pIdentifier  .sIdentifier .sPublic
-        @ValueorLike  ';';
+        .sVar @identifier .sPublic @ValueorLike  ';';
 
-LikeClause :
+ParameterIdentifier:
     [
-        | '[':
-            pInteger ']' ':'
-            [
-                | 'file':
-                    .sFile
-                    .sInteger
-                    pLike .sLike
-                    @ConstantValue
-                | pLike:
-                    .sArray
-                    .sInteger
-                    .sLike
-                    @ConstantValue
-            ]
-        | ':':
-            pLike .sLike
-            @ConstantValue
+        | 'var': @identifier .sVar
+        | pIdentifier: .sIdentifier
+        | *: #eUnexpectedToken
     ];
 
-ProcedureHeading :
-        % Accept zero or more procedure formal parameter declarations.
-        [
-            | '(':
-                {
-                    % formal parameter identifier
-                    [
-                        | 'var':
-                            pIdentifier  .sIdentifier
-                            .sVar
-                        | *:
-                            pIdentifier  .sIdentifier
-                    ]
-                    ':'
-                    % type identifier
-                    pIdentifier  .sIdentifier
-                    [
-                        | ';':
-                        | *:
-                            >
-                    ]
-                }
-                ')'
-            | *:
-        ]
-		'is'
-        .sParmEnd;
+ParameterDeclaration:
+    @ParameterIdentifier ':' @LikeClause;
+
+ProcedureParameters:
+    @ParameterDeclaration
+    {[
+        | ')': >
+        | ',': @ParameterDeclaration
+        | *: #eUnexpectedToken
+    ]};
 
 ValueorLike :
+        [
+            | '=': @Expression
+            | '[': .sArray @ConstantValue ']' ':' @LikeClause
+            | ':': @LikeClause
+        ];
+
+LikeClause:
+    @OptionalFile @like @ConstantValue;
+
+% VERY SIMPLE RULES BELOW
+
+% lowercase rules indicate simple passthroughs
+identifier: pIdentifier .sIdentifier;
+like: pLike .sLike;
+
+OptionalFile:
     [
-        | '=':
-            @Expression
-        | *:
-            @LikeClause
+        | 'file': .sFile
+        | *: 
     ];
 
+
+OptionalProcedureParameters:
+    [
+        | '(': @ProcedureParameters
+        | *: 
+    ];
 
 % 
 % Statement :

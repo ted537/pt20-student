@@ -1,19 +1,20 @@
  .sProgram
-  .sIdentifier
-  .sIdentifier
+   .sIdentifier
+   .sIdentifier
   % .sNewLine
   .sParmEnd
   .sBegin
-  .sVar
-   .sIdentifier
-   .sPublic
+     .sVar
+      .sIdentifier
+     .sPublic
+          .sInteger
+     % .sNewLine
+     .sVar
+      .sIdentifier
+     .sPublic
+      .sArray
+       .sInteger
+        .sFile
+        .sLike
         .sInteger
-   % .sNewLine
-  .sVar
-   .sIdentifier
-   .sPublic
-     .sFile
-     .sInteger
-     .sLike
-      .sInteger
   .sEnd

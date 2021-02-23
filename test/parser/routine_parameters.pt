@@ -1,4 +1,4 @@
 using input, output;
-fun flag(f : integer; var set : boolean) is
+fun flag(number : like 1, var string : like "hello world") is
 	var x = 5;
 end;
