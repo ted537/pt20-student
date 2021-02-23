@@ -208,12 +208,14 @@ DeclarationOrStatement:
         ;
 
 RepeatBlock:
+        .sRepeatStmt
         .sBegin
         {[
-            | 'while': @Expression ';' >
+            | 'while': >
             | *: @DeclarationOrStatement
         ]}
-        .sEnd;
+        .sEnd .sRepeatEnd @Expression .sExpnEnd ';'
+        ;
 
 RepeatStatement:
         [
