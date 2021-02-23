@@ -206,8 +206,17 @@ DeclarationOrStatement:
         ]
         ;
 
+IfBlock:
+    .sBegin
+    {[
+        | 'end': ';' .sEnd >
+        | 'else': .sEnd .sElse @Block >
+        | *: @DeclarationOrStatement
+    ]};
+    
+
 IfStatement:
-    .sIfStmt @Expression .sExpnEnd @then @Block
+    .sIfStmt @Expression .sExpnEnd @then @IfBlock
     ;
 
 Procedure:
