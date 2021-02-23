@@ -207,7 +207,7 @@ DeclarationOrStatement:
         ]
         ;
 
-RepeatBlock:
+RepeatBlock: % inside of repeat block where 'while' is at bottom
         .sRepeatStmt
         .sBegin
         {[
@@ -217,7 +217,7 @@ RepeatBlock:
         .sEnd .sRepeatEnd @Expression .sExpnEnd ';'
         ;
 
-RepeatStatement:
+RepeatStatement: % follows 'repeat' keyword
         [
             | 'while': .sWhileStmt @Expression .sExpnEnd @Block
             | *: @RepeatBlock
