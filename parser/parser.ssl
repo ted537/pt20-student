@@ -261,6 +261,7 @@ Package:
 AssignmentOrCallStmtOrVariableDeclaration: 
 	[
 		| '(': @CallStatement
+		| ';': @CallStatementNoParams
 		| *: #eUnexpectedToken
 	];
 
@@ -271,8 +272,11 @@ Arguments:
 		| *: @ConstantValue
 	]};
 
+CallStatementNoParams:
+	.sCallStmt .sIdentifier .sParmEnd;
+
 CallStatement: % starts after '('
-	.sCallStmt @Arguments .sExpnEnd .sParmEnd ';'
+	.sCallStmt .sIdentifier @Arguments .sExpnEnd .sParmEnd ';'
 	;
 
 UsingStatement:
