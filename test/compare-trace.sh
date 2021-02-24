@@ -11,10 +11,10 @@ expected_tokens=$(tokens $expected)
 output_tokens=$(tokens $output)
 
 if [ "$expected_tokens" = "$output_tokens" ]; then
-	echo $expected matches $output;
+	echo PASS: $expected matches $output;
 	exit 0;
 else
-	echo $expected does not match $output;
+	echo FAIL: $expected does not match $output;
 	echo "=== EXPECTED ==="
 	echo $expected_tokens;
 	echo "=== OUTPUT ==="
