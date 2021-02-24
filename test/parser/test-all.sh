@@ -2,7 +2,7 @@
 
 find_test_cases() {
     # magically find test cases by the .expected ending
-    expected_files=$(find test/parser -name "*.expected")
+    expected_files=$(find test/parser test/examples -name "*.pt")
 
     # strip file endings
     for expected_file in $expected_files; do
