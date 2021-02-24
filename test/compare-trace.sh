@@ -1,6 +1,6 @@
 #!/bin/bash
-expected=$1
-output=$2
+output=$1
+expected=$2
 
 tokens() {
 	trace=$1
