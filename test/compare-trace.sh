@@ -2,6 +2,23 @@
 output=$1
 expected=$2
 
+# Color
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+function red {
+    printf "${RED}$@${NC}\n"
+}
+
+function green {
+    printf "${GREEN}$@${NC}\n"
+}
+
+function yellow {
+    printf "${YELLOW}$@${NC}\n"
+}
+
 tokens() {
 	trace=$1
 	echo $(cat $trace | grep -v %)
@@ -11,10 +28,10 @@ expected_tokens=$(tokens $expected)
 output_tokens=$(tokens $output)
 
 if [ "$expected_tokens" = "$output_tokens" ]; then
-	echo PASS: $expected matches $output;
+	echo $(green PASS): $expected matches $output;
 	exit 0;
 else
-	echo FAIL: $expected does not match $output;
+	echo $(red FAIL): $expected does not match $output;
 	echo "=== EXPECTED ==="
 	echo $expected_tokens;
 	echo "=== OUTPUT ==="
