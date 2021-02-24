@@ -15,5 +15,9 @@ if [ "$expected_tokens" = "$output_tokens" ]; then
 	exit 0;
 else
 	echo $expected does not match $output;
+	echo "=== EXPECTED ==="
+	echo $expected_tokens;
+	echo "=== OUTPUT ==="
+	echo $output_tokens;
 	exit 1;
 fi
