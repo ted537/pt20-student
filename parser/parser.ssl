@@ -200,11 +200,28 @@ DeclarationOrStatement:
             | 'fun': @Procedure
             | 'public': @Public
             | pIf: @IfStatement
+            | pRepeat: @RepeatStatement
             | *:
                 ?
                 #eUnexpectedToken
         ]
         ;
+
+RepeatBlock: % inside of repeat block where 'while' is at bottom
+        .sRepeatStmt
+        .sBegin
+        {[
+            | 'while': >
+            | *: @DeclarationOrStatement
+        ]}
+        .sEnd .sRepeatEnd @Expression .sExpnEnd ';'
+        ;
+
+RepeatStatement: % follows 'repeat' keyword
+        [
+            | 'while': .sWhileStmt @Expression .sExpnEnd @Block
+            | *: @RepeatBlock
+        ];
 
 IfBlock:
     .sBegin
