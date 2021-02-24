@@ -1,0 +1,644 @@
+  .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pUsing)
+  .pIdentifier
+  % Output token text 'input'
+ .pComma
+  .pIdentifier
+  % Output token text 'output'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pVal)
+  .pIdentifier
+  % Output token text 'nilpointer'
+ .pEquals
+  .pInteger
+  % Output token text '0'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVal)
+  .pIdentifier
+  % Output token text 'maxtreeelements'
+ .pEquals
+  .pInteger
+  % Output token text '100'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'treereference'
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'root'
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pIdentifier
+  % Output token text 'treereference'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'treeleft'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'maxtreeelements'
+ .pRightBracket
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pIdentifier
+  % Output token text 'treereference'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'treeright'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'maxtreeelements'
+ .pRightBracket
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pIdentifier
+  % Output token text 'treereference'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'treeval'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'maxtreeelements'
+ .pRightBracket
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'avail'
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pFun)
+  .pIdentifier
+  % Output token text 'insert'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'value'
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pInteger
+  % Output token text '1'
+ .pRightParen
+  .pIdentifier (screened to pIs)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'treeval'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'avail'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'value'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'treeright'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'avail'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'nilpointer'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'treeleft'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'avail'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'nilpointer'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'root'
+ .pDoubleEquals
+  .pIdentifier
+  % Output token text 'nilpointer'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'root'
+ .pEquals
+  .pIdentifier
+  % Output token text 'avail'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'root'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'value'
+ .pLess
+  .pIdentifier
+  % Output token text 'treeval'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'treeleft'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pDoubleEquals
+  .pIdentifier
+  % Output token text 'nilpointer'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'treeleft'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'avail'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'avail'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'treeleft'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pElseif)
+  .pIdentifier
+  % Output token text 'value'
+ .pGreater
+  .pIdentifier
+  % Output token text 'treeval'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'treeright'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pDoubleEquals
+  .pIdentifier
+  % Output token text 'nilpointer'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'treeright'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'avail'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'avail'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'treeright'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'treeval'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pNotEqual
+  .pIdentifier
+  % Output token text 'value'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'avail'
+ .pPlusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pFun)
+  .pIdentifier
+  % Output token text 'walk'
+  .pIdentifier (screened to pIs)
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'stack'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'maxtreeelements'
+ .pRightBracket
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pIdentifier
+  % Output token text 'treereference'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'top'
+ .pEquals
+  .pInteger
+  % Output token text '0'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'root'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'done'
+ .pEquals
+  .pIdentifier
+  % Output token text 'false'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'node'
+ .pNotEqual
+  .pIdentifier
+  % Output token text 'nilpointer'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'top'
+ .pPlusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'stack'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'top'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'node'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'treeleft'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'top'
+ .pGreater
+  .pInteger
+  % Output token text '0'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'stack'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'top'
+ .pRightBracket
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'top'
+ .pMinusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'treeval'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pColon
+  .pInteger
+  % Output token text '1'
+ .pComma
+  .pStringLiteral
+  % Output token text ' '
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'node'
+ .pEquals
+  .pIdentifier
+  % Output token text 'treeright'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'node'
+ .pRightBracket
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'done'
+ .pEquals
+  .pIdentifier
+  % Output token text 'true'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pWhile)
+  .pIdentifier (screened to PNot)
+  .pIdentifier
+  % Output token text 'done'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 's'
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'i'
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier
+  % Output token text 'i'
+ .pEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'i'
+ .pLessEqual
+  .pIdentifier
+  % Output token text 'maxtreeelements'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'treeval'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'i'
+ .pRightBracket
+ .pEquals
+  .pInteger
+  % Output token text '0'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'treeleft'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'i'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'nilpointer'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'treeright'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'i'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'nilpointer'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'i'
+ .pPlusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'avail'
+ .pEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'root'
+ .pEquals
+  .pIdentifier
+  % Output token text 'nilpointer'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Type in some integers, please, ending with 0'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'get'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 's'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 's'
+ .pNotEqual
+  .pInteger
+  % Output token text '0'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'insert'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 's'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 's'
+ .pNotEqual
+  .pInteger
+  % Output token text '0'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier
+  % Output token text 'walk'
+ .pSemicolon
+ .pNewLine
+ .pEndFile

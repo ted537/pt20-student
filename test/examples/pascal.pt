@@ -1,0 +1,43 @@
+// Like example program
+// Pascal's triangle 
+using output;
+
+var pascal [15] : like 1;
+
+fun addto (index : like 1) is
+    if index == 1 then 
+        pascal [1] = pascal [1] + 1;
+    else
+        pascal [index] = pascal [index] + pascal [index - 1];
+    end;
+end;
+
+// initialize the array  
+pascal [1] = 1;
+var col = 2;
+repeat
+    pascal [col] = 0;
+    col += 1;
+while col <= 15;
+
+put (1:5); putln;
+
+var row = 2;
+repeat
+    // calculate a new row 
+    col = row;
+    repeat while col >= 1 
+        addto (col);
+        col -= 1;
+    end;
+
+    // print this row 
+    col = 1;
+    repeat while col <= row 
+        put (pascal [col] : 5);
+        col += 1;
+    end;
+    putln;
+
+    row += 1;
+while row <= 15;

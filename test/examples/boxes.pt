@@ -1,0 +1,47 @@
+// Like example program 
+// Draw boxes on the console
+using input, output;
+
+// Ask for size and number of boxes to draw
+var width : like 5; 
+var height : like 5;
+put ("enter box width and height: ");
+get (width, height);
+
+var Nacross : like 4; 
+var Ndown : like 6;
+put ("enter number of boxes across and down: ");
+get (Nacross, Ndown);
+
+// Add 1 for boundaries 
+width += 1; height += 1;
+
+// Comprinte top, bottom and middle lines 
+var top = ""; var middle = ""; var bottom = "";
+var i = 0;
+repeat while i <= width * Nacross;
+    if i % width == 0 then
+        top = top | " ";
+        middle = middle | "|";
+        bottom = bottom | "|";
+    else 
+        top = top | "_";
+        middle = middle | " ";
+        bottom = bottom | "_";
+    end;
+    i += 1;
+end;
+
+// Now output the whole thing
+put (top); putln;
+i = 1;
+repeat while i <= Ndown;
+    var j = 1;
+    repeat while j < height - 1;
+        put (middle); putln;
+        j += 1;
+    end;
+
+    put (bottom); putln;
+    i += 1;
+end;

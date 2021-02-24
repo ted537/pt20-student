@@ -1,0 +1,60 @@
+ % .sNewLine
+ .sProgram
+ .sIdentifier
+ .sIdentifier
+ .sParmEnd
+ % .sNewLine
+  .sBegin
+  .sVar
+   .sIdentifier
+    .sInitialValue
+        .sStringLiteral
+    .sExpnEnd
+   % .sNewLine
+   % .sNewLine
+    .sCallStmt
+    .sIdentifier
+        .sStringLiteral
+    .sExpnEnd
+    .sParmEnd
+    .sCallStmt
+    .sIdentifier
+    .sParmEnd
+   % .sNewLine
+  % .sNewLine
+   .sRepeatStmt
+     .sBegin
+       .sCallStmt
+       .sIdentifier
+           .sIdentifier
+       .sExpnEnd
+       .sParmEnd
+      % .sNewLine
+       .sCallStmt
+       .sIdentifier
+           .sIdentifier
+           .sStringLiteral
+         .sConcatenate
+           .sIdentifier
+         .sConcatenate
+       .sExpnEnd
+       .sParmEnd
+      % .sNewLine
+       .sCallStmt
+       .sIdentifier
+       .sParmEnd
+      % .sNewLine
+       .sCallStmt
+       .sIdentifier
+       .sParmEnd
+      % .sNewLine
+     .sEnd
+   .sRepeatEnd
+       .sIdentifier
+       .sStringLiteral
+    .sNE
+   .sNot
+   .sExpnEnd
+  % .sNewLine
+  .sNullStmt
+  .sEnd

@@ -1,0 +1,11 @@
+// Like example program 
+// Print a triangle of stars
+using output;
+
+var i = 1;
+var stars = "";
+repeat while i <= 50;
+    stars = "*" | stars;
+    put (stars); putln;
+    i += 1;
+end;

@@ -1,0 +1,65 @@
+// Like example program 
+// Lunch - the singing program
+using output;
+
+// Sing about the old lady!
+var animal [8] : like "fly";
+var remark [8] : like "why";
+
+// All the animals ...
+animal [1] = "fly";
+animal [2] = "spider";
+animal [3] = "bird";
+animal [4] = "cat";
+animal [5] = "dog";
+animal [6] = "goat";
+animal [7] = "cow";
+animal [8] = "horse";
+
+// ... and their stories
+remark [1] = "I don't know why she swallowed a fly.";
+remark [2] = "That wiggled and jiggled and tickled inside her.";
+remark [3] = "How absurd, to swallow a bird.";
+remark [4] = "Imagine that, she swallowed a cat.";
+remark [5] = "What a hog, to swallow a dog.";
+remark [6] = "What a dope, to swallow a goat.";
+remark [7] = "I don't know how she swallowed that cow.";
+remark [8] = "She died of course.";
+
+// Title it
+put ("I Know an Old Lady"); putln;
+
+// Now sing, starting with verse 1
+var verse = 1;
+
+repeat while verse < 8;
+    putln;
+    put ("I know an old lady"); putln;
+    put ("Who swallowed a " | animal [verse]); putln;
+    put (remark [verse]); putln;
+
+    var countdown = verse;
+    repeat while countdown >= 2;
+        put ("She swallowed the " | animal [countdown]);
+        put (" to catch the " | animal [countdown - 1] | ","); putln;
+        countdown -= 1;
+    end;
+
+    if verse > 1 then
+        put (remark [1]); putln;
+    end;
+
+    if verse < 8 then
+        put ("Perhaps she'll die."); putln;
+    end;
+
+    verse += 1;
+end;
+
+// End nicely
+putln;
+put ("The end."); putln;
+putln;
+put ("Thank you very much, you're too kind."); putln;
+put ("I'll be here until Thursday - try the veal!"); putln;
+putln;

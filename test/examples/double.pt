@@ -1,0 +1,11 @@
+// Like example program 
+using input, output;
+var word = "";
+
+put ("Anything you can say, I can say twice (end with 'bye'):"); putln;
+repeat
+    get (word);
+    put (word | " " | word);
+    putln;
+    getln;
+while word != "bye";

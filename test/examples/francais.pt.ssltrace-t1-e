@@ -1,0 +1,440 @@
+  .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pUsing)
+  .pIdentifier
+  % Output token text 'input'
+ .pComma
+  .pIdentifier
+  % Output token text 'output'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pStringLiteral
+  % Output token text 'arreter'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Please give me a regular French 'er' verb (end with 'arreter')'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'get'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Thanks, here is the present conjugation'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'root'
+ .pEquals
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pSlash
+  .pInteger
+  % Output token text '1'
+ .pColon
+ .pLeftParen
+ .pHash
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pMinus
+  .pInteger
+  % Output token text '2'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'The root of this verb is ''
+ .pComma
+  .pIdentifier
+  % Output token text 'root'
+ .pComma
+  .pStringLiteral
+  % Output token text '''
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pSlash
+ .pLeftParen
+ .pHash
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pMinus
+  .pInteger
+  % Output token text '1'
+ .pRightParen
+ .pColon
+ .pHash
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pDoubleEquals
+  .pStringLiteral
+  % Output token text 'er'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pIf)
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'root'
+ .pSlash
+  .pInteger
+  % Output token text '1'
+ .pColon
+  .pInteger
+  % Output token text '1'
+ .pDoubleEquals
+  .pStringLiteral
+  % Output token text 'a'
+ .pRightParen
+  .pIdentifier (screened to POr)
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'root'
+ .pSlash
+  .pInteger
+  % Output token text '1'
+ .pColon
+  .pInteger
+  % Output token text '1'
+ .pDoubleEquals
+  .pStringLiteral
+  % Output token text 'e'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to POr)
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'root'
+ .pSlash
+  .pInteger
+  % Output token text '1'
+ .pColon
+  .pInteger
+  % Output token text '1'
+ .pDoubleEquals
+  .pStringLiteral
+  % Output token text 'i'
+ .pRightParen
+  .pIdentifier (screened to POr)
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'root'
+ .pSlash
+  .pInteger
+  % Output token text '1'
+ .pColon
+  .pInteger
+  % Output token text '1'
+ .pDoubleEquals
+  .pStringLiteral
+  % Output token text 'o'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to POr)
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'root'
+ .pSlash
+  .pInteger
+  % Output token text '1'
+ .pColon
+  .pInteger
+  % Output token text '1'
+ .pDoubleEquals
+  .pStringLiteral
+  % Output token text 'u'
+ .pRightParen
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'J''
+ .pOrBar
+  .pIdentifier
+  % Output token text 'root'
+ .pOrBar
+  .pStringLiteral
+  % Output token text 'e'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Je '
+ .pOrBar
+  .pIdentifier
+  % Output token text 'root'
+ .pOrBar
+  .pStringLiteral
+  % Output token text 'e'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Tu '
+ .pOrBar
+  .pIdentifier
+  % Output token text 'root'
+ .pOrBar
+  .pStringLiteral
+  % Output token text 'es'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Il ou elle '
+ .pOrBar
+  .pIdentifier
+  % Output token text 'root'
+ .pOrBar
+  .pStringLiteral
+  % Output token text 'e'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'root'
+ .pSlash
+ .pHash
+  .pIdentifier
+  % Output token text 'root'
+ .pColon
+ .pHash
+  .pIdentifier
+  % Output token text 'root'
+ .pDoubleEquals
+  .pStringLiteral
+  % Output token text 'g'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Nous '
+ .pOrBar
+  .pIdentifier
+  % Output token text 'root'
+ .pOrBar
+  .pStringLiteral
+  % Output token text 'eons'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Nous '
+ .pOrBar
+  .pIdentifier
+  % Output token text 'root'
+ .pOrBar
+  .pStringLiteral
+  % Output token text 'ons'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Vous '
+ .pOrBar
+  .pIdentifier
+  % Output token text 'root'
+ .pOrBar
+  .pStringLiteral
+  % Output token text 'ez'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Ils ou elles '
+ .pOrBar
+  .pIdentifier
+  % Output token text 'root'
+ .pOrBar
+  .pStringLiteral
+  % Output token text 'ent'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pElseif)
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pSlash
+ .pLeftParen
+ .pHash
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pMinus
+  .pInteger
+  % Output token text '1'
+ .pRightParen
+ .pColon
+ .pHash
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pDoubleEquals
+  .pStringLiteral
+  % Output token text 'ir'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'I'm too tired to do an 'ir' verb'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'I don't like the looks of this verb'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'getln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'infinitive'
+ .pNotEqual
+  .pStringLiteral
+  % Output token text 'arreter'
+ .pSemicolon
+ .pNewLine
+ .pEndFile

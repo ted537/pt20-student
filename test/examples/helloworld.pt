@@ -1,0 +1,4 @@
+// Like example program
+using output;
+put ("Hello world"); 
+putln;
