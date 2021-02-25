@@ -15,6 +15,11 @@ scanner:
 	cd cmd; make $(ACTION)
 	cd parser; make scanner
 
+Parser:
+	mkdir -p bin lib/pt
+	cd cmd; make $(ACTION)
+	cd parser; make $(ACTION)
+
 install: 
 	make all ACTION=install
 
