@@ -1,4 +1,5 @@
 #!/bin/bash
+# generate all required ssltraces for evaluation
 
 # run scanner on everything
 for test_case in $(./test/find_test_cases.sh test); do

@@ -1,4 +1,5 @@
 #!/bin/bash
+# generates comparison commands
 
 compare=./test/compare-trace.sh
 

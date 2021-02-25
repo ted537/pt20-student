@@ -1,4 +1,6 @@
 #!/bin/bash
+# wrapper around ssltrace command that reorders parameters
+# such that scanner-trace and parser-trace are trivial
 
 def=$1
 o=$2

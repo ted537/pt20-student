@@ -1,4 +1,5 @@
 #!/bin/bash
+# test all and show summary
 
 results=$(./test/test-all.sh | grep 'PASS\|FAIL')
 echo "$results";

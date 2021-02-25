@@ -1,4 +1,6 @@
 #!/bin/bash
+# compares expected file to output file, ignoring whitespace and comments
+
 output=$1
 expected=$2
 

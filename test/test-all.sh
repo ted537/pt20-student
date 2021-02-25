@@ -1,4 +1,7 @@
 #!/bin/bash
+# generate all test outputs.
+# pretty overwhelming to look at directly.
+# ./test/summary.sh is much better for actually observing
 
 ./test/generate-traces.sh
 commands=$(./test/commands.sh)
