@@ -8,3 +8,11 @@ fails=$(echo "$results" | grep -c FAIL)
 echo =========
 echo Passes: $passes
 echo Fails: $fails
+echo =========
+
+if [ "$fails" -eq "0" ]; then
+	echo "All tests passing";
+else
+	echo "The following tests are failing";
+	./test/failing.sh
+fi
