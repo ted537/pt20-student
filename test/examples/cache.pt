@@ -1,0 +1,253 @@
+// Like example program
+using input, output;
+
+/* Example CISC 211A Assignment 2 Solution 
+  J.R. Cordy, October 1995                */
+
+/* Program parameters :
+     N is the number of customers in the database,
+     M is the number of random lookups to try      */
+
+var integer : like 1;
+var N : like integer;
+var M : like integer;
+
+/* The database is modelled by a set of random integers */
+val maxN = 1000;
+var customer [maxN] : like integer;
+
+/* Counter for total number of compares */
+var ncompares : like integer;
+
+/* random seed */
+var seed : like integer;
+var multiplier : like integer;
+
+/* cache for use by cache strategy */
+val cachesize = 20;
+var cachename [cachesize] : like integer;
+var cacheindx [cachesize] : like integer;
+var cp : like integer;
+
+var c : like integer;
+var r : like integer;
+var j : like integer;
+var indx : like integer;
+var cavg : like integer;
+
+
+/* Procedure to generate random numbers */
+
+fun randint (var result : like integer, modulus : like integer) is
+    /* random number generation */
+    if multiplier == 17 then
+        multiplier = 19;
+    else 
+        multiplier = 17;
+    end;
+    seed = (seed * multiplier) % 10000;
+    result = (seed % modulus) + 1;
+end /*randint*/;
+
+
+/* Procedure to initialize the customer database to N random */
+/* integers between 1000 and 1099 */
+
+fun initialize is
+    var i = 1;
+    repeat while i <= N 
+        var p: like integer;
+        randint (p, 100);
+        p += 1000;
+        customer [i] = p;
+        i += 1;
+    end;
+end /*initialize*/;
+
+
+/* Function to generate a random successful lookup key. */
+/* We generate a random index of the array, then use */
+/* the value there to look up. */
+
+fun randomname (var r : like integer) is
+    var p : like integer;
+    randint (p, N);
+    r = customer [p];
+end /*randomname*/;
+
+
+/* Function implementing a naive linear lookup. */
+
+fun findlinear (name : like integer, var r : like integer) is
+    var i = 1;
+    r = 0;
+    repeat while (i <=  N) and (r == 0)
+        ncompares += 1;
+        if customer [i] == name then
+            r = i;
+        end;
+        i += 1;
+    end;
+end /*findlinear*/;
+
+
+/* Function impelementing a linear lookup with cache of size cachesize. */
+/* The cache strategy is LRE - that is, least recently */
+/* entered cache item gets replaced.  This is effectively */
+/* round-robin use of the cache. */
+
+
+fun findcache (name : like integer, r : like integer) is
+    var c = 1;
+    r = 0;
+    repeat while (c <= cachesize) and (cachename [c] != 0) and (r == 0) 
+        ncompares += 1;
+        if cachename [c] == name then
+            r = cacheindx [c];
+        end;
+        c += 1;
+    end;
+    var i = 1;
+    repeat while (i <= N) and (r == 0)  
+        ncompares += 1;
+        if customer [i] == name then
+            /* Put it in the cache */
+            cp += 1;
+            if cp > cachesize then
+                cp = 1;
+            end;
+            cachename [cp] = name;
+            cacheindx [cp] = i;
+            r = i;
+        end;
+        i += 1;
+    end;
+end /*findcache*/;
+
+
+/* Procedure to bubble sort the customer array so that */
+/* we can use binary search.  Compares used here count */
+/* as part of the total cost of that strategy. */
+
+fun swap (n1: like integer, n2 : like integer) is
+    var temp = customer [n1];
+    customer [n1] = customer [n2];
+    customer [n2] = temp;
+end /*swap*/;
+
+fun bubblesort is
+    var j = N;
+    var nswaps = 1;
+    repeat while (j > 1) and (nswaps != 0)  
+        nswaps = 0;
+        var k = 1;
+        repeat while k < j 
+            ncompares += 1;
+            if customer [k] > customer [k + 1] then
+                nswaps += 1;
+                swap (k, k + 1);
+            end; 
+            k += 1;
+        end;
+        j -= 1;
+    end;
+end /*bubblesort*/;
+
+
+/* Function implementing a binary search. */
+/* Assumes that the database is sorted in increasing order. */
+
+fun findbinary (name : like integer, r : like integer) is
+    var first = 1;
+    var last = N;
+    repeat while first != last 
+        var mid = (first + last) / 2;
+        ncompares = ncompares + 1;
+        if name > customer [mid] then
+            first = mid + 1;
+        else
+            last = mid;
+        end;
+    end;
+    ncompares += 1;
+    if customer [first] == name then
+        r = first;
+    else
+        r = 0;
+    end;
+end /*findbinary*/;
+
+
+/* Main program. */
+/* Initialize the database to N random integers */
+/* then look up M of them using each method. */
+
+/* initialize random seed */
+seed = 13277;
+multiplier = 17;
+
+/* Get the number of customers in the database N and the number of random lookups to try M */
+put ("Enter N (number of elements, at most 1000, e.g. 100): ");
+get (N); getln;
+put ("Enter M (number of lookups, e.g. 1000): ");
+get (M); getln;
+put ("Enter a prime number (e.g. 13, 19, 51, ...): ");
+get (multiplier); getln;
+
+initialize;
+
+/* Linear lookup */
+putln; put ("Linear lookup"); putln;
+ncompares = 0;
+
+c = 1;
+repeat while c <= M 
+    randomname (r);
+    findlinear (r, indx);
+    c += 1;
+end;
+
+cavg = ncompares / M;
+put ("N= ", N:1, "  Average compares per search (Cavg) = ", cavg:1); putln;
+
+
+/* Linear lookup with cache */
+putln; put ("Linear lookup with cache"); putln;
+ncompares = 0;
+
+/* Initialize the cache to empty */
+cp = 0;
+j = 1;
+repeat while j <= cachesize 
+    cachename [j] = 0;
+    j += 1;
+end;
+
+c = 1;
+repeat while c <= M 
+    randomname (r);
+    findlinear (r, indx);
+    c += 1;
+end;
+
+cavg = ncompares / M;
+put ("N= ", N:1, "  Average compares per search (Cavg) = ", cavg:1); putln;
+
+
+/* Binary search */
+putln; put ("Binary search"); putln;
+
+/* Don't count compares of bubble sort in total */
+bubblesort;
+
+ncompares = 0;
+c = 1;
+repeat while c <= M 
+    randomname (r);
+    findbinary (r, indx);
+    c += 1;
+end;
+
+cavg = ncompares / M;
+put ("N= ", N:1, "  Average compares per search (Cavg) = ", cavg:1); putln;
+

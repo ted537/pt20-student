@@ -1,0 +1,106 @@
+// Like example program 
+// Binary tree sort
+using input, output;
+
+// Limits
+val nilPointer = 0;
+val maxTreeElements = 100;
+var treeReference : like 1;
+
+// Binary tree node representation
+var root : like treeReference;
+var treeleft [maxTreeElements] : like treeReference;
+var treeright [maxTreeElements] : like treeReference;
+var treeval [maxTreeElements] : like 1;
+
+// Keep track of next free node
+var avail : like 1;
+
+// Binary tree insert routine
+fun Insert (value : like 1) is
+    treeval [avail] = value;
+    treeright [avail] = nilPointer;
+    treeleft [avail] = nilPointer;
+
+    if root == nilPointer then
+        root = avail;
+    else
+        var node = root;
+        repeat
+            if value < treeval [node] then
+                if treeleft [node] == nilPointer then
+                    treeleft [node] = avail;
+                    node = avail;
+                else
+                    node = treeleft [node];
+                end;
+
+            elseif value > treeval [node] then
+                if treeright [node] == nilPointer then
+                    treeright [node] = avail;
+                    node = avail;
+                else
+                    node = treeright [node];
+                end;
+            end;
+        while treeval [node] != value;
+    end;
+
+    avail += 1;
+end;
+
+// Binary tree depth first left-right walk
+fun Walk is
+    var stack [maxTreeElements] : like treeReference;
+    var top = 0;
+    var node = root;
+    var done = false;
+    repeat
+        if node != nilPointer then
+            top += 1;
+            stack [top] = node;
+            node = treeLeft [node];
+        else
+            if top > 0 then
+                node = stack [top];
+                top -= 1;
+                put (treeval [node]: 1, " ") ;
+                node = treeRight [node];
+            else
+                done = true;
+            end;
+        end;
+    while not done;
+    putln;
+end;
+
+
+// Main program  
+var s : like 1;
+var i : like 1;
+
+// Initialization 
+i = 1;
+repeat while i <= maxTreeElements;
+    treeval [i] = 0;
+    treeleft [i] = nilPointer;
+    treeright [i] = nilPointer;
+    i += 1;
+end;
+
+avail = 1;
+root = nilPointer;
+
+// Get ints to be sorted and insert them in the binary tree
+put ("Type in some integers, please, ending with 0");
+putln;
+
+repeat
+    get (s);
+    if s != 0 then
+        Insert (s);
+    end;
+while s != 0;
+
+// Output the sorted result
+Walk;

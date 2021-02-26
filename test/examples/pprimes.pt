@@ -1,0 +1,69 @@
+// Like example program with packages
+// Primes: determine the primes up to maxprimes using the sieve method 
+using output;
+
+// Limits
+val maxprimes = 100;
+var maxfactor = 50 / 2;
+
+val prime = true;
+val notprime = false;
+
+pkg flags is
+   var flagvector [maxprimes] : like prime;
+
+    public fun flagset (f: like 1, tf: like prime) is
+	flagvector [f] = tf;
+    end;
+
+    public fun flag (f: like 1, var set: like prime) is
+	set = flagvector [f];
+    end;
+
+    // Everything begins as prime 
+    var i = 1;
+    repeat while i <= maxprimes 
+	flagvector [i] = prime;
+	i += 1;
+    end;
+end;
+
+
+// Main program
+
+// Pick out multiples of each prime factor and set these to notprime 
+var multiple = 2;
+var factor = 2;
+
+repeat while factor <= maxfactor;
+
+    // Set multiples of factor to notprime  
+    multiple = factor + factor;
+    repeat while multiple <= maxprimes;
+	flagset (multiple, notprime);
+	multiple += factor;
+    end;
+
+    // Set factor = next prime 
+    var nextfactor = factor + 1;
+    var isprime: like true;
+    flag (nextfactor, isprime);
+    repeat while (nextfactor <= maxprimes) and not isprime;
+	nextfactor += 1;
+	flag (nextfactor, isprime);
+    end;
+    factor = nextfactor;
+end;
+
+// Now report the results 
+put ("The primes up to ", maxprimes:1, " are:"); putln;
+var nextfactor = 2;
+repeat while nextfactor <= maxprimes;
+    var isprime: like true;
+    flag (nextfactor, isprime);
+    if isprime then
+	put (nextfactor:4);
+    end;
+    nextfactor += 1;
+end;
+putln;

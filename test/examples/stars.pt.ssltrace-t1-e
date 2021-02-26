@@ -1,0 +1,65 @@
+  .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pUsing)
+  .pIdentifier
+  % Output token text 'output'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'i'
+ .pEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'stars'
+ .pEquals
+  .pStringLiteral
+  % Output token text ''
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'i'
+ .pLessEqual
+  .pInteger
+  % Output token text '50'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'stars'
+ .pEquals
+  .pStringLiteral
+  % Output token text '*'
+ .pOrBar
+  .pIdentifier
+  % Output token text 'stars'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'stars'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'i'
+ .pPlusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pEndFile

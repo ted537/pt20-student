@@ -1,0 +1,64 @@
+// Like example program
+// Bubble sort of a list of integers
+using output;
+
+val nelements = 25;
+val maxval = 99;
+
+var list [nelements]: like 1;
+var current: like 1;
+
+fun lessthan (i : like 1, j : like 1, var b : like true) is
+    current = i;
+    b = (list [i] < list [j]);
+end;
+
+fun swap (i: like 1, j : like 1) is
+    var t : like 1;
+    current = j;
+    t = list [i];
+    list [i] = list [j];
+    list [j] = t;
+end;
+
+fun print is
+    var i = 1;
+    repeat
+        put (list[i]:4);
+        i += 1;
+    while i <= nelements;
+    putln;
+end;
+
+fun sort is
+    var i = nelements - 1;
+    repeat while i > 0
+        var j = 1;
+        repeat while j < nelements 
+            var lt: like true;
+            lessthan (j, j+1, lt);
+            if not lt then
+                swap (j, j + 1);
+            end;
+            j += 1;
+        end;
+        i -= 1;
+    end;
+end;
+
+// Initialization 
+list[1] = 61;
+
+var i = 1;
+repeat
+    i += 1;
+    var j = list[i-1] * 1271;
+    list[i] = j % maxval;
+while i != nelements;
+
+current = 0;
+
+// Main program 
+print;
+sort;
+print;

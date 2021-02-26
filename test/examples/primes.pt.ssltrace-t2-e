@@ -1,0 +1,313 @@
+ % .sNewLine
+ % .sNewLine
+ .sProgram
+ .sIdentifier
+ .sParmEnd
+ % .sNewLine
+  .sBegin
+  .sConst
+   .sIdentifier
+    .sInteger
+   % .sNewLine
+  .sConst
+   .sIdentifier
+    .sInteger
+   % .sNewLine
+   % .sNewLine
+   % .sNewLine
+  .sVar
+   .sIdentifier
+     .sLike
+      .sIdentifier
+   % .sNewLine
+  .sVar
+   .sIdentifier
+     .sLike
+       .sInteger
+   % .sNewLine
+   % .sNewLine
+  .sConst
+   .sIdentifier
+    .sIdentifier
+   % .sNewLine
+  .sConst
+   .sIdentifier
+    .sIdentifier
+   % .sNewLine
+   % .sNewLine
+  .sVar
+   .sIdentifier
+     .sArray
+      .sIdentifier
+     .sLike
+      .sIdentifier
+   % .sNewLine
+   % .sNewLine
+  .sProcedure
+  .sIdentifier
+   .sIdentifier
+    .sLike
+     .sIdentifier
+   .sIdentifier
+    .sLike
+     .sIdentifier
+   .sParmEnd
+  % .sNewLine
+   .sBegin
+    .sAssignmentStmt
+    .sIdentifier
+    .sSubscript
+        .sIdentifier
+    .sExpnEnd
+        .sIdentifier
+    .sExpnEnd
+    % .sNewLine
+   .sEnd
+  % .sNewLine
+  % .sNewLine
+  .sProcedure
+  .sIdentifier
+   .sIdentifier
+    .sLike
+     .sIdentifier
+   .sIdentifier
+   .sVar
+    .sLike
+     .sIdentifier
+   .sParmEnd
+  % .sNewLine
+   .sBegin
+    .sAssignmentStmt
+    .sIdentifier
+        .sIdentifier
+         .sSubscript
+             .sIdentifier
+         .sExpnEnd
+    .sExpnEnd
+    % .sNewLine
+   .sEnd
+  % .sNewLine
+  % .sNewLine
+  .sVar
+   .sIdentifier
+    .sInitialValue
+        .sInteger
+    .sExpnEnd
+   % .sNewLine
+   .sWhileStmt
+       .sIdentifier
+       % .sNewLine
+       .sIdentifier
+    .sLE
+   .sExpnEnd
+     .sBegin
+      .sAssignmentStmt
+      .sIdentifier
+      .sSubscript
+          .sIdentifier
+      .sExpnEnd
+          .sIdentifier
+      .sExpnEnd
+      % .sNewLine
+      .sAssignmentStmt
+      .sIdentifier
+      .sIdentifier
+          .sInteger
+      .sAdd
+      .sExpnEnd
+      % .sNewLine
+     .sEnd
+   % .sNewLine
+   % .sNewLine
+   % .sNewLine
+  .sVar
+   .sIdentifier
+    .sInitialValue
+        .sInteger
+    .sExpnEnd
+   % .sNewLine
+  .sVar
+   .sIdentifier
+    .sInitialValue
+        .sInteger
+    .sExpnEnd
+   % .sNewLine
+   % .sNewLine
+   .sWhileStmt
+       .sIdentifier
+       % .sNewLine
+       % .sNewLine
+       % .sNewLine
+       .sIdentifier
+    .sLE
+   .sExpnEnd
+     .sBegin
+      .sAssignmentStmt
+      .sIdentifier
+          .sIdentifier
+          .sIdentifier
+        .sAdd
+      .sExpnEnd
+      % .sNewLine
+      .sWhileStmt
+          .sIdentifier
+          % .sNewLine
+          .sIdentifier
+       .sLE
+      .sExpnEnd
+        .sBegin
+          .sCallStmt
+          .sIdentifier
+              .sIdentifier
+          .sExpnEnd
+              .sIdentifier
+          .sExpnEnd
+          .sParmEnd
+         % .sNewLine
+         .sAssignmentStmt
+         .sIdentifier
+         .sIdentifier
+             .sIdentifier
+         .sAdd
+         .sExpnEnd
+         % .sNewLine
+        .sEnd
+      % .sNewLine
+      % .sNewLine
+      % .sNewLine
+     .sVar
+      .sIdentifier
+       .sInitialValue
+           .sIdentifier
+           .sInteger
+         .sAdd
+       .sExpnEnd
+      % .sNewLine
+     .sVar
+      .sIdentifier
+        .sLike
+         .sIdentifier
+      % .sNewLine
+      % .sNewLine
+       .sCallStmt
+       .sIdentifier
+           .sIdentifier
+       .sExpnEnd
+           .sIdentifier
+       .sExpnEnd
+       .sParmEnd
+      % .sNewLine
+      .sWhileStmt
+              .sIdentifier
+              .sIdentifier
+           .sLE
+         .sInfixAnd
+           % .sNewLine
+           .sIdentifier
+          .sNot
+         .sAnd
+      .sExpnEnd
+        .sBegin
+         .sAssignmentStmt
+         .sIdentifier
+         .sIdentifier
+             .sInteger
+         .sAdd
+         .sExpnEnd
+         % .sNewLine
+          .sCallStmt
+          .sIdentifier
+              .sIdentifier
+          .sExpnEnd
+              .sIdentifier
+          .sExpnEnd
+          .sParmEnd
+         % .sNewLine
+        .sEnd
+      % .sNewLine
+      % .sNewLine
+      .sAssignmentStmt
+      .sIdentifier
+          .sIdentifier
+      .sExpnEnd
+      % .sNewLine
+     .sEnd
+   % .sNewLine
+   % .sNewLine
+   % .sNewLine
+    .sCallStmt
+    .sIdentifier
+        .sStringLiteral
+    .sExpnEnd
+        .sIdentifier
+    .sExpnEnd
+    .sFieldWidth
+        .sInteger
+    .sExpnEnd
+        .sStringLiteral
+    .sExpnEnd
+    .sParmEnd
+    .sCallStmt
+    .sIdentifier
+    .sParmEnd
+   % .sNewLine
+   % .sNewLine
+  .sVar
+   .sIdentifier
+     .sLike
+      .sIdentifier
+   % .sNewLine
+  .sVar
+   .sIdentifier
+    .sInitialValue
+        .sInteger
+    .sExpnEnd
+   % .sNewLine
+   % .sNewLine
+   .sWhileStmt
+       .sIdentifier
+       % .sNewLine
+       .sIdentifier
+    .sLE
+   .sExpnEnd
+     .sBegin
+       .sCallStmt
+       .sIdentifier
+           .sIdentifier
+       .sExpnEnd
+           .sIdentifier
+       .sExpnEnd
+       .sParmEnd
+      % .sNewLine
+      .sIfStmt
+          .sIdentifier
+      .sExpnEnd
+      % .sNewLine
+      .sThen
+        .sBegin
+          .sCallStmt
+          .sIdentifier
+              .sIdentifier
+          .sExpnEnd
+          .sFieldWidth
+              .sInteger
+          .sExpnEnd
+          .sParmEnd
+         % .sNewLine
+        .sEnd
+      % .sNewLine
+      .sAssignmentStmt
+      .sIdentifier
+      .sIdentifier
+          .sInteger
+      .sAdd
+      .sExpnEnd
+      % .sNewLine
+     .sEnd
+   % .sNewLine
+   % .sNewLine
+    .sCallStmt
+    .sIdentifier
+    .sParmEnd
+   % .sNewLine
+  .sEnd

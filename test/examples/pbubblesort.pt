@@ -1,0 +1,65 @@
+// Like package example program 
+// Bubble sort a list of random ints 
+using output;
+
+// Limits
+val nelements = 25;
+val maxval = 99;
+
+pkg elements is
+    // The list 
+    var list [nelements] : like 1;
+
+    // Utility routines
+    public fun lessthan (i : like 1, j : like 2, var b : like true) is
+        b = (list [i] < list [j]);
+    end;
+
+    public fun swap (i: like 1, j : like 2) is
+        var t = list [i];
+        list [i] = list [j];
+        list [j] = t;
+    end;
+
+    // Routine to print the list
+    public fun show is
+        var i = 1;
+        repeat
+            put (list[i]:4);
+            i += 1;
+        while i <= nelements;
+        putln;
+    end;
+
+    // Initialize list to a random set of ints 
+    list[1] = 61;
+
+    var i = 1;
+    repeat
+        i += 1;
+        var j = list[i-1] * 1271;
+        list[i] = j % maxval;
+    while i != nelements;
+end;
+
+// The bubble sort algorithm
+fun sort is
+    var i = nelements - 1;
+    repeat while i != 0;
+        var j = 1;
+        repeat while j != nelements;
+            var lt: like true;
+            lessthan (j, j+1, lt);
+            if not lt then
+                swap (j, j + 1);
+            end;
+            j += 1;
+        end;
+        i -= 1;
+    end;
+end;
+
+// Main program - show them, sort, then show them sorted
+show;
+sort;
+show;

@@ -12,3 +12,6 @@ parser/parser.pt
 *.o
 
 test/**/*.output
+
+*.parsed
+*.scanned

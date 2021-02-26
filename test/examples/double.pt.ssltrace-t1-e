@@ -1,0 +1,70 @@
+  .pNewLine
+  .pIdentifier (screened to pUsing)
+  .pIdentifier
+  % Output token text 'input'
+ .pComma
+  .pIdentifier
+  % Output token text 'output'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'word'
+ .pEquals
+  .pStringLiteral
+  % Output token text ''
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Anything you can say, I can say twice (end with 'bye'):'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'get'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'word'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'word'
+ .pOrBar
+  .pStringLiteral
+  % Output token text ' '
+ .pOrBar
+  .pIdentifier
+  % Output token text 'word'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'getln'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'word'
+ .pNotEqual
+  .pStringLiteral
+  % Output token text 'bye'
+ .pSemicolon
+ .pNewLine
+ .pEndFile

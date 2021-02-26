@@ -1,0 +1,56 @@
+// Like example program 
+// Program to conjugate regular French verbs
+using input, output;
+
+var infinitive : like "arreter";
+
+repeat
+    put ("Please give me a regular French 'er' verb (end with 'arreter')"); putln;
+    get (infinitive);
+    putln;
+
+    put ("Thanks, here is the present conjugation"); putln;
+
+    var root = infinitive / 1 : (#infinitive-2);
+    put ("The root of this verb is '", root, "'"); putln;
+    putln;
+
+    if infinitive / (#infinitive - 1) : #infinitive == "er" then
+    
+        if (root / 1:1 == "a") or (root / 1:1 == "e")
+               or (root / 1:1 == "i") or (root / 1:1 == "o")
+               or (root / 1:1 == "u") then
+            put ("J'" | root | "e");
+        else
+            put ("Je " | root | "e");
+        end;
+
+        putln;
+
+        put ("Tu " | root | "es"); putln;
+        put ("Il ou elle " | root | "e"); putln;
+        putln;
+
+        if root / #root : #root == "g" then
+            put ("Nous " | root | "eons");
+        else
+            put ("Nous " | root | "ons");
+        end;
+
+        putln;
+
+        put ("Vous " | root | "ez"); putln;
+        put ("Ils ou elles " | root | "ent"); putln;
+        putln;
+
+    elseif infinitive / (#infinitive - 1) : #infinitive == "ir" then
+        put ("I'm too tired to do an 'ir' verb"); putln;
+        putln;
+
+    else
+        put ("I don't like the looks of this verb"); putln;
+        putln;
+    end;
+
+    getln;
+while infinitive != "arreter";

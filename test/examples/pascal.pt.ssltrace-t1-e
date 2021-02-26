@@ -1,0 +1,266 @@
+  .pNewLine
+  .pNewLine
+  .pIdentifier (screened to pUsing)
+  .pIdentifier
+  % Output token text 'output'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pInteger
+  % Output token text '15'
+ .pRightBracket
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pFun)
+  .pIdentifier
+  % Output token text 'addto'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'index'
+ .pColon
+  .pIdentifier (screened to pLike)
+  .pInteger
+  % Output token text '1'
+ .pRightParen
+  .pIdentifier (screened to pIs)
+ .pNewLine
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'index'
+ .pDoubleEquals
+  .pInteger
+  % Output token text '1'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pInteger
+  % Output token text '1'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pInteger
+  % Output token text '1'
+ .pRightBracket
+ .pPlus
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'index'
+ .pRightBracket
+ .pEquals
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'index'
+ .pRightBracket
+ .pPlus
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'index'
+ .pMinus
+  .pInteger
+  % Output token text '1'
+ .pRightBracket
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pInteger
+  % Output token text '1'
+ .pRightBracket
+ .pEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'col'
+ .pEquals
+  .pInteger
+  % Output token text '2'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'col'
+ .pRightBracket
+ .pEquals
+  .pInteger
+  % Output token text '0'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'col'
+ .pPlusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'col'
+ .pLessEqual
+  .pInteger
+  % Output token text '15'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pInteger
+  % Output token text '1'
+ .pColon
+  .pInteger
+  % Output token text '5'
+ .pRightParen
+ .pSemicolon
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier (screened to pVar)
+  .pIdentifier
+  % Output token text 'row'
+ .pEquals
+  .pInteger
+  % Output token text '2'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+ .pNewLine
+  .pNewLine
+  .pIdentifier
+  % Output token text 'col'
+ .pEquals
+  .pIdentifier
+  % Output token text 'row'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'col'
+ .pGreaterEqual
+  .pInteger
+  % Output token text '1'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'addto'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'col'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'col'
+ .pMinusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pNewLine
+  .pIdentifier
+  % Output token text 'col'
+ .pEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pRepeat)
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'col'
+ .pLessEqual
+  .pIdentifier
+  % Output token text 'row'
+ .pNewLine
+  .pIdentifier
+  % Output token text 'put'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'pascal'
+ .pLeftBracket
+  .pIdentifier
+  % Output token text 'col'
+ .pRightBracket
+ .pColon
+  .pInteger
+  % Output token text '5'
+ .pRightParen
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'col'
+ .pPlusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pSemicolon
+ .pNewLine
+  .pIdentifier
+  % Output token text 'putln'
+ .pSemicolon
+ .pNewLine
+ .pNewLine
+  .pIdentifier
+  % Output token text 'row'
+ .pPlusEquals
+  .pInteger
+  % Output token text '1'
+ .pSemicolon
+ .pNewLine
+  .pIdentifier (screened to pWhile)
+  .pIdentifier
+  % Output token text 'row'
+ .pLessEqual
+  .pInteger
+  % Output token text '15'
+ .pSemicolon
+ .pNewLine
+ .pEndFile

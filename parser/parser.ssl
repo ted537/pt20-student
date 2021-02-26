@@ -258,7 +258,26 @@ Public:
 Package:
     .sPackage @identifier 'is' @Block;
 
-AssignmentOrCallStmtOrVariableDeclaration: ;
+AssignmentOrCallStmtOrVariableDeclaration: 
+	[
+		| '(': @CallStatement
+		| ';': @CallStatementNoParams
+		| *: #eUnexpectedToken
+	];
+
+Arguments:
+	{[
+		| ')': >
+		| ',': 
+		| *: @ConstantValue
+	]};
+
+CallStatementNoParams:
+	.sCallStmt .sIdentifier .sParmEnd;
+
+CallStatement: % starts after '('
+	.sCallStmt .sIdentifier @Arguments .sExpnEnd .sParmEnd ';'
+	;
 
 UsingStatement:
     pUsing @identifier

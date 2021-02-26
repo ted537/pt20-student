@@ -11,4 +11,4 @@ Will Macdonald - 20051603 - 16wjgm
 
 # Testing
 
-Run `./test-all.sh`
+Run `./test.sh`
