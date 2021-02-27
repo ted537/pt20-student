@@ -412,15 +412,15 @@ ChooseStatement :
         ]
         pEnd';';
 
+CommaSeparatedConstants:
+        @OptionallySignedIntegerConstant
+        {[
+            | ',': @OptionallySignedIntegerConstant
+            | *: >
+        ]};
+
 ChainedChooseAlternative :
-        {
-            @OptionallySignedIntegerConstant
-            [
-                | ',':
-                | *:
-                    >
-            ]
-        }
+        @CommaSeparatedConstants
         'then'
         .sLabelEnd
         % allow any number of declarations or statements
