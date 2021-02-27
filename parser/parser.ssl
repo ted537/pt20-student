@@ -377,8 +377,15 @@ LikeClause:
 ChooseBlock :
     .sBegin
     {[
-        | pVal, pVar, pIdentifier, pPkg, 'fun', 'public', pIf, pRepeat, pChoose:
-            @DeclarationOrStatement
+        | pVal : @ConstantDefinitions
+        | pVar : @VariableDeclaration
+        | pIdentifier: @AssignmentOrCallStmtOrVariableDeclaration
+        | pPkg: @Package
+        | 'fun': @Procedure
+        | 'public': @Public
+        | pIf: @IfStatement
+        | pRepeat: @RepeatStatement
+        | pChoose: @ChooseStatement
         | *:
             >
     ]}
