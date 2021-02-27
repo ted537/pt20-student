@@ -413,10 +413,21 @@ ChooseStatement :
         .sExpnEnd
         'of'
         @ChooseAlternative
+%         {[
+%             | 'when':
+%                 @ChooseAlternative
+%             | *:
+%                 >
+%         ]}
         {[
-            | 'when':
-                @ChooseAlternative
-            | *:
+            | ';':
+                [
+                    | 'end':
+                        >
+                    | *:
+                        @CaseAlternative
+                ]
+            | 'end':
                 >
         ]}
         .sCaseEnd

@@ -13,10 +13,10 @@
      % .sNewLine
      .sLabelEnd
       .sBegin
-         .sConst
-          .sIdentifier
-          .sInteger
-        % .sNewLine
+        .sConst
+         .sIdentifier
+         .sInteger
+       % .sNewLine
       .sEnd
     .sCaseEnd
-    .sEnd
+  .sEnd
