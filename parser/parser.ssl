@@ -373,6 +373,8 @@ ValueorLike :
 LikeClause:
     @OptionalFile @like @ConstantValue;
 
+% choose statement rule
+
 % VERY SIMPLE RULES BELOW
 
 % lowercase rules indicate simple passthroughs
