@@ -1,0 +1,3 @@
+using input;
+str = "Hello World";
+length = #str;

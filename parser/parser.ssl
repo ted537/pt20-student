@@ -622,7 +622,7 @@ Factor :
 				[
 					% If next token is the substring identifier
 					| '/':
-						
+						@Substring
 					| *:
 						>
 				]
@@ -634,6 +634,16 @@ Factor :
                 .sFile '(' @Expression ')'
                 .sExpnEnd
         ];
+
+Substring: 
+	@Factor
+	[
+		| ':':
+			@Factor
+			.sSubstring
+		| *:
+			>
+	]
 
 IdentifierExtension :
         % Handle subscripts and function actual parameter lists
