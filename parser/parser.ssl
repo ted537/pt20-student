@@ -425,7 +425,7 @@ ChooseStatement :
                     | 'end':
                         >
                     | *:
-                        @CaseAlternative
+                        @ChooseAlternative
                 ]
             | 'end':
                 >
