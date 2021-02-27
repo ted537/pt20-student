@@ -426,7 +426,7 @@ ChooseStatement :
                 @ChooseElseBlock
             | *:
         ]
-        pEnd .sEnd ';';
+        pEnd';';
 
 ChooseAlternative :
         % A case alternative is a statement labelled by
