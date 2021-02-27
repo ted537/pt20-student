@@ -408,7 +408,7 @@ ChooseStatement :
                 @ChooseBlock
             | *:
         ]
-        pEnd ';';
+        'end' ';';
 
 CommaSeparatedConstants:
         @OptionallySignedIntegerConstant
