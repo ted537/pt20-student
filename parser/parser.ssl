@@ -374,7 +374,7 @@ ValueorLike :
 LikeClause:
     @OptionalFile @like @ConstantValue;
 
-ChooseBlock :
+ChooseElseBlock :
     .sBegin
     {[
         | pVal : @ConstantDefinitions
@@ -388,8 +388,7 @@ ChooseBlock :
         | pChoose: @ChooseStatement
         | *:
             >
-    ]}
-    .sEnd;
+    ]};
 
 ChooseStatement :
         .sCaseStmt
@@ -407,10 +406,10 @@ ChooseStatement :
         [
             | 'else':
                 .sCaseElse
-                @Block
+                @ChooseElseBlock
             | *:
         ]
-        .sEnd ';';
+        pEnd .sEnd ';';
 
 ChooseAlternative :
         % A case alternative is a statement labelled by
