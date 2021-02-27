@@ -407,7 +407,7 @@ ChooseStatement :
         [
             | 'else':
                 .sCaseElse
-                @ChooseBlock
+                @Block
             | *:
         ]
         .sEnd ';';
@@ -427,7 +427,7 @@ ChooseAlternative :
         'then'
         .sLabelEnd
         % allow any number of declarations or statements
-        @ChooseBlock;
+        @Block;
 
 % VERY SIMPLE RULES BELOW
 
