@@ -413,23 +413,23 @@ ChooseStatement :
         .sExpnEnd
         'of'
         @ChooseAlternative
-%         {[
-%             | 'when':
-%                 @ChooseAlternative
-%             | *:
-%                 >
-%         ]}
         {[
-            | ';':
-                [
-                    | 'end':
-                        >
-                    | *:
-                        @ChooseAlternative
-                ]
-            | 'end':
+            | 'when':
+                @ChainedChooseAlternative
+            | *:
                 >
         ]}
+%         {[
+%             | ';':
+%                 [
+%                     | 'end':
+%                         >
+%                     | *:
+%                         @ChooseAlternative
+%                 ]
+%             | 'end':
+%                 >
+%         ]}
         .sCaseEnd
         [
             | 'else':
@@ -438,6 +438,20 @@ ChooseStatement :
             | *:
         ]
         pEnd';';
+
+ChainedChooseAlternative :
+        {
+            @OptionallySignedIntegerConstant
+            [
+                | ',':
+                | *:
+                    >
+            ]
+        }
+        'then'
+        .sLabelEnd
+        % allow any number of declarations or statements
+        @ChooseBlock;
 
 ChooseAlternative :
         % A case alternative is a statement labelled by
