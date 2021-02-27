@@ -390,6 +390,23 @@ ChooseElseBlock :
             >
     ]};
 
+ChooseBlock :
+    .sBegin
+    {[
+        | pVal : @ConstantDefinitions
+        | pVar : @VariableDeclaration
+        | pIdentifier: @AssignmentOrCallStmtOrVariableDeclaration
+        | pPkg: @Package
+        | 'fun': @Procedure
+        | 'public': @Public
+        | pIf: @IfStatement
+        | pRepeat: @RepeatStatement
+        | pChoose: @ChooseStatement
+        | *:
+            >
+    ]}
+    .sEnd;
+
 ChooseStatement :
         .sCaseStmt
         @Expression
@@ -426,7 +443,7 @@ ChooseAlternative :
         'then'
         .sLabelEnd
         % allow any number of declarations or statements
-        @Block;
+        @ChooseBlock;
 
 % VERY SIMPLE RULES BELOW
 
