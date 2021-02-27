@@ -402,7 +402,6 @@ ChooseStatement :
                 .sCaseElse
                 @ChooseBlock
             | *:
-                >
         ]
         .sEnd ';';
 
