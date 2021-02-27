@@ -1,8 +1,8 @@
 using input, output;
 choose i of
     when 1, 2 then
-        x = 5;
+        val x = 5;
     when 3 then
-        x = 6;
-        y = 7;
+        val x = 6;
+        val y = 7;
 end;
