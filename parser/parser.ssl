@@ -237,10 +237,12 @@ IfStatement:
     .sIfStmt @Expression .sExpnEnd @then @IfBlock
     ;
 
+% Rule that handles procedure declaration with parameters
 Procedure:
     .sProcedure 
     @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
 
+% Rule that handles procedure declaration with optional public keyword 
 PublicProcedure:
     .sProcedure 
     @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
@@ -579,8 +581,12 @@ SimpleExpression :
                 @Term  .sSubtract
             | 'or':
                 .sInfixOr  @Term  .sOr
-            | *:
-                >
+			% Concatenate strings
+			| '|':
+				@Term .sConcatenate
+			% Repeat strings
+			| '||':
+				@Term .sRepeatString
         ]};
 
 Term :
@@ -588,6 +594,7 @@ Term :
         {[
             | '*':
                 @Factor  .sMultiply
+			% Need to add support for the substring command. How do I know when to divide or do substring
             | '/':
                 @Factor  .sDivide
             | '%':
@@ -612,6 +619,17 @@ Factor :
                 .sNot
             | pStringLiteral:
                 .sStringLiteral
+				[
+					% If next token is the substring identifier
+					| '/':
+						
+					| *:
+						>
+				]
+			% Special character for the string length
+			| pHash: 
+				@Factor
+				.sLength
             | 'file':
                 .sFile '(' @Expression ')'
                 .sExpnEnd
