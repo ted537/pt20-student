@@ -201,6 +201,7 @@ DeclarationOrStatement:
             | 'public': @Public
             | pIf: @IfStatement
             | pRepeat: @RepeatStatement
+            | pChoose: @ChooseStatement
             | *:
                 ?
                 #eUnexpectedToken
@@ -373,7 +374,54 @@ ValueorLike :
 LikeClause:
     @OptionalFile @like @ConstantValue;
 
-% choose statement rule
+ChooseBlock :
+    .sBegin
+    {[
+        | pVal, pVar, pIdentifier, pPkg, 'fun', 'public', pIf, pRepeat, pChoose:
+            @DeclarationOrStatement
+        | *:
+            >
+    ]}
+    .sEnd;
+
+ChooseStatement :
+        .sCaseStmt
+        @Expression
+        .sExpnEnd
+        'of'
+        @ChooseAlternative
+        {[
+            | 'when':
+                @ChooseAlternative
+            | *:
+                >
+        ]}
+        .sCaseEnd
+        [
+            | 'else':
+                .sCaseElse
+                @ChooseBlock
+            | *:
+                >
+        ]
+        .sEnd ';';
+
+ChooseAlternative :
+        % A case alternative is a statement labelled by
+        % one or more optionally signed integer constants
+        'when'
+        {
+            @OptionallySignedIntegerConstant
+            [
+                | ',':
+                | *:
+                    >
+            ]
+        }
+        'then'
+        .sLabelEnd
+        % allow any number of declarations or statements
+        @ChooseBlock;
 
 % VERY SIMPLE RULES BELOW
 
@@ -488,42 +536,6 @@ OptionalProcedureParameters:
 %             | *:
 %         ];
 % 
-% CaseStmt :
-%         .sCaseStmt
-%         @Expression
-%         .sExpnEnd
-%         'of'
-%         @CaseAlternative
-%         {[
-%             | ';':
-%                 % since case alternatives cannot be null, allow
-%                 % for the common situation of an extra semicolon
-%                 % at the end of the list of case alternatives.
-%                 [
-%                     | 'end':
-%                         >
-%                     | *:
-%                         @CaseAlternative
-%                 ]
-%             | 'end':
-%                 >
-%         ]}
-%         .sCaseEnd;
-% 
-% CaseAlternative :
-%         % A case alternative is a statement labelled by
-%         % one or more optionally signed integer constants
-% 
-%         {
-%             @OptionallySignedIntegerConstant
-%             [
-%                 | ',':
-%                 | *:
-%                     >
-%             ]
-%         }
-%         .sLabelEnd
-%         ':'  @Statement;
 % 
 % WhileStmt :
 %         .sWhileStmt
