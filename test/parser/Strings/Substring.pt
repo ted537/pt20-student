@@ -1,2 +1,2 @@
 using input;
-val subStr = "Hello World" / 2 : 5;
+var subStr = "Hello World" / 2 : 5;
