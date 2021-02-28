@@ -585,7 +585,7 @@ SimpleExpression :
 	    | '|':
 		@Term .sConcatenate
 	    % Repeat strings
-	    | '||':
+	    | pDoubleOrBar:
 		 @Term .sRepeatString
 	    | *:
 		>

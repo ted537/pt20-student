@@ -1,2 +1,3 @@
 using input;
-val str = "Hello" | "World"
+var str = "Hello" | "World";
+
