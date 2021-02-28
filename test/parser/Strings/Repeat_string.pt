@@ -1,3 +1,2 @@
 using input;
-var str = "Hello";
-var repeat = str || 4;
+var str = "Hello" || 4;
