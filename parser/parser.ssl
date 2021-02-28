@@ -596,7 +596,6 @@ Term :
         {[
             | '*':
                 @Factor  .sMultiply
-	    % Need to add support for the substring command. How do I know when to divide or do substring
             | '/':
 		[
 		% First integer in Substring operation
