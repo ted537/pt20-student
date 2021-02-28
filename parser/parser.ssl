@@ -587,6 +587,8 @@ SimpleExpression :
 			% Repeat strings
 			| '||':
 				@Term .sRepeatString
+			| *:
+				>
         ]};
 
 Term :
@@ -623,8 +625,7 @@ Factor :
 					% If next token is the substring identifier
 					| '/':
 						@Substring
-					| *:
-						>
+					% ADD ERROR CASE
 				]
 			% Special character for the string length
 			| pHash: 
@@ -641,8 +642,7 @@ Substring:
 		| ':':
 			@Factor
 			.sSubstring
-		| *:
-			>
+		% ADD ERROR CASE
 	]
 
 IdentifierExtension :

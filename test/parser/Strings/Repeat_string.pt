@@ -1,2 +1,2 @@
 using input;
-Repeat = "Hello" || 4;
+val repeat = "Hello" || 4;

@@ -1,2 +1,2 @@
 using input;
-str = "Hello" | "World"
+val str = "Hello" | "World"
