@@ -1,0 +1,5 @@
+using input;
+var div = 10 / 5;
+var top = 10;
+var bottom = 5;
+var div2 = top / bottom;

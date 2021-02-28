@@ -598,25 +598,25 @@ Term :
                 @Factor  .sMultiply
 			% Need to add support for the substring command. How do I know when to divide or do substring
             | '/':
-				[
-					% First integer in Substring operation
-					| pInteger:
-						[
-							% Get first integer
-							@Factor
-							% Colon operator in Substring
-							| ':':
-								@Factor 
-								.sSubstring
-							% If colon doesn't appear do nornmal division
-							| *:
-								% Integer for divide is above
-								.sDivide
-						]
-						% If not an integer then it cannot be substring so do normal division
+		[
+			% First integer in Substring operation
+			| pInteger:
+				% First integer
+				.sInteger
+				[			
+					% Colon operator in Substring
+					| ':':
+						@Factor 
+						.sSubstring
+					% If colon doesn't appear do nornmal division
 					| *:
-						@Factor .sDivide
+						% Integer for divide is above
+						.sDivide
 				]
+			% If not an integer then it cannot be substring so do normal division
+			| *:
+				@Factor .sDivide
+		]
             | '%':
                 @Factor  .sModulus
             | 'and':
