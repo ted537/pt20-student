@@ -261,25 +261,25 @@ Package:
     .sPackage @identifier 'is' @Block;
 
 AssignmentOrCallStmtOrVariableDeclaration: 
-	[
-		| '(': @CallStatement
-		| ';': @CallStatementNoParams
-		| *: #eUnexpectedToken
-	];
+    [
+        | '(': @CallStatement
+        | ';': @CallStatementNoParams
+        | *: #eUnexpectedToken
+    ];
 
 Arguments:
-	{[
-		| ')': >
-		| ',': 
-		| *: @ConstantValue
-	]};
+    {[
+        | ')': >
+        | ',': 
+        | *: @ConstantValue
+    ]};
 
 CallStatementNoParams:
-	.sCallStmt .sIdentifier .sParmEnd;
+    .sCallStmt .sIdentifier .sParmEnd;
 
 CallStatement: % starts after '('
-	.sCallStmt .sIdentifier @Arguments .sExpnEnd .sParmEnd ';'
-	;
+    .sCallStmt .sIdentifier @Arguments .sExpnEnd .sParmEnd ';'
+    ;
 
 UsingStatement:
     pUsing @identifier
@@ -581,14 +581,14 @@ SimpleExpression :
                 @Term  .sSubtract
             | 'or':
                 .sInfixOr  @Term  .sOr
-	    % Concatenate strings
-	    | '|':
-		@Term .sConcatenate
-	    % Repeat strings
-	    | pDoubleOrBar:
-		 @Term .sRepeatString
-	    | *:
-		>
+        % Concatenate strings
+        | '|':
+        @Term .sConcatenate
+        % Repeat strings
+        | pDoubleOrBar:
+         @Term .sRepeatString
+        | *:
+        >
         ]};
 
 Term :
@@ -597,25 +597,25 @@ Term :
             | '*':
                 @Factor  .sMultiply
             | '/':
-	        [
-	        % First integer in Substring operation
-	        | pInteger:
-		    % First integer
-		    .sInteger
-		    [			
-		        % Colon operator in Substring
-		        | ':':
-			    @Factor 
-			    .sSubstring
-		   	% If colon doesn't appear do nornmal division
-		    	| *:
-			    % Integer for divide is above
-			    .sDivide
-		    ]
-		    % If not an integer then it cannot be substring so do normal division
-		    | *:
-		        @Factor .sDivide
-		]
+                [
+                    % First integer in Substring operation
+                    | pInteger:
+                        % First integer
+                        .sInteger
+                        [           
+                            % Colon operator in Substring
+                            | ':':
+                            @Factor 
+                            .sSubstring
+                        % If colon doesn't appear do nornmal division
+                            | *:
+                            % Integer for divide is above
+                            .sDivide
+                        ]
+                    % If not an integer then it cannot be substring so do normal division
+                    | *:
+                        @Factor .sDivide
+                ]
             | '%':
                 @Factor  .sModulus
             | 'and':
@@ -638,15 +638,15 @@ Factor :
                 .sNot
             | pStringLiteral:
                 .sStringLiteral
-	    % Special character for the string length
-	    | pHash: 
-		@Factor
-		.sLength
+            % Special character for the string length
+            | pHash: 
+                @Factor
+                .sLength
             | 'file':
                 .sFile '(' @Expression ')'
                 .sExpnEnd
         ];
-		
+        
 IdentifierExtension :
         % Handle subscripts and function actual parameter lists
         [
