@@ -639,11 +639,6 @@ Factor :
                 .sNot
             | pStringLiteral:
                 .sStringLiteral
-				[
-					% If next token is the substring identifier
-					| '/':
-						@Substring
-				]
 			% Special character for the string length
 			| pHash: 
 				@Factor
