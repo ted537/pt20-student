@@ -1,0 +1,4 @@
+using input, output;
+var a = 5;
+var b = 0;
+b = a;

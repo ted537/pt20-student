@@ -260,6 +260,13 @@ Package:
 
 AssignmentOrCallStmtOrVariableDeclaration: 
 	[
+		| '=': @AssignmentStatement
+		| '+=': @AssignmentStatement
+		| '-=': @AssignmentStatement
+		| '*=': @AssignmentStatement
+		| '/=': @AssignmentStatement
+		| '%=': @AssignmentStatement
+		| '[': @AssignmentStatement
 		| '(': @CallStatement
 		| ';': @CallStatementNoParams
 		| *: #eUnexpectedToken
@@ -271,6 +278,59 @@ Arguments:
 		| ',': 
 		| *: @ConstantValue
 	]};
+
+AssignmentStatement:
+	[
+		| '=':
+			.sAssignmentStmt
+			.sIdentifier
+			@Expression
+			.sExpnEnd
+		| '+=':
+			.sAssignmentStmt
+			.sIdentifier
+			@Expression
+			.sExpnEnd
+		| '-=':
+			.sAssignmentStmt
+			.sIdentifier
+			@Expression
+			.sExpnEnd
+		| '*=':
+			.sAssignmentStmt
+			.sIdentifier
+			@Expression
+			.sExpnEnd
+		| '/=':
+			.sAssignmentStmt
+			.sIdentifier
+			@Expression
+			.sExpnEnd
+		| '%=':
+			.sAssignmentStmt
+			.sIdentifier
+			@Expression
+			.sExpnEnd
+		| '[':
+			.sAssignmentStmt
+			.sIdentifier
+			.sSubscript
+			@Expression
+			.sExpnEnd
+			']'
+			[
+				| '=': '='
+				| '+=': '+='
+				| '-=': '-='
+				| '*=': '*='
+				| '/=': '/='
+				| '%=': '%='
+				| *: #eUnexpectedToken
+			]
+			@Expression
+			.sExpnEnd
+		% | *:    @CallStatement
+	];
 
 CallStatementNoParams:
 	.sCallStmt .sIdentifier .sParmEnd;
@@ -577,7 +637,7 @@ SimpleExpression :
                 @Term  .sAdd
             | '-':
                 @Term  .sSubtract
-            | 'or':
+	    | 'or':
                 .sInfixOr  @Term  .sOr
             | *:
                 >
