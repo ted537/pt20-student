@@ -1,0 +1,5 @@
+using input;
+var str = "Hello";
+var str2 = "Hello";
+var con = str | str2;
+
