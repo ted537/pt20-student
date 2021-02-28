@@ -581,14 +581,14 @@ SimpleExpression :
                 @Term  .sSubtract
             | 'or':
                 .sInfixOr  @Term  .sOr
-			% Concatenate strings
-			| '|':
-				@Term .sConcatenate
-			% Repeat strings
-			| '||':
-				@Term .sRepeatString
-			| *:
-				>
+	    % Concatenate strings
+	    | '|':
+		@Term .sConcatenate
+	    % Repeat strings
+	    | '||':
+		 @Term .sRepeatString
+	    | *:
+		>
         ]};
 
 Term :
@@ -626,6 +626,7 @@ Factor :
 					| '/':
 						@Substring
 					% ADD ERROR CASE
+					| *:
 				]
 			% Special character for the string length
 			| pHash: 
@@ -643,7 +644,7 @@ Substring:
 			@Factor
 			.sSubstring
 		% ADD ERROR CASE
-	]
+	];
 
 IdentifierExtension :
         % Handle subscripts and function actual parameter lists

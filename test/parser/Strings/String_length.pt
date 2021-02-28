@@ -1,3 +1,4 @@
 using input;
 val str = "Hello World";
-val length = #str;
+var length = #str;
+

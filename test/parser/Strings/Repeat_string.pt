@@ -1,2 +1,3 @@
 using input;
-val repeat = "Hello" || 4;
+var str = "Hello";
+var repeat = str || 4;
