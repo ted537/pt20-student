@@ -265,63 +265,63 @@ AssignmentOrCallStmtOrVariableDeclaration:
     [
         | '=':          
             .sAssignmentStmt
-	    .sIdentifier
-	    @Expression
-	    .sExpnEnd
-	    ';'
-	| '+=': 
-	    .sAssignmentStmt
-	    .sIdentifier
-	    .sIdentifier
-	    @Expression
-	    .sAdd
-	    .sExpnEnd
-	    ';'
-	| '-=':
-	    .sAssignmentStmt
-	    .sIdentifier
-	    .sIdentifier
-	    @Expression
-	    .sSubtract
-	    .sExpnEnd
-	    ';'
-	| '*=': 
-	    .sAssignmentStmt
-	    .sIdentifier
-	    .sIdentifier
-	    @Expression
-	    .sMultiply
-	    .sExpnEnd
-	    ';'
-	| '/=': 
-	    .sAssignmentStmt
-	    .sIdentifier
-	    .sIdentifier
-	    @Expression
-	    .sDivide
-	    .sExpnEnd
-	    ';'
-	| '%=': 
-	    .sAssignmentStmt
-	    .sIdentifier
-	    .sIdentifier
-	    @Expression
-	    .sModulus
-	    .sExpnEnd
-	    ';'
-	| '[': 
-	    .sAssignmentStmt
-	    .sIdentifier
-	    .sSubscript
-	    @Expression
-	    .sExpnEnd
-	    ']' '='
-	    @Expression
-	    .sExpnEnd
-	    ';'
-	| '(': @CallStatement
-	| ';': @CallStatementNoParams
-	| *: #eUnexpectedToken
+            .sIdentifier
+            @Expression
+            .sExpnEnd
+            ';'
+        | '+=': 
+            .sAssignmentStmt
+            .sIdentifier
+            .sIdentifier
+            @Expression
+            .sAdd
+            .sExpnEnd
+            ';'
+        | '-=':
+            .sAssignmentStmt
+            .sIdentifier
+            .sIdentifier
+            @Expression
+            .sSubtract
+            .sExpnEnd
+            ';'
+        | '*=': 
+            .sAssignmentStmt
+            .sIdentifier
+            .sIdentifier
+            @Expression
+            .sMultiply
+            .sExpnEnd
+            ';'
+        | '/=': 
+            .sAssignmentStmt
+            .sIdentifier
+            .sIdentifier
+            @Expression
+            .sDivide
+            .sExpnEnd
+            ';'
+        | '%=': 
+            .sAssignmentStmt
+            .sIdentifier
+            .sIdentifier
+            @Expression
+            .sModulus
+            .sExpnEnd
+            ';'
+        | '[': 
+            .sAssignmentStmt
+            .sIdentifier
+            .sSubscript
+            @Expression
+            .sExpnEnd
+            ']' '='
+            @Expression
+            .sExpnEnd
+            ';'
+        | '(': @CallStatement
+        | ';': @CallStatementNoParams
+        | *: #eUnexpectedToken
     ];
 
 Arguments:
@@ -650,7 +650,7 @@ SimpleExpression :
                 @Term  .sAdd
             | '-':
                 @Term  .sSubtract
-	    | 'or':
+            | 'or':
                 .sInfixOr  @Term  .sOr
         % Concatenate strings
         | '|':
