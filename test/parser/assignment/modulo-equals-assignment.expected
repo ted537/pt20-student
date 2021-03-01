@@ -12,7 +12,7 @@
     .sIdentifier
     .sIdentifier
         .sInteger
-    .sDivide
+    .sModulus
     .sExpnEnd
     % .sNewLine
   .sEnd

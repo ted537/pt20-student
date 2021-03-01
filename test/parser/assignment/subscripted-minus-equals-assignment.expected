@@ -20,4 +20,14 @@
          .sInteger
      .sExpnEnd
      % .sNewLine
+    .sAssignmentStmt
+    .sIdentifier
+    .sSubscript
+        .sInteger
+    .sExpnEnd
+     .sIdentifier
+         .sInteger
+     .sSubtract
+     .sExpnEnd
+     % .sNewLine
   .sEnd

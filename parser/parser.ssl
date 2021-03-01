@@ -265,6 +265,7 @@ AssignmentOrCallStmtOrVariableDeclaration:
 			.sIdentifier
 			@Expression
 			.sExpnEnd
+			';'
 		| '+=': 
 			.sAssignmentStmt
 			.sIdentifier
@@ -272,6 +273,7 @@ AssignmentOrCallStmtOrVariableDeclaration:
 			@Expression
 			.sAdd
 			.sExpnEnd
+			';'
 		| '-=':
 			.sAssignmentStmt
 			.sIdentifier
@@ -279,6 +281,7 @@ AssignmentOrCallStmtOrVariableDeclaration:
 			@Expression
 			.sSubtract
 			.sExpnEnd
+			';'
 		| '*=': 
 			.sAssignmentStmt
 			.sIdentifier
@@ -286,6 +289,7 @@ AssignmentOrCallStmtOrVariableDeclaration:
 			@Expression
 			.sMultiply
 			.sExpnEnd
+			';'
 		| '/=': 
 			.sAssignmentStmt
 			.sIdentifier
@@ -293,6 +297,7 @@ AssignmentOrCallStmtOrVariableDeclaration:
 			@Expression
 			.sDivide
 			.sExpnEnd
+			';'
 		| '%=': 
 			.sAssignmentStmt
 			.sIdentifier
@@ -300,6 +305,7 @@ AssignmentOrCallStmtOrVariableDeclaration:
 			@Expression
 			.sModulus
 			.sExpnEnd
+			';'
 		| '[': 
 			.sAssignmentStmt
 			.sIdentifier
@@ -320,31 +326,37 @@ SubscriptedAssignments:
 			.sIdentifier
 			@Expression
 			.sExpnEnd
+			';'
 		| '+=':
 			.sIdentifier
 			@Expression
 			.sAdd
 			.sExpnEnd
+			';'
 		| '-=':
 			.sIdentifier
 			@Expression
 			.sSubtract
 			.sExpnEnd
+			';'
 		| '*=':
 			.sIdentifier
 			@Expression
 			.sMultiply
 			.sExpnEnd
+			';'
 		| '/=':
 			.sIdentifier
 			@Expression
 			.sDivide
 			.sExpnEnd
+			';'
 		| '%=':
 			.sIdentifier
 			@Expression
 			.sModulus
 			.sExpnEnd
+			';'
 	];
 
 Arguments:
