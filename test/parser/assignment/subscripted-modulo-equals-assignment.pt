@@ -1,4 +1,0 @@
-using input, output;
-var a[1]: like 1;
-a[1] = 15;
-a[1] %= 10;

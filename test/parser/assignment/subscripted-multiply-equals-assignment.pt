@@ -1,4 +1,0 @@
-using input, output;
-var a[1]: like 1;
-a[1] = 5;
-a[1] *= 3;
