@@ -311,14 +311,14 @@ Arguments:
     {[
         | ')': >
         | ',': 
-        | *: @ConstantValue
+        | *: @ConstantValue .sExpnEnd
     ]};
 
 CallStatementNoParams:
     .sCallStmt .sIdentifier .sParmEnd;
 
 CallStatement: % starts after '('
-    .sCallStmt .sIdentifier @Arguments .sExpnEnd .sParmEnd ';'
+    .sCallStmt .sIdentifier @Arguments .sParmEnd ';'
     ;
 
 UsingStatement:
@@ -407,7 +407,7 @@ ProcedureParameters:
 
 ValueorLike :
         [
-            | '=': @Expression
+            | '=': .sInitialValue @Expression
             | '[': .sArray @ConstantValue ']' ':' @LikeClause
             | ':': @LikeClause
         ];
