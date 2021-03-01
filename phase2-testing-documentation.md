@@ -6,7 +6,7 @@
 Each test case has a .pt and a .expected file
 * The .pt file is the PT Pascal program run to test a specific case
 * The .expected file is the expected output from the test case as
-determined by the Like program specifications
+determined by the Like program specifications.\s\s
 All test cases were ran using `ssltrace` and the expected behaviour
 was achieved
 
@@ -16,6 +16,7 @@ I dont know what to put here, cuz i havent used the scripts to run the tests
 ### Test Case Description
 
 **/test/parser/Routines**
+
 The test cases contained within this folder are to test the functionality
 of `fun` or Like program routines.
 * `routine_no_parameters.pt` tests that functions can be declared without
@@ -26,6 +27,7 @@ number of parameters and parameter types (`fun flag(number : like 1,...)`)
 public using the `public` flag before the function definition
 
 **/test/parser/Strings**
+
 The test cases contained within this folder are to test the functionality
 of Like strings and string operations
 * All files are clearly labelled in which specific string operation they
@@ -35,6 +37,7 @@ by using the string operation `||`
 * The rest of the test cases within this folder follow a similar structure
 
 **/test/parser/choose**
+
 The test cases contained within this folder are to test the functionality
 of choose statements within Like
 * `choose-one-case.pt` tests that choose statements can be declared with a 
@@ -54,6 +57,7 @@ of constants within Like
 by using the `public` keyword
 
 **test/parser/if**
+
 The test cases contained within this folder are to test the functionality
 of if and elseif statements within Like
 * `if.pt` tests that if statement can exist as a single if with no else
@@ -64,11 +68,13 @@ case (`if 1==1 then ... end;`)
 with no statements to be satisfied
 
 **test/parser/pkg**
+
 The test cases contained within this folder are to test the functionality
 of the `pkg` keyword
 * `pkg.pt` tests that a package can be declared using `pkg`
 
 **test/parser/repeat**
+
 The test cases contained within this folder are to test the functionality
 of while statements
 * `while-top.pt` tests that `repeat while ...` statements can be declared
@@ -77,6 +83,7 @@ and have a similar functionality to PT Pascal's `while` statements
 declared and have the opposite functionality to PT Pascal's `while`
 
 **test/parser/using**
+
 The test cases contained within this folder are to test the functionality
 of using statements at the beginning of a program
 * `using-output.pt` tests that `using output;` can be declared at the top
@@ -85,6 +92,7 @@ of a Like program
 in a list at the top of a Like program (`using input,output;`)
 
 **test/parser/variables**
+
 The test cases contained within this folder are to test the functionality
 of variables within Like, and the many optional additions
 * `simple-var.pt` tests that variables can be declared using `var` and
