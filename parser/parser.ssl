@@ -423,23 +423,6 @@ ValueorLike :
 LikeClause:
     @OptionalFile @like @ConstantValue;
 
-ChooseBlock :
-    .sBegin
-    {[
-        | pVal : @ConstantDefinitions
-        | pVar : @VariableDeclaration
-        | pIdentifier: @AssignmentOrCallStmtOrVariableDeclaration
-        | pPkg: @Package
-        | 'fun': @Procedure
-        | 'public': @Public
-        | pIf: @IfStatement
-        | pRepeat: @RepeatStatement
-        | pChoose: @ChooseStatement
-        | *:
-            >
-    ]}
-    .sEnd;
-
 ChooseStatement :
         .sCaseStmt
         @Expression
@@ -454,7 +437,7 @@ ChooseStatement :
         [
             | 'else':
                 .sCaseElse
-                @ChooseBlock
+                @Block
             | *:
         ]
         'end' ';';
@@ -470,8 +453,7 @@ WhenStatement: % starts after 'when' in choose
         @CommaSeparatedConstants
         'then'
         .sLabelEnd
-        % allow any number of declarations or statements
-        @ChooseBlock;
+        @Block;
 
 % VERY SIMPLE RULES BELOW
 
