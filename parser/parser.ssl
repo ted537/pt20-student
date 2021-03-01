@@ -215,10 +215,8 @@ DeclarationOrStatements:
 
 RepeatBlock: % inside of repeat block where 'while' is at bottom
         .sRepeatStmt
-        .sBegin
-        @DeclarationOrStatements
-        'while'
-        .sEnd .sRepeatEnd @Expression .sExpnEnd ';'
+        @Block
+        'while' .sRepeatEnd @Expression .sExpnEnd ';'
         ;
 
 RepeatStatement: % follows 'repeat' keyword
@@ -227,19 +225,13 @@ RepeatStatement: % follows 'repeat' keyword
             | *: @RepeatBlock
         ];
 
-IfBlock:
-    .sBegin
-    @DeclarationOrStatements
-    [
-        | 'end': ';' .sEnd
-        | 'else': .sEnd .sElse @Block
-        | 'elseif': .sEnd .sElse .sBegin @IfStatement .sEnd
-    ];
-    
-
 IfStatement:
-    .sIfStmt @Expression .sExpnEnd @then @IfBlock
-    ;
+    .sIfStmt @Expression .sExpnEnd @then @Block
+    [
+        | 'end': ';'
+        | 'else': .sElse @Block
+        | 'elseif': .sElse .sBegin @IfStatement .sEnd
+    ];
 
 % Rule that handles procedure declaration with parameters
 Procedure:
