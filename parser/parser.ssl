@@ -188,7 +188,7 @@ Program :
         ;
 Block:
         .sBegin
-        @DeclarationOrStatements
+        @DeclarationsAndStatements
         .sEnd;
 
 DeclarationOrStatement >> ConsumeStatus:
@@ -207,7 +207,7 @@ DeclarationOrStatement >> ConsumeStatus:
         >> cConsumed
         ;
 
-DeclarationOrStatements:
+DeclarationsAndStatements:
         {[ @DeclarationOrStatement
             | cConsumed:
             | cDidNotConsume: >
