@@ -6,7 +6,8 @@
 Each test case has a .pt and a .expected file
 * The .pt file is the PT Pascal program run to test a specific case
 * The .expected file is the expected output from the test case as
-determined by the Like program specifications.\s\s
+determined by the Like program specifications.
+
 All test cases were ran using `ssltrace` and the expected behaviour
 was achieved
 
@@ -48,6 +49,7 @@ cases chained together (`when 1,2 then ... when 3 then ...`)
 optional defualt or `else` case, which new to Like
 
 **/test/parser/constants**
+
 The test cases contained within this folder are to test the functionality
 of constants within Like
 * `val.pt` tests that constants can be declared using the `val` keyword
