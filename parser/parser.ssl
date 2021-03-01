@@ -260,16 +260,91 @@ Package:
 
 AssignmentOrCallStmtOrVariableDeclaration: 
 	[
-		| '=': @AssignmentStatement
-		| '+=': @AssignmentStatement
-		| '-=': @AssignmentStatement
-		| '*=': @AssignmentStatement
-		| '/=': @AssignmentStatement
-		| '%=': @AssignmentStatement
-		| '[': @AssignmentStatement
+		| '=': 
+			.sAssignmentStmt
+			.sIdentifier
+			@Expression
+			.sExpnEnd
+		| '+=': 
+			.sAssignmentStmt
+			.sIdentifier
+			.sIdentifier
+			@Expression
+			.sAdd
+			.sExpnEnd
+		| '-=':
+			.sAssignmentStmt
+			.sIdentifier
+			.sIdentifier
+			@Expression
+			.sSubtract
+			.sExpnEnd
+		| '*=': 
+			.sAssignmentStmt
+			.sIdentifier
+			.sIdentifier
+			@Expression
+			.sMultiply
+			.sExpnEnd
+		| '/=': 
+			.sAssignmentStmt
+			.sIdentifier
+			.sIdentifier
+			@Expression
+			.sDivide
+			.sExpnEnd
+		| '%=': 
+			.sAssignmentStmt
+			.sIdentifier
+			.sIdentifier
+			@Expression
+			.sModulus
+			.sExpnEnd
+		| '[': 
+			.sAssignmentStmt
+			.sIdentifier
+			.sSubscript
+			@Expression
+			.sExpnEnd
+			']'
+			@SubscriptedAssignments
 		| '(': @CallStatement
 		| ';': @CallStatementNoParams
 		| *: #eUnexpectedToken
+	];
+
+SubscriptedAssignments:
+	% this is required to avoid multiple .sAssignment outputs when working with subscripted assignments
+	[
+		| '=':
+			.sIdentifier
+			@Expression
+			.sExpnEnd
+		| '+=':
+			.sIdentifier
+			@Expression
+			.sAdd
+			.sExpnEnd
+		| '-=':
+			.sIdentifier
+			@Expression
+			.sSubtract
+			.sExpnEnd
+		| '*=':
+			.sIdentifier
+			@Expression
+			.sMultiply
+			.sExpnEnd
+		| '/=':
+			.sIdentifier
+			@Expression
+			.sDivide
+			.sExpnEnd
+		| '%=':
+			.sIdentifier
+			@Expression
+			.sModulus
+			.sExpnEnd
 	];
 
 Arguments:
@@ -278,59 +353,6 @@ Arguments:
 		| ',': 
 		| *: @ConstantValue
 	]};
-
-AssignmentStatement:
-	[
-		| '=':
-			.sAssignmentStmt
-			.sIdentifier
-			@Expression
-			.sExpnEnd
-		| '+=':
-			.sAssignmentStmt
-			.sIdentifier
-			@Expression
-			.sExpnEnd
-		| '-=':
-			.sAssignmentStmt
-			.sIdentifier
-			@Expression
-			.sExpnEnd
-		| '*=':
-			.sAssignmentStmt
-			.sIdentifier
-			@Expression
-			.sExpnEnd
-		| '/=':
-			.sAssignmentStmt
-			.sIdentifier
-			@Expression
-			.sExpnEnd
-		| '%=':
-			.sAssignmentStmt
-			.sIdentifier
-			@Expression
-			.sExpnEnd
-		| '[':
-			.sAssignmentStmt
-			.sIdentifier
-			.sSubscript
-			@Expression
-			.sExpnEnd
-			']'
-			[
-				| '=': '='
-				| '+=': '+='
-				| '-=': '-='
-				| '*=': '*='
-				| '/=': '/='
-				| '%=': '%='
-				| *: #eUnexpectedToken
-			]
-			@Expression
-			.sExpnEnd
-		% | *:    @CallStatement
-	];
 
 CallStatementNoParams:
 	.sCallStmt .sIdentifier .sParmEnd;
