@@ -175,6 +175,10 @@ Output :
 Error:
         eUnexpectedToken;
 
+type ConsumeStatus:
+        cConsumed
+        cDidNotConsume;
+
 rules
 
 Program : 
@@ -184,14 +188,10 @@ Program :
         ;
 Block:
         .sBegin
-        {[
-            | pAlmostEndFile: >
-            | 'end': ';' >
-            | *: @DeclarationOrStatement
-        ]}
+        @DeclarationOrStatements
         .sEnd;
 
-DeclarationOrStatement:
+DeclarationOrStatement >> ConsumeStatus:
         [
             | pVal : @ConstantDefinitions
             | pVar : @VariableDeclaration
@@ -202,19 +202,22 @@ DeclarationOrStatement:
             | pIf: @IfStatement
             | pRepeat: @RepeatStatement
             | pChoose: @ChooseStatement
-            | *:
-                ?
-                #eUnexpectedToken
+            | *: >> cDidNotConsume
         ]
+        >> cConsumed
         ;
+
+DeclarationOrStatements:
+        {[ @DeclarationOrStatement
+            | cConsumed:
+            | cDidNotConsume: >
+        ]};
 
 RepeatBlock: % inside of repeat block where 'while' is at bottom
         .sRepeatStmt
         .sBegin
-        {[
-            | 'while': >
-            | *: @DeclarationOrStatement
-        ]}
+        @DeclarationOrStatements
+        'while'
         .sEnd .sRepeatEnd @Expression .sExpnEnd ';'
         ;
 
@@ -226,12 +229,12 @@ RepeatStatement: % follows 'repeat' keyword
 
 IfBlock:
     .sBegin
-    {[
-        | 'end': ';' .sEnd >
-        | 'else': .sEnd .sElse @Block >
-        | 'elseif': .sEnd .sElse .sBegin @IfStatement .sEnd >
-        | *: @DeclarationOrStatement
-    ]};
+    @DeclarationOrStatements
+    [
+        | 'end': ';' .sEnd
+        | 'else': .sEnd .sElse @Block
+        | 'elseif': .sEnd .sElse .sBegin @IfStatement .sEnd
+    ];
     
 
 IfStatement:
