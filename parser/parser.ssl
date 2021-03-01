@@ -202,6 +202,7 @@ DeclarationOrStatement >> ConsumeStatus:
             | pIf: @IfStatement
             | pRepeat: @RepeatStatement
             | pChoose: @ChooseStatement
+            | ';': .sNullStmt
             | *: >> cDidNotConsume
         ]
         >> cConsumed
@@ -221,7 +222,7 @@ RepeatBlock: % inside of repeat block where 'while' is at bottom
 
 RepeatStatement: % follows 'repeat' keyword
         [
-            | 'while': .sWhileStmt @Expression .sExpnEnd @Block
+            | 'while': .sWhileStmt @Expression .sExpnEnd @Block  'end' ';'
             | *: @RepeatBlock
         ];
 
@@ -229,7 +230,7 @@ IfStatement:
     .sIfStmt @Expression .sExpnEnd @then @Block
     [
         | 'end': ';'
-        | 'else': .sElse @Block
+        | 'else': .sElse @Block 'end' ';'
         | 'elseif': .sElse .sBegin @IfStatement .sEnd
     ];
 
@@ -407,7 +408,7 @@ ProcedureParameters:
 
 ValueorLike :
         [
-            | '=': .sInitialValue @Expression
+            | '=': .sInitialValue @Expression .sExpnEnd
             | '[': .sArray @ConstantValue ']' ':' @LikeClause
             | ':': @LikeClause
         ];
