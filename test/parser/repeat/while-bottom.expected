@@ -17,6 +17,8 @@
          .sInteger
          .sInteger
       .sEq
+      .sNot
      .sExpnEnd
+     .sNullStmt
      % .sNewLine
   .sEnd

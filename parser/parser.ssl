@@ -78,7 +78,7 @@ Input :
         pSemicolon              ';'
         pColon                  ':'
         pEquals                 '='
-        pNotEqual               '<>'
+        pNotEqual               '!='
         pLess                   '<'
         pLessEqual              '<='
         pGreaterEqual           '>='
@@ -217,7 +217,7 @@ DeclarationsAndStatements:
 RepeatBlock: % inside of repeat block where 'while' is at bottom
         .sRepeatStmt
         @Block
-        'while' .sRepeatEnd @Expression .sExpnEnd ';'
+        'while' .sRepeatEnd @Expression .sNot .sExpnEnd
         ;
 
 RepeatStatement: % follows 'repeat' keyword
@@ -473,17 +473,17 @@ Expression :
         @SimpleExpression
         [
             | '==':
-                @SimpleExpression  .sEq
-            | '<>':
-                @SimpleExpression  .sNE
+                @SimpleExpression .sEq
+            | '!=':
+                @SimpleExpression .sNE
             | '<':
-                @SimpleExpression  .sLT
+                @SimpleExpression .sLT
             | '<=':
-                @SimpleExpression  .sLE
+                @SimpleExpression .sLE
             | '>':
-                @SimpleExpression  .sGT
+                @SimpleExpression .sGT
             | '>=':
-                @SimpleExpression  .sGE
+                @SimpleExpression .sGE
             | *:
         ];
 
