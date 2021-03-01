@@ -175,6 +175,10 @@ Output :
 Error:
         eUnexpectedToken;
 
+type ConsumeStatus:
+        cConsumed
+        cDidNotConsume;
+
 rules
 
 Program : 
@@ -184,14 +188,10 @@ Program :
         ;
 Block:
         .sBegin
-        {[
-            | pAlmostEndFile: >
-            | 'end': ';' >
-            | *: @DeclarationOrStatement
-        ]}
+        @DeclarationsAndStatements
         .sEnd;
 
-DeclarationOrStatement:
+DeclarationOrStatement >> ConsumeStatus:
         [
             | pVal : @ConstantDefinitions
             | pVar : @VariableDeclaration
@@ -202,20 +202,21 @@ DeclarationOrStatement:
             | pIf: @IfStatement
             | pRepeat: @RepeatStatement
             | pChoose: @ChooseStatement
-            | *:
-                ?
-                #eUnexpectedToken
+            | *: >> cDidNotConsume
         ]
+        >> cConsumed
         ;
+
+DeclarationsAndStatements:
+        {[ @DeclarationOrStatement
+            | cConsumed:
+            | cDidNotConsume: >
+        ]};
 
 RepeatBlock: % inside of repeat block where 'while' is at bottom
         .sRepeatStmt
-        .sBegin
-        {[
-            | 'while': >
-            | *: @DeclarationOrStatement
-        ]}
-        .sEnd .sRepeatEnd @Expression .sExpnEnd ';'
+        @Block
+        'while' .sRepeatEnd @Expression .sExpnEnd ';'
         ;
 
 RepeatStatement: % follows 'repeat' keyword
@@ -224,19 +225,13 @@ RepeatStatement: % follows 'repeat' keyword
             | *: @RepeatBlock
         ];
 
-IfBlock:
-    .sBegin
-    {[
-        | 'end': ';' .sEnd >
-        | 'else': .sEnd .sElse @Block >
-        | 'elseif': .sEnd .sElse .sBegin @IfStatement .sEnd >
-        | *: @DeclarationOrStatement
-    ]};
-    
-
 IfStatement:
-    .sIfStmt @Expression .sExpnEnd @then @IfBlock
-    ;
+    .sIfStmt @Expression .sExpnEnd @then @Block
+    [
+        | 'end': ';'
+        | 'else': .sElse @Block
+        | 'elseif': .sElse .sBegin @IfStatement .sEnd
+    ];
 
 % Rule that handles procedure declaration with parameters
 Procedure:
@@ -420,23 +415,6 @@ ValueorLike :
 LikeClause:
     @OptionalFile @like @ConstantValue;
 
-ChooseBlock :
-    .sBegin
-    {[
-        | pVal : @ConstantDefinitions
-        | pVar : @VariableDeclaration
-        | pIdentifier: @AssignmentOrCallStmtOrVariableDeclaration
-        | pPkg: @Package
-        | 'fun': @Procedure
-        | 'public': @Public
-        | pIf: @IfStatement
-        | pRepeat: @RepeatStatement
-        | pChoose: @ChooseStatement
-        | *:
-            >
-    ]}
-    .sEnd;
-
 ChooseStatement :
         .sCaseStmt
         @Expression
@@ -451,7 +429,7 @@ ChooseStatement :
         [
             | 'else':
                 .sCaseElse
-                @ChooseBlock
+                @Block
             | *:
         ]
         'end' ';';
@@ -467,8 +445,7 @@ WhenStatement: % starts after 'when' in choose
         @CommaSeparatedConstants
         'then'
         .sLabelEnd
-        % allow any number of declarations or statements
-        @ChooseBlock;
+        @Block;
 
 % VERY SIMPLE RULES BELOW
 
@@ -490,121 +467,6 @@ OptionalProcedureParameters:
         | *: 
     ];
 
-% 
-% Statement :
-%         [
-%             | pIdentifier:
-%                 @AssignmentOrCallStmt
-%             | 'begin':
-%                 @BeginStmt
-%             | 'if':
-%                 @IfStmt
-%             | 'while':
-%                 @WhileStmt
-%             | 'case':
-%                 @CaseStmt
-%             | 'repeat':
-%                 @RepeatStmt
-%             | *:
-%                 .sNullStmt
-%         ];
-% 
-% AssignmentOrCallStmt :
-%         [
-%             | ':=':
-%                 .sAssignmentStmt
-%                 .sIdentifier    % identifier accepted in the Statement rule
-%                 @Expression
-%                 .sExpnEnd
-%             | '[':
-%                 .sAssignmentStmt
-%                 .sIdentifier
-%                 .sSubscript
-%                 @Expression
-%                 .sExpnEnd
-%                 ']'  ':='
-%                 @Expression
-%                 .sExpnEnd
-%             | *:
-%                 @CallStmt
-%         ];
-% 
-% CallStmt :
-%         .sCallStmt
-%         .sIdentifier    % procedure identifier accepted in the Statement rule
-%         % accept zero or more actual parameters
-%         [
-%             | '(':
-%                 {
-%                     @Expression
-%                     .sExpnEnd
-%                     % allow a field width specification to occur in calls
-%                     % to the standard procedures write and writeln
-%                     [
-%                         | ':':
-%                             .sFieldWidth
-%                             @Expression
-%                             .sExpnEnd
-%                         | *:
-%                     ]
-%                     [
-%                         | ',':
-%                         | *:
-%                             >
-%                     ]
-%                 }
-%                 ')'
-%             | *:        % no actual parameters
-%         ]
-%         .sParmEnd;
-% 
-% BeginStmt :
-%         .sBegin
-%         {
-%             @Statement
-%             [
-%                 | ';':
-%                 | 'end':
-%                     .sEnd
-%                     >
-%             ]
-%         };
-% 
-% IfStmt :
-%         .sIfStmt
-%         @Expression
-%         .sExpnEnd
-%         'then'  .sThen
-%         @Statement
-%         [
-%             | 'else':
-%                 .sElse
-%                 @Statement
-%             | *:
-%         ];
-% 
-% 
-% WhileStmt :
-%         .sWhileStmt
-%         @Expression
-%         .sExpnEnd
-%         'do'
-%         @Statement;
-% 
-% RepeatStmt :
-%         .sRepeatStmt
-%         {
-%             @Statement
-%             [
-%                 | ';':
-%                 | 'until':
-%                     .sRepeatEnd
-%                     >
-%             ]
-%         }
-%         @Expression
-%         .sExpnEnd;
-%
 
 Expression :
         @SimpleExpression
@@ -640,41 +502,29 @@ SimpleExpression :
                 @Term  .sSubtract
             | 'or':
                 .sInfixOr  @Term  .sOr
-        % Concatenate strings
-        | '|':
-        @Term .sConcatenate
-        % Repeat strings
-        | pDoubleOrBar:
-         @Term .sRepeatString
-        | *:
-        >
+            % Concatenate strings
+            | '|':
+                @Term .sConcatenate
+            % Repeat strings
+            | pDoubleOrBar:
+                @Term .sRepeatString
+            | *:
+                >
         ]};
+
+DivideOrSubstring:
+        @Factor
+        [
+            | ':': @Factor .sSubstring
+            | *: .sDivide
+        ];
 
 Term :
         @Factor
         {[
             | '*':
                 @Factor  .sMultiply
-            | '/':
-                [
-                    % First integer in Substring operation
-                    | pInteger:
-                        % First integer
-                        .sInteger
-                        [           
-                            % Colon operator in Substring
-                            | ':':
-                            @Factor 
-                            .sSubstring
-                        % If colon doesn't appear do nornmal division
-                            | *:
-                            % Integer for divide is above
-                            .sDivide
-                        ]
-                    % If not an integer then it cannot be substring so do normal division
-                    | *:
-                        @Factor .sDivide
-                ]
+            | '/': @DivideOrSubstring
             | '%':
                 @Factor  .sModulus
             | 'and':
