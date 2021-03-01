@@ -312,7 +312,7 @@ Arguments:
     {[
         | ')': >
         | ',': 
-        | *: @ConstantValue .sExpnEnd
+        | *: @Expression .sExpnEnd
     ]};
 
 CallStatementNoParams:
