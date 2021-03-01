@@ -261,8 +261,52 @@ Public:
 Package:
     .sPackage @identifier 'is' @Block;
 
+AssignEqual:
+        .sAssignmentStmt .sIdentifier 
+        @Expression .sExpnEnd 
+        ';';
+
+AssignAdd:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sAdd .sExpnEnd
+        ';';
+
+AssignSubtract:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sSubtract .sExpnEnd
+        ';';
+
+AssignMultiply:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sMultiply .sExpnEnd
+        ';';
+
+AssignDivide:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sDivide .sExpnEnd
+        ';';
+
+AssignModulus:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sModulus .sExpnEnd
+        ';';
+
+SubscriptAssign: % starts after '['
+        .sAssignmentStmt .sIdentifier
+        .sSubscript @Expression .sExpnEnd ']'
+        '='
+        @Expression .sExpnEnd ';'
+        ;
+    
 AssignmentOrCallStmtOrVariableDeclaration: 
     [
+        | '=': @AssignEqual
+        | '+=': @AssignAdd
+        | '-=': @AssignSubtract
+        | '*=': @AssignMultiply
+        | '/=': @AssignDivide
+        | '%=': @AssignModulus
+        | '[': @SubscriptAssign
         | '(': @CallStatement
         | ';': @CallStatementNoParams
         | *: #eUnexpectedToken
