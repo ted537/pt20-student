@@ -317,6 +317,7 @@ AssignmentOrCallStmtOrVariableDeclaration:
 	    .sExpnEnd
 	    ']'
 	    @SubscriptedAssignments
+	    ';'
 	| '(': @CallStatement
 	| ';': @CallStatementNoParams
 	| *: #eUnexpectedToken
@@ -329,37 +330,41 @@ SubscriptedAssignments:
             .sIdentifier
 	    @Expression
 	    .sExpnEnd
-	    ';'
 	| '+=':
 	    .sIdentifier
+	    .sSubscript
+            % Need a way to retrieve subscript integer again (was already consumed on line 316)
 	    @Expression
 	    .sAdd
 	    .sExpnEnd
-	    ';'
 	| '-=':
 	    .sIdentifier
+	    .sSubscript
+	    % Need a way to retrieve subscript integer again (was already consumed on line 316)
 	    @Expression
 	    .sSubtract
 	    .sExpnEnd
-	    ';'
 	| '*=':
 	    .sIdentifier
-	    @Expression
+	    .sSubscript
+	    % Need a way to retrieve subscript integer again (was already consumed on line 316)
+            @Expression
 	    .sMultiply
 	    .sExpnEnd
-	    ';'
 	| '/=':
 	    .sIdentifier
+	    .sSubscript
+	    % Need a way to retrieve subscript integer again (was already consumed on line 316)
 	    @Expression
 	    .sDivide
 	    .sExpnEnd
-	    ';'
 	| '%=':
 	    .sIdentifier
+	    .sSubscript
+            % Need a way to retrieve subscript integer again (was already consumed on line 316)
 	    @Expression
 	    .sModulus
 	    .sExpnEnd
-	    ';'
 	];
 
 Arguments:
