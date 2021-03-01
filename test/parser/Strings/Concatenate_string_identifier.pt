@@ -1,0 +1,4 @@
+using input;
+var str = "Hello";
+var con = str | "World";
+

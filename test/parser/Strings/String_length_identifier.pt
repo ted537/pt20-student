@@ -1,0 +1,4 @@
+using input;
+val str = "Hello World";
+var length = #str;
+

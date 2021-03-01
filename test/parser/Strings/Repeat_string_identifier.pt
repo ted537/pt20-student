@@ -1,0 +1,3 @@
+using input;
+var str = "Hello";
+var rep = str || 4;

@@ -1,0 +1,3 @@
+using input;
+var str = "Hello World";
+var subStr = str / 2 : 5;

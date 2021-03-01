@@ -201,6 +201,7 @@ DeclarationOrStatement:
             | 'public': @Public
             | pIf: @IfStatement
             | pRepeat: @RepeatStatement
+            | pChoose: @ChooseStatement
             | *:
                 ?
                 #eUnexpectedToken
@@ -237,10 +238,12 @@ IfStatement:
     .sIfStmt @Expression .sExpnEnd @then @IfBlock
     ;
 
+% Rule that handles procedure declaration with parameters
 Procedure:
     .sProcedure 
     @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
 
+% Rule that handles procedure declaration with optional public keyword 
 PublicProcedure:
     .sProcedure 
     @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
@@ -257,121 +260,121 @@ Public:
 
 Package:
     .sPackage @identifier 'is' @Block;
-
+    
 AssignmentOrCallStmtOrVariableDeclaration: 
-	[
-		| '=': 
-			.sAssignmentStmt
-			.sIdentifier
-			@Expression
-			.sExpnEnd
-			';'
-		| '+=': 
-			.sAssignmentStmt
-			.sIdentifier
-			.sIdentifier
-			@Expression
-			.sAdd
-			.sExpnEnd
-			';'
-		| '-=':
-			.sAssignmentStmt
-			.sIdentifier
-			.sIdentifier
-			@Expression
-			.sSubtract
-			.sExpnEnd
-			';'
-		| '*=': 
-			.sAssignmentStmt
-			.sIdentifier
-			.sIdentifier
-			@Expression
-			.sMultiply
-			.sExpnEnd
-			';'
-		| '/=': 
-			.sAssignmentStmt
-			.sIdentifier
-			.sIdentifier
-			@Expression
-			.sDivide
-			.sExpnEnd
-			';'
-		| '%=': 
-			.sAssignmentStmt
-			.sIdentifier
-			.sIdentifier
-			@Expression
-			.sModulus
-			.sExpnEnd
-			';'
-		| '[': 
-			.sAssignmentStmt
-			.sIdentifier
-			.sSubscript
-			@Expression
-			.sExpnEnd
-			']'
-			@SubscriptedAssignments
-		| '(': @CallStatement
-		| ';': @CallStatementNoParams
-		| *: #eUnexpectedToken
-	];
+    [
+        | '=':          
+            .sAssignmentStmt
+	    .sIdentifier
+	    @Expression
+	    .sExpnEnd
+	    ';'
+	| '+=': 
+	    .sAssignmentStmt
+	    .sIdentifier
+	    .sIdentifier
+	    @Expression
+	    .sAdd
+	    .sExpnEnd
+	    ';'
+	| '-=':
+	    .sAssignmentStmt
+	    .sIdentifier
+	    .sIdentifier
+	    @Expression
+	    .sSubtract
+	    .sExpnEnd
+	    ';'
+	| '*=': 
+	    .sAssignmentStmt
+	    .sIdentifier
+	    .sIdentifier
+	    @Expression
+	    .sMultiply
+	    .sExpnEnd
+	    ';'
+	| '/=': 
+	    .sAssignmentStmt
+	    .sIdentifier
+	    .sIdentifier
+	    @Expression
+	    .sDivide
+	    .sExpnEnd
+	    ';'
+	| '%=': 
+	    .sAssignmentStmt
+	    .sIdentifier
+	    .sIdentifier
+	    @Expression
+	    .sModulus
+	    .sExpnEnd
+	    ';'
+	| '[': 
+	    .sAssignmentStmt
+	    .sIdentifier
+	    .sSubscript
+	    @Expression
+	    .sExpnEnd
+	    ']'
+	    @SubscriptedAssignments
+	| '(': @CallStatement
+	| ';': @CallStatementNoParams
+	| *: #eUnexpectedToken
+    ];
 
 SubscriptedAssignments:
-	% this is required to avoid multiple .sAssignment outputs when working with subscripted assignments
-	[
-		| '=':
-			.sIdentifier
-			@Expression
-			.sExpnEnd
-			';'
-		| '+=':
-			.sIdentifier
-			@Expression
-			.sAdd
-			.sExpnEnd
-			';'
-		| '-=':
-			.sIdentifier
-			@Expression
-			.sSubtract
-			.sExpnEnd
-			';'
-		| '*=':
-			.sIdentifier
-			@Expression
-			.sMultiply
-			.sExpnEnd
-			';'
-		| '/=':
-			.sIdentifier
-			@Expression
-			.sDivide
-			.sExpnEnd
-			';'
-		| '%=':
-			.sIdentifier
-			@Expression
-			.sModulus
-			.sExpnEnd
-			';'
+    % this is required to avoid multiple .sAssignment outputs when working with subscripted assignments
+    [
+	| '=':
+            .sIdentifier
+	    @Expression
+	    .sExpnEnd
+	    ';'
+	| '+=':
+	    .sIdentifier
+	    @Expression
+	    .sAdd
+	    .sExpnEnd
+	    ';'
+	| '-=':
+	    .sIdentifier
+	    @Expression
+	    .sSubtract
+	    .sExpnEnd
+	    ';'
+	| '*=':
+	    .sIdentifier
+	    @Expression
+	    .sMultiply
+	    .sExpnEnd
+	    ';'
+	| '/=':
+	    .sIdentifier
+	    @Expression
+	    .sDivide
+	    .sExpnEnd
+	    ';'
+	| '%=':
+	    .sIdentifier
+	    @Expression
+	    .sModulus
+	    .sExpnEnd
+	    ';'
 	];
 
 Arguments:
-	{[
-		| ')': >
-		| ',': 
-		| *: @ConstantValue
-	]};
+    {[
+        | ')': >
+        | ',': 
+        | *: @ConstantValue
+    ]};
 
 CallStatementNoParams:
-	.sCallStmt .sIdentifier .sParmEnd;
+    .sCallStmt .sIdentifier .sParmEnd;
 
 CallStatement: % starts after '('
-	.sCallStmt .sIdentifier @Arguments .sExpnEnd .sParmEnd ';'
-	;
+    .sCallStmt .sIdentifier @Arguments .sExpnEnd .sParmEnd ';'
+    ;
 
 UsingStatement:
     pUsing @identifier
@@ -466,6 +469,56 @@ ValueorLike :
 
 LikeClause:
     @OptionalFile @like @ConstantValue;
+
+ChooseBlock :
+    .sBegin
+    {[
+        | pVal : @ConstantDefinitions
+        | pVar : @VariableDeclaration
+        | pIdentifier: @AssignmentOrCallStmtOrVariableDeclaration
+        | pPkg: @Package
+        | 'fun': @Procedure
+        | 'public': @Public
+        | pIf: @IfStatement
+        | pRepeat: @RepeatStatement
+        | pChoose: @ChooseStatement
+        | *:
+            >
+    ]}
+    .sEnd;
+
+ChooseStatement :
+        .sCaseStmt
+        @Expression
+        .sExpnEnd
+        'of'
+        'when' @WhenStatement
+        {[
+            | 'when': @WhenStatement
+            | *: >
+        ]}
+        .sCaseEnd
+        [
+            | 'else':
+                .sCaseElse
+                @ChooseBlock
+            | *:
+        ]
+        'end' ';';
+
+CommaSeparatedConstants:
+        @OptionallySignedIntegerConstant
+        {[
+            | ',': @OptionallySignedIntegerConstant
+            | *: >
+        ]};
+
+WhenStatement: % starts after 'when' in choose
+        @CommaSeparatedConstants
+        'then'
+        .sLabelEnd
+        % allow any number of declarations or statements
+        @ChooseBlock;
 
 % VERY SIMPLE RULES BELOW
 
@@ -580,42 +633,6 @@ OptionalProcedureParameters:
 %             | *:
 %         ];
 % 
-% CaseStmt :
-%         .sCaseStmt
-%         @Expression
-%         .sExpnEnd
-%         'of'
-%         @CaseAlternative
-%         {[
-%             | ';':
-%                 % since case alternatives cannot be null, allow
-%                 % for the common situation of an extra semicolon
-%                 % at the end of the list of case alternatives.
-%                 [
-%                     | 'end':
-%                         >
-%                     | *:
-%                         @CaseAlternative
-%                 ]
-%             | 'end':
-%                 >
-%         ]}
-%         .sCaseEnd;
-% 
-% CaseAlternative :
-%         % A case alternative is a statement labelled by
-%         % one or more optionally signed integer constants
-% 
-%         {
-%             @OptionallySignedIntegerConstant
-%             [
-%                 | ',':
-%                 | *:
-%                     >
-%             ]
-%         }
-%         .sLabelEnd
-%         ':'  @Statement;
 % 
 % WhileStmt :
 %         .sWhileStmt
@@ -673,8 +690,14 @@ SimpleExpression :
                 @Term  .sSubtract
 	    | 'or':
                 .sInfixOr  @Term  .sOr
-            | *:
-                >
+        % Concatenate strings
+        | '|':
+        @Term .sConcatenate
+        % Repeat strings
+        | pDoubleOrBar:
+         @Term .sRepeatString
+        | *:
+        >
         ]};
 
 Term :
@@ -683,7 +706,25 @@ Term :
             | '*':
                 @Factor  .sMultiply
             | '/':
-                @Factor  .sDivide
+                [
+                    % First integer in Substring operation
+                    | pInteger:
+                        % First integer
+                        .sInteger
+                        [           
+                            % Colon operator in Substring
+                            | ':':
+                            @Factor 
+                            .sSubstring
+                        % If colon doesn't appear do nornmal division
+                            | *:
+                            % Integer for divide is above
+                            .sDivide
+                        ]
+                    % If not an integer then it cannot be substring so do normal division
+                    | *:
+                        @Factor .sDivide
+                ]
             | '%':
                 @Factor  .sModulus
             | 'and':
@@ -706,11 +747,15 @@ Factor :
                 .sNot
             | pStringLiteral:
                 .sStringLiteral
+            % Special character for the string length
+            | pHash: 
+                @Factor
+                .sLength
             | 'file':
                 .sFile '(' @Expression ')'
                 .sExpnEnd
         ];
-
+        
 IdentifierExtension :
         % Handle subscripts and function actual parameter lists
         [

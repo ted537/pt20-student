@@ -1,0 +1,5 @@
+using input, output;
+choose i of
+    when 1, 2 then
+        val x = 5;
+end;
