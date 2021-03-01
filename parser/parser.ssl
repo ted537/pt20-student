@@ -512,31 +512,33 @@ SimpleExpression :
         >
         ]};
 
+DivideOrSubstring:
+        [
+            % First integer in Substring operation
+            | pInteger:
+                % First integer
+                .sInteger
+                [           
+                    % Colon operator in Substring
+                    | ':':
+                    @Factor 
+                    .sSubstring
+                % If colon doesn't appear do nornmal division
+                    | *:
+                    % Integer for divide is above
+                    .sDivide
+                ]
+            % If not an integer then it cannot be substring so do normal division
+            | *:
+                @Factor .sDivide
+        ];
+
 Term :
         @Factor
         {[
             | '*':
                 @Factor  .sMultiply
-            | '/':
-                [
-                    % First integer in Substring operation
-                    | pInteger:
-                        % First integer
-                        .sInteger
-                        [           
-                            % Colon operator in Substring
-                            | ':':
-                            @Factor 
-                            .sSubstring
-                        % If colon doesn't appear do nornmal division
-                            | *:
-                            % Integer for divide is above
-                            .sDivide
-                        ]
-                    % If not an integer then it cannot be substring so do normal division
-                    | *:
-                        @Factor .sDivide
-                ]
+            | '/': @DivideOrSubstring
             | '%':
                 @Factor  .sModulus
             | 'and':
