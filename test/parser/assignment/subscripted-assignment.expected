@@ -16,8 +16,7 @@
     .sSubscript
         .sInteger
     .sExpnEnd
-     .sIdentifier
-         .sInteger
-     .sExpnEnd
-     % .sNewLine
+        .sInteger
+    .sExpnEnd
+    % .sNewLine
   .sEnd
