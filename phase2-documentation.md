@@ -199,3 +199,109 @@ ChooseBlock :
     ]}
     .sEnd;
 ```
+In `parser.ssl` in the `Procedure` rule:
+* Added new logic to handle Like function declarations
+* All function declarations now handled using the `Procedure` rule
+```
+Procedure:
+    .sProcedure 
+    @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
+```
+* This new rule achieves the changes between PT Pascal procedures and Like functions
+
+In `parser.ssl` in the `PublicProcedure` rule: 
+* Like adds functionality for public routines/functions
+* The new rule `PublicProcedure` handles this special case of public function declarations
+```
+PublicProcedure:
+    .sProcedure 
+    @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
+```
+* Note for both `PublicProcedure` and `Procedure` the `OptionalProcedureParameters` rule is unchanged. This rule handles the parameter declaration for the routines.
+
+In `parser.ssl` in the `SimpleExpression` rule:
+* New cases are added to `SimpleExpressions` to handle two of the new string operations, concatenate ('|') and repeat ('||'), added by Like
+```
+SimpleExpression :
+        [
+            | '+':
+                @Term
+            | '-':
+                @Term  .sNegate
+            | *:
+                @Term
+        ]
+        {[
+            | '+':
+                @Term  .sAdd
+            | '-':
+                @Term  .sSubtract
+            | 'or':
+                .sInfixOr  @Term  .sOr
+            % Concatenate strings
+            | '|':
+                @Term .sConcatenate
+            % Repeat strings
+            | pDoubleOrBar:
+                @Term .sRepeatString
+            | *:
+                >
+        ]};
+```
+* Both of these operations have precedence equal to that of integer addition as specified in the Like specifications document
+
+In `parser.ssl` in the `Term` rule:
+* New Like string operation substring ('/') handled through `Term` rule case
+* Colon in substring operation distinguishes between division and substring
+* This distinction is done in `DivideOrSubstring` rule
+```
+Term :
+        @Factor
+        {[
+            | '*':
+                @Factor  .sMultiply
+            | '/': @DivideOrSubstring
+            | '%':
+                @Factor  .sModulus
+            | 'and':
+                .sInfixAnd  @Factor  .sAnd
+            | *:
+                >
+        ]};
+```
+* New rule to handle distinction between division and substring
+```
+DivideOrSubstring:
+        @Factor
+        [
+            | ':': @Factor .sSubstring
+            | *: .sDivide
+        ];
+```
+In `parser.ssl` in the `Factor` rule: 
+* Like adds a new string operator length ('#')
+* Added case in factor to handle this operator (similar to how not is handled)
+```
+Factor :
+        [
+            | pIdentifier:
+                .sIdentifier
+                @IdentifierExtension
+            | pInteger:
+                .sInteger
+            | '(':
+                @Expression  ')'
+            | 'not':
+                @Factor
+                .sNot
+            | pStringLiteral:
+                .sStringLiteral
+            % Special character for the string length
+            | pHash: 
+                @Factor
+                .sLength
+            | 'file':
+                .sFile '(' @Expression ')'
+                .sExpnEnd
+        ];
+```
