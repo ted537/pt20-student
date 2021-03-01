@@ -13,6 +13,7 @@
         .sBegin
             .sVar
             .sIdentifier
+            .sInitialValue
             .sInteger
             % .sNewLine
         .sEnd
@@ -28,6 +29,7 @@
             .sBegin
                 .sVar
                 .sIdentifier
+                .sInitialValue
                 .sInteger
                 % .sNewLine
                 % .sNewLine

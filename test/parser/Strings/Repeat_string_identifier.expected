@@ -5,10 +5,12 @@
   .sBegin
     .sVar
      .sIdentifier
+     .sInitialValue
          .sStringLiteral
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
          .sIdentifier
          .sInteger
        .sRepeatString

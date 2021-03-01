@@ -6,5 +6,6 @@
   .sBegin
   .sVar
    .sIdentifier
+   .sInitialValue
         .sInteger
   .sEnd

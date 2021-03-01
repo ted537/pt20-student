@@ -18,6 +18,7 @@
      .sBegin
        .sVar
         .sIdentifier
+        .sInitialValue
             .sInteger
        % .sNewLine
      .sEnd

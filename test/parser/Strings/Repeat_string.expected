@@ -5,6 +5,7 @@
   .sBegin
     .sVar
      .sIdentifier
+     .sInitialValue
          .sStringLiteral
          .sInteger
        .sRepeatString

@@ -9,6 +9,7 @@
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
           .sIdentifier
          .sLength
     % .sNewLine

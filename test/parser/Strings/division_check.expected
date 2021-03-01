@@ -5,20 +5,24 @@
   .sBegin
     .sVar
      .sIdentifier
+    .sInitialValue
          .sInteger
         .sInteger
         .sDivide
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
          .sInteger
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
          .sInteger
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
          .sIdentifier
          .sIdentifier
         .sDivide
