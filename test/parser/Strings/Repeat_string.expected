@@ -9,5 +9,6 @@
          .sStringLiteral
          .sInteger
        .sRepeatString
+       .sExpnEnd
     % .sNewLine
   .sEnd

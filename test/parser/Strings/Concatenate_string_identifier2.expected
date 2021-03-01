@@ -7,11 +7,13 @@
      .sIdentifier
      .sInitialValue
          .sStringLiteral
+         .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
      .sInitialValue
          .sStringLiteral
+         .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
@@ -19,6 +21,7 @@
          .sIdentifier
          .sIdentifier
        .sConcatenate
+       .sExpnEnd
     % .sNewLine
     % .sNewLine
   .sEnd

@@ -8,4 +8,5 @@
    .sIdentifier
    .sInitialValue
         .sInteger
+        .sExpnEnd
   .sEnd

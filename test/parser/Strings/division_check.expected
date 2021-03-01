@@ -9,16 +9,19 @@
          .sInteger
         .sInteger
         .sDivide
+        .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
      .sInitialValue
          .sInteger
+         .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
      .sInitialValue
          .sInteger
+         .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
@@ -26,5 +29,6 @@
          .sIdentifier
          .sIdentifier
         .sDivide
+        .sExpnEnd
     % .sNewLine
   .sEnd

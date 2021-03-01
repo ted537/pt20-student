@@ -10,5 +10,6 @@
            .sInteger
            .sInteger
           .sSubstring
+          .sExpnEnd
     % .sNewLine
   .sEnd

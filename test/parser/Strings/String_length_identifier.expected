@@ -12,6 +12,7 @@
      .sInitialValue
           .sIdentifier
          .sLength
+         .sExpnEnd
     % .sNewLine
     % .sNewLine
   .sEnd
