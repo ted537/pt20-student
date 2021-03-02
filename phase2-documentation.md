@@ -285,3 +285,100 @@ Factor :
                 .sExpnEnd
         ];
 ```
+
+In `parser.ssl` in the `Package` rule:
+* New functionality in Like for creating packages
+```
+Package:
+    .sPackage @identifier 'is' @Block 'end' ';';
+```
+
+In `parser.ssl` in the `AssignmentOrCallStmtOrVariableDeclaration` rule:
+* Like modifies the PT Pascal assignment symbol from `:=` to `=`
+* New to Like is short form assignment operators such as incremental assignment, decramental assignment, multiplicative assignment, divisive assignment, and modular assignment
+```
+AssignmentOrCallStmtOrVariableDeclaration: 
+    [
+        | '=': @AssignEqual
+        | '+=': @AssignAdd
+        | '-=': @AssignSubtract
+        | '*=': @AssignMultiply
+        | '/=': @AssignDivide
+        | '%=': @AssignModulus
+        | '[': @SubscriptAssign
+        | '(': @CallStatement
+        | ';': @CallStatementNoParams
+        | *: #eUnexpectedToken
+    ];
+```
+
+In `parser.ssl` in the `AssignEqual` rule:
+* Implementation for the `=` assignment operator did not change from that of `:=` in PT Pascal, was simply made into its own rule to be called
+```
+AssignEqual:
+        .sAssignmentStmt .sIdentifier 
+        @Expression .sExpnEnd 
+        ';';
+```
+
+In `parser.ssl` in the `AssignAdd` rule:
+* New functionality in Like for short form of incremental assignment
+```
+AssignAdd:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sAdd .sExpnEnd
+        ';';
+```
+* Short form assignment (e.g., `i += 10`) is interpreted by the parser as its respective long form assignment (i.e., `i = i + 10`)
+
+In `parser.ssl` in the `AssignSubtract` rule:
+* New functionality in Like for short form decrimental assignment
+```
+AssignSubtract:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sSubtract .sExpnEnd
+        ';';
+```
+* Short for assignment (e.g., `i -= 10`) is interpreted by the parser as its respective long form assignment (i.e., `i = i - 10`)
+
+In `parser.ssl` in the `AssignMultiply` rule:
+* New functionality in Like for short form multiplicative assignment
+```
+AssignMultiply:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sMultiply .sExpnEnd
+        ';';
+```
+* Short form assignment (e.g., `i *= 10`) is interpreted by the parser as its respective long form assignment (i.e., `i = i * 10`)
+
+In `parser.ssl` in the `AssignDivide` rule:
+* New functionality in Like for short form divisive assignment
+```
+AssignDivide:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sDivide .sExpnEnd
+        ';';
+```
+* Short form assignment (e.g., `i /= 10`) is interpreted by the parser as its respective long form assignment (i.e., `i = i / 10`)
+
+In `parser.ssl` in the `AssignModulus` rule:
+* New functionality in Like for short form modular assignment
+```
+AssignModulus:
+        .sAssignmentStmt .sIdentifier .sIdentifier 
+        @Expression .sModulus .sExpnEnd
+        ';';
+```
+* Short form assignment (e.g., `i %= 10`) is interpreted by the parser as its respective long form assignment (i.e., `i = i % 10`)
+
+In `parser.ssl` in the `SubscriptAssign` rule:
+* Only modification from the previous PT Pascal implementation was to reflect changes made to the assignment symbol in Like
+* Changed assignment symbol from PT Pascals' `:=` to Like's `=`
+```
+SubscriptAssign: % starts after '['
+        .sAssignmentStmt .sIdentifier
+        .sSubscript @Expression .sExpnEnd ']'
+        '='
+        @Expression .sExpnEnd ';'
+        ;
+```
