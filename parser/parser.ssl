@@ -220,9 +220,18 @@ RepeatBlock: % inside of repeat block where 'while' is at bottom
         'while' .sRepeatEnd @Expression .sNot .sExpnEnd
         ;
 
+OptionalSemicolon:
+        [
+            | ';': 
+            | *:
+        ];
+
 RepeatStatement: % follows 'repeat' keyword
         [
-            | 'while': .sWhileStmt @Expression .sExpnEnd @Block  'end' ';'
+            | 'while': 
+                .sWhileStmt @Expression .sExpnEnd 
+                @Block  
+                'end' @OptionalSemicolon
             | *: @RepeatBlock
         ];
 
@@ -237,7 +246,7 @@ IfStatement:
 % Rule that handles procedure declaration with parameters
 Procedure:
     .sProcedure 
-    @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
+    @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block 'end' ';';
 
 % Rule that handles procedure declaration with optional public keyword 
 PublicProcedure:
@@ -509,6 +518,8 @@ SimpleExpression :
             % Repeat strings
             | pDoubleOrBar:
                 @Term .sRepeatString
+            | ':':
+                .sExpnEnd .sFieldWidth @Term
             | *:
                 >
         ]};
