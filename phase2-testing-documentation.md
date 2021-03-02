@@ -27,6 +27,7 @@ any parameters (`fun flag is`)
 number of parameters and parameter types (`fun flag(number : like 1,...)`)
 * `routine_public.pt` tests that function can be optionally declared as
 public using the `public` flag before the function definition
+* `old_procedures.pt` tests that the old function declaration syntax is no longer valid
 
 **/test/parser/Strings**
 
