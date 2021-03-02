@@ -12,7 +12,8 @@ All test cases were ran using `ssltrace` and the expected behaviour
 was achieved
 
 ### How to Run the Tests
-I dont know what to put here, cuz i havent used the scripts to run the tests
+All tests can be run by running `./test.sh` in the base directory of the 
+project
 
 ### Test Case Description
 
