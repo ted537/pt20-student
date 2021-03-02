@@ -37,6 +37,16 @@ test. As such, a single example will be provided for clarity sake
 by using the string operation `||`
 * The rest of the test cases within this folder follow a similar structure
 
+**/test/parser/assignment**
+The test cases contained within this folder are to test the functionality
+of short form assignments within Like
+* All files are clearly labelled in which specific short form assignment
+they test. As such, a single example will be provided for clarity sake
+* `modulo-equals-assignment.pt` tests that variables can be assigned a
+value by taking their current value and applying the modulus operator
+* the rest of the test cases within this folder follow a similar structure
+
+
 **/test/parser/choose**
 
 The test cases contained within this folder are to test the functionality

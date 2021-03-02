@@ -178,27 +178,7 @@ where `@CommaSeparatedConstants` simply allows a list of comma separated
 constants
 * This rule was a modified version of PT Pascal's case statement rule and
 was required as per the Like specifications.
-* **NOTE**: A new `ChoiceBlock` rule had to be added to handle any number
-of declarations and statements, much like the Block rule. The `ChoiceBlock`
-rule is as follows
-```
-ChooseBlock :
-    .sBegin
-    {[
-        | pVal : @ConstantDefinitions
-        | pVar : @VariableDeclaration
-        | pIdentifier: @AssignmentOrCallStmtOrVariableDeclaration
-        | pPkg: @Package
-        | 'fun': @Procedure
-        | 'public': @Public
-        | pIf: @IfStatement
-        | pRepeat: @RepeatStatement
-        | pChoose: @ChooseStatement
-        | *:
-            >
-    ]}
-    .sEnd;
-```
+
 In `parser.ssl` in the `Procedure` rule:
 * Added new logic to handle Like function declarations
 * All function declarations now handled using the `Procedure` rule
