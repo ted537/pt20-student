@@ -78,7 +78,7 @@ Input :
         pSemicolon              ';'
         pColon                  ':'
         pEquals                 '='
-        pNotEqual               '<>'
+        pNotEqual               '!='
         pLess                   '<'
         pLessEqual              '<='
         pGreaterEqual           '>='
@@ -202,6 +202,7 @@ DeclarationOrStatement >> ConsumeStatus:
             | pIf: @IfStatement
             | pRepeat: @RepeatStatement
             | pChoose: @ChooseStatement
+            | ';': .sNullStmt
             | *: >> cDidNotConsume
         ]
         >> cConsumed
@@ -216,12 +217,21 @@ DeclarationsAndStatements:
 RepeatBlock: % inside of repeat block where 'while' is at bottom
         .sRepeatStmt
         @Block
-        'while' .sRepeatEnd @Expression .sExpnEnd ';'
+        'while' .sRepeatEnd @Expression .sNot .sExpnEnd
         ;
+
+OptionalSemicolon:
+        [
+            | ';': 
+            | *:
+        ];
 
 RepeatStatement: % follows 'repeat' keyword
         [
-            | 'while': .sWhileStmt @Expression .sExpnEnd @Block
+            | 'while': 
+                .sWhileStmt @Expression .sExpnEnd 
+                @Block  
+                'end' @OptionalSemicolon
             | *: @RepeatBlock
         ];
 
@@ -229,19 +239,23 @@ IfStatement:
     .sIfStmt @Expression .sExpnEnd @then @Block
     [
         | 'end': ';'
-        | 'else': .sElse @Block
+        | 'else': .sElse @Block 'end' ';'
         | 'elseif': .sElse .sBegin @IfStatement .sEnd
     ];
 
 % Rule that handles procedure declaration with parameters
 Procedure:
     .sProcedure 
-    @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block;
+    @identifier @OptionalProcedureParameters 'is' .sParmEnd 
+    @Block 
+    'end' ';';
 
 % Rule that handles procedure declaration with optional public keyword 
 PublicProcedure:
     .sProcedure 
-    @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
+    @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd 
+    @Block
+    'end' ';';
 
 Public:
     [
@@ -254,7 +268,7 @@ Public:
     ];
 
 Package:
-    .sPackage @identifier 'is' @Block;
+    .sPackage @identifier 'is' @Block 'end' ';';
 
 AssignEqual:
         .sAssignmentStmt .sIdentifier 
@@ -311,14 +325,14 @@ Arguments:
     {[
         | ')': >
         | ',': 
-        | *: @ConstantValue
+        | *: @Expression .sExpnEnd
     ]};
 
 CallStatementNoParams:
     .sCallStmt .sIdentifier .sParmEnd;
 
 CallStatement: % starts after '('
-    .sCallStmt .sIdentifier @Arguments .sExpnEnd .sParmEnd ';'
+    .sCallStmt .sIdentifier @Arguments .sParmEnd ';'
     ;
 
 UsingStatement:
@@ -407,7 +421,7 @@ ProcedureParameters:
 
 ValueorLike :
         [
-            | '=': @Expression
+            | '=': .sInitialValue @Expression .sExpnEnd
             | '[': .sArray @ConstantValue ']' ':' @LikeClause
             | ':': @LikeClause
         ];
@@ -472,17 +486,17 @@ Expression :
         @SimpleExpression
         [
             | '==':
-                @SimpleExpression  .sEq
-            | '<>':
-                @SimpleExpression  .sNE
+                @SimpleExpression .sEq
+            | '!=':
+                @SimpleExpression .sNE
             | '<':
-                @SimpleExpression  .sLT
+                @SimpleExpression .sLT
             | '<=':
-                @SimpleExpression  .sLE
+                @SimpleExpression .sLE
             | '>':
-                @SimpleExpression  .sGT
+                @SimpleExpression .sGT
             | '>=':
-                @SimpleExpression  .sGE
+                @SimpleExpression .sGE
             | *:
         ];
 
@@ -508,6 +522,8 @@ SimpleExpression :
             % Repeat strings
             | pDoubleOrBar:
                 @Term .sRepeatString
+            | ':':
+                .sExpnEnd .sFieldWidth @Term
             | *:
                 >
         ]};

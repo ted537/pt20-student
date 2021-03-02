@@ -7,7 +7,9 @@
      .sVar
       .sIdentifier
      .sPublic
+     .sInitialValue
           .sInteger
+          .sExpnEnd
      % .sNewLine
      .sVar
       .sIdentifier

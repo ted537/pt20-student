@@ -238,8 +238,6 @@ Scan :
                 ]
             | '<':
                 [
-                    | '>':
-                        .pNotEqual
                     | '=':
                         .pLessEqual
                     | *:
@@ -280,7 +278,12 @@ Scan :
             | '#':
                 .pHash
             | '!':
-                .pBang
+                [
+                    | '=':
+                        .pNotEqual
+                    | *:
+                        .pBang
+                ]
             | '|':
                 [
                     | '|':

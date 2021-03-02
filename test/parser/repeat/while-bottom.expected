@@ -8,13 +8,17 @@
      .sBegin
        .sVar
         .sIdentifier
+        .sInitialValue
             .sInteger
+            .sExpnEnd
        % .sNewLine
      .sEnd
      .sRepeatEnd
          .sInteger
          .sInteger
       .sEq
+      .sNot
      .sExpnEnd
+     .sNullStmt
      % .sNewLine
   .sEnd

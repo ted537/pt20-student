@@ -5,13 +5,17 @@
   .sBegin
     .sVar
      .sIdentifier
+     .sInitialValue
          .sStringLiteral
+         .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
          .sIdentifier
         .sInteger
          .sInteger
         .sSubstring
+        .sExpnEnd
     % .sNewLine
   .sEnd

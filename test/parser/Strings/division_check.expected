@@ -5,22 +5,30 @@
   .sBegin
     .sVar
      .sIdentifier
+    .sInitialValue
          .sInteger
         .sInteger
         .sDivide
+        .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
          .sInteger
+         .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
          .sInteger
+         .sExpnEnd
     % .sNewLine
     .sVar
      .sIdentifier
+     .sInitialValue
          .sIdentifier
          .sIdentifier
         .sDivide
+        .sExpnEnd
     % .sNewLine
   .sEnd

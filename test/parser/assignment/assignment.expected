@@ -6,7 +6,9 @@
   .sBegin
     .sVar
      .sIdentifier
+     .sInitialValue
          .sInteger
+         .sExpnEnd
     % .sNewLine
     .sAssignmentStmt
     .sIdentifier

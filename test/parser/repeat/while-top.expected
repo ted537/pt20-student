@@ -12,7 +12,9 @@
      .sBegin
        .sVar
         .sIdentifier
+        .sInitialValue
             .sInteger
+            .sExpnEnd
        % .sNewLine
      % .sNewLine
      .sEnd
