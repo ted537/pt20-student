@@ -39,6 +39,7 @@ by using the string operation `||`
 * The rest of the test cases within this folder follow a similar structure
 
 **/test/parser/assignment**
+
 The test cases contained within this folder are to test the functionality
 of short form assignments within Like
 * All files are clearly labelled in which specific short form assignment
