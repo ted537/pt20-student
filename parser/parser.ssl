@@ -246,12 +246,16 @@ IfStatement:
 % Rule that handles procedure declaration with parameters
 Procedure:
     .sProcedure 
-    @identifier @OptionalProcedureParameters 'is' .sParmEnd @Block 'end' ';';
+    @identifier @OptionalProcedureParameters 'is' .sParmEnd 
+    @Block 
+    'end' ';';
 
 % Rule that handles procedure declaration with optional public keyword 
 PublicProcedure:
     .sProcedure 
-    @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd @Block;
+    @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd 
+    @Block
+    'end' ';';
 
 Public:
     [
@@ -264,7 +268,7 @@ Public:
     ];
 
 Package:
-    .sPackage @identifier 'is' @Block;
+    .sPackage @identifier 'is' @Block 'end' ';';
 
 AssignEqual:
         .sAssignmentStmt .sIdentifier 
