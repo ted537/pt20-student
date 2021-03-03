@@ -391,3 +391,34 @@ SubscriptAssign: % starts after '['
         @Expression .sExpnEnd ';'
         ;
 ```
+
+In `parser.ssl` in the `IfStatement` rule,
+added support for `else` and `elseif` as per the Like specification.
+
+```
+IfStatement:
+    .sIfStmt @Expression .sExpnEnd @then @Block
+    [
+        | 'end': ';'
+        | 'else': .sElse @Block 'end' ';'
+        | 'elseif': .sElse .sBegin @IfStatement .sEnd
+    ];
+```
+
+In `parser.ssl` in the `RepeatStatement` rule,
+adde support for `repeat {block} while` and `repeat while {block}`.
+When `while` appears before block,
+parser outputs semantic tokens for while statement.
+When `while` appears after block,
+parser outputs semantic tokens for repeat statement.
+
+```
+RepeatStatement: % follows 'repeat' keyword
+        [
+            | 'while': 
+                .sWhileStmt @Expression .sExpnEnd 
+                @Block  
+                'end' @OptionalSemicolon
+            | *: @RepeatBlock
+        ];
+```
