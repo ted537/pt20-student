@@ -1,0 +1,5 @@
+case i of
+    1,2:
+        const x = 5;
+    end;
+end;
