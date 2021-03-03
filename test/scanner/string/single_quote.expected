@@ -3,5 +3,4 @@
   % Output token text 'hello'
  #eIllegalChar
  .pNewLine
- .pAlmostEndFile
  .pEndFile

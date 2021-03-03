@@ -67,7 +67,6 @@ Input :
         % Non-compound tokens - 
         %   These tokens simply represent themselves.
         pNewLine
-        pAlmostEndFile
         pEndFile
         pPlus                   '+'
         pMinus                  '-'
@@ -185,6 +184,10 @@ Program :
         .sProgram
         @UsingStatement
         @Block
+        {[
+            | pNewLine: 
+            | *: >
+        ]}
         ;
 Block:
         .sBegin

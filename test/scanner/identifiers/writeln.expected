@@ -1,5 +1,4 @@
   .pIdentifier
   % Output token text 'writeln'
  .pNewLine
- .pAlmostEndFile
  .pEndFile
