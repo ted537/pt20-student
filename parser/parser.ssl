@@ -236,39 +236,39 @@ RepeatStatement: % follows 'repeat' keyword
         ];
 
 IfStatement:
-    .sIfStmt @Expression .sExpnEnd @then @Block
-    [
-        | 'end': ';'
-        | 'else': .sElse @Block 'end' ';'
-        | 'elseif': .sElse .sBegin @IfStatement .sEnd
-    ];
+		.sIfStmt @Expression .sExpnEnd @then @Block
+		[
+			| 'end': ';'
+			| 'else': .sElse @Block 'end' ';'
+			| 'elseif': .sElse .sBegin @IfStatement .sEnd
+		];
 
 % Rule that handles procedure declaration with parameters
 Procedure:
-    .sProcedure 
-    @identifier @OptionalProcedureParameters 'is' .sParmEnd 
-    @Block 
-    'end' ';';
+		.sProcedure 
+		@identifier @OptionalProcedureParameters 'is' .sParmEnd 
+		@Block 
+		'end' ';';
 
 % Rule that handles procedure declaration with optional public keyword 
 PublicProcedure:
-    .sProcedure 
-    @identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd 
-    @Block
-    'end' ';';
+		.sProcedure 
+		@identifier .sPublic @OptionalProcedureParameters 'is' .sParmEnd 
+		@Block
+		'end' ';';
 
 Public:
-    [
-        | 'val':
-            @PublicConstantDefinitions
-        | 'var':
-            @PublicVariableDeclaration
-        | 'fun':
-            @PublicProcedure
-    ];
+		[
+			| 'val':
+				@PublicConstantDefinitions
+			| 'var':
+				@PublicVariableDeclaration
+			| 'fun':
+				@PublicProcedure
+		];
 
 Package:
-    .sPackage @identifier 'is' @Block 'end' ';';
+		.sPackage @identifier 'is' @Block 'end' ';';
 
 AssignEqual:
         .sAssignmentStmt .sIdentifier 
@@ -308,49 +308,47 @@ SubscriptAssign: % starts after '['
         ;
     
 AssignmentOrCallStmtOrVariableDeclaration: 
-    [
-        | '=': @AssignEqual
-        | '+=': @AssignAdd
-        | '-=': @AssignSubtract
-        | '*=': @AssignMultiply
-        | '/=': @AssignDivide
-        | '%=': @AssignModulus
-        | '[': @SubscriptAssign
-        | '(': @CallStatement
-        | ';': @CallStatementNoParams
-        | *: #eUnexpectedToken
-    ];
+		[
+			| '=': @AssignEqual
+			| '+=': @AssignAdd
+			| '-=': @AssignSubtract
+			| '*=': @AssignMultiply
+			| '/=': @AssignDivide
+			| '%=': @AssignModulus
+			| '[': @SubscriptAssign
+			| '(': @CallStatement
+			| ';': @CallStatementNoParams
+			| *: #eUnexpectedToken
+		];
 
 Arguments:
-    {[
-        | ')': >
-        | ',': 
-        | *: @Expression .sExpnEnd
-    ]};
+		{[
+			| ')': >
+			| ',': 
+			| *: @Expression .sExpnEnd
+		]};
 
 CallStatementNoParams:
-    .sCallStmt .sIdentifier .sParmEnd;
+		.sCallStmt .sIdentifier .sParmEnd;
 
 CallStatement: % starts after '('
-    .sCallStmt .sIdentifier @Arguments .sParmEnd ';'
-    ;
+		.sCallStmt .sIdentifier @Arguments .sParmEnd ';';
 
 UsingStatement:
-    pUsing @identifier
-    {[
-        | ',': @identifier
-        | ';': >
-        | *: #eUnexpectedToken
-    ]}
-    .sParmEnd
-    ;
-
+		pUsing @identifier
+		{[
+			| ',': @identifier
+			| ';': >
+			| *: #eUnexpectedToken
+		]}
+		.sParmEnd
+		;
 
 ConstantDefinition:
-    .sConst @identifier '=' @ConstantValue;
+		.sConst @identifier '=' @ConstantValue;
 
 PublicConstantDefinition:
-    .sConst @identifier .sPublic '=' @ConstantValue;
+		.sConst @identifier .sPublic '=' @ConstantValue;
 
 PublicConstantDefinitions :
         @PublicConstantDefinition
@@ -402,22 +400,22 @@ PublicVariableDeclaration :
         .sVar @identifier .sPublic @ValueorLike  ';';
 
 ParameterIdentifier:
-    [
-        | 'var': @identifier .sVar
-        | pIdentifier: .sIdentifier
-        | *: #eUnexpectedToken
-    ];
+		[
+			| 'var': @identifier .sVar
+			| pIdentifier: .sIdentifier
+			| *: #eUnexpectedToken
+		];
 
 ParameterDeclaration:
-    @ParameterIdentifier ':' @LikeClause;
+		@ParameterIdentifier ':' @LikeClause;
 
 ProcedureParameters:
-    @ParameterDeclaration
-    {[
-        | ')': >
-        | ',': @ParameterDeclaration
-        | *: #eUnexpectedToken
-    ]};
+		@ParameterDeclaration
+		{[
+			| ')': >
+			| ',': @ParameterDeclaration
+			| *: #eUnexpectedToken
+		]};
 
 ValueorLike :
         [
@@ -427,7 +425,7 @@ ValueorLike :
         ];
 
 LikeClause:
-    @OptionalFile @like @ConstantValue;
+		@OptionalFile @like @ConstantValue;
 
 ChooseStatement :
         .sCaseStmt
@@ -461,25 +459,23 @@ WhenStatement: % starts after 'when' in choose
         .sLabelEnd
         @Block;
 
-% VERY SIMPLE RULES BELOW
-
 % lowercase rules indicate simple passthroughs
 identifier: pIdentifier .sIdentifier;
 like: pLike .sLike;
 then: pThen .sThen;
 
 OptionalFile:
-    [
-        | 'file': .sFile
-        | *: 
-    ];
+		[
+			| 'file': .sFile
+			| *: 
+		];
 
 
 OptionalProcedureParameters:
-    [
-        | '(': @ProcedureParameters
-        | *: 
-    ];
+		[
+			| '(': @ProcedureParameters
+			| *: 
+		];
 
 
 Expression :
