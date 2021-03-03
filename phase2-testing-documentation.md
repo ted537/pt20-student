@@ -60,6 +60,8 @@ single case (i.e. `when`)
 cases chained together (`when 1,2 then ... when 3 then ...`)
 * `choose-w-else.pt` tests that choose statements can be declared with an
 optional defualt or `else` case, which new to Like
+* `old-case-statement.pt` verifies that the deprecated `case` keyword no longer
+works and instead raises an unexpected error token
 
 **/test/parser/constants**
 
@@ -70,6 +72,8 @@ of constants within Like
   constants, separated by commas, unlike semicolons in Pascal
 * `public-val.pt` tests that constants can optionally be declared as public
 by using the `public` keyword
+*  `old-const.pt` verifies that the deprecated `const` keyword no longer
+works for defining constants
 
 **test/parser/if**
 
@@ -121,3 +125,7 @@ array (`var x[5]: like 1`)
 using the `file` keyword within the like clause
 * `public-var.pt` tests that variables, like constants, can be optionally
 declared as public using the `public` keyword
+* `old-var.pt` verifies that the old method of defining constants no
+longer works
+* `old-type.pt` verifies that the type keyword along with a variable
+type is no longer accepted in Like
