@@ -41,6 +41,11 @@ semantic.out:  semantic.pt semantic.sst semantic.consistency
 	    rm -f $*.err $*.err.nowarn  ; \
 	fi 
 
+semantic.def: semantic.sst
+
+semantic.pt: semantic.template.pt semantic.def
+	../include.sh semantic.template.pt > semantic.pt
+
 semantic.consistency: semantic.sst semantic.pt
 	@ # parser/semantic semantic tokens
 	@inconsistent=0 ; \
