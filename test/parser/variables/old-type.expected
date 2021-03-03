@@ -1,0 +1,7 @@
+ .sProgram
+   .sIdentifier
+   .sIdentifier
+  % .sNewLine
+  .sParmEnd
+  .sBegin
+     #eUnexpectedToken
