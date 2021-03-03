@@ -28,11 +28,7 @@ which every loop accepts a new declaration or statement
 ```
 Block:
         .sBegin
-        {[
-            | pAlmostEndFile: >
-            | 'end': ';' >
-            | *: @DeclarationOrStatement
-        ]}
+        @DeclarationsAndStatements
         .sEnd;
 ```
 where `@DeclarationOrStatement` is a choice of any declaration or statement
@@ -46,7 +42,13 @@ a Like program
 * A choice statement determines where the line is a declaration or 
 statement and redirects to the appropriate rule within the parser
 ```
-DeclarationOrStatement:
+DeclarationsAndStatements:
+        {[ @DeclarationOrStatement
+            | cConsumed:
+            | cDidNotConsume: >
+        ]};
+        
+DeclarationOrStatement >> ConsumeStatus:
         [
             | pVal : @ConstantDefinitions
             | pVar : @VariableDeclaration
@@ -57,14 +59,21 @@ DeclarationOrStatement:
             | pIf: @IfStatement
             | pRepeat: @RepeatStatement
             | pChoose: @ChooseStatement
-            | *:
-                ?
-                #eUnexpectedToken
+            | ';': .sNullStmt
+            | *: >> cDidNotConsume
         ]
+        >> cConsumed
         ;
 ```
 * The addition of this rule allows for the parser to accept any order or
 declarations and statements, which is new to the Like language
+* There is also the addition of a consumed status to make execution clearer
+  * The consumed type flag is as follows
+```
+type ConsumeStatus:
+        cConsumed
+        cDidNotConsume;
+```
 
 In `parser.ssl` in the `ConstantDefinitions` rule:
 * Added logic for Like `val` which is a run-time constant. These constants
