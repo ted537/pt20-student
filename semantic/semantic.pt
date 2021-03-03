@@ -1,7 +1,7 @@
-{  PT Semantic Analysis Pass Version 5.0
+{  PT Semantic Analysis Pass Version 5.1
 
    Date:  30 Jun 1980
-          (Revised v5.0 - 10 Dec 2020)
+          (Revised v5.1 - 8 Feb 2021)
 
    Author:  Alan Rosselet
 
@@ -56,78 +56,79 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
         oSymbolTblUpdate = 15;
         oSymbolTblPushScope = 16;
         oSymbolTblPopScope = 17;
-        oSymbolTblLookupExternal = 18; { >>14 }
-        oSymbolStkPush = 19; { (17) }
-        oSymbolStkPushIdentifier = 20;
-        oSymbolStkPushLocalIdentifier = 21;
-        oSymbolStkPushStandardVariable = 22; { (19) }
-        oSymbolStkPushFormalParameter = 23;
-        oSymbolStkSetKind = 24; { (17) }
-        oSymbolStkEnterValue = 25;
-        oSymbolStkEnterStringValue = 26;
-        oSymbolStkEnterDataAddress = 27;
-        oSymbolStkEnterTypeReference = 28;
-        oSymbolStkChooseKind = 29; { >>17 }
-        oSymbolStkChooseStandardFile = 30; { >>19 }
-        oSymbolStkChooseStandardRoutine = 31; { >>18 }
-        oSymbolStkPop = 32;
-        oTypeTblEnter = 33;
-        oTypeTblUpdate = 34;
-        oTypeStkPush = 35; { (20) }
-        oTypeStkPushSymbol = 36;
-        oTypeStkPushComponent = 37;
-        oTypeStkSetKind = 38; { (20) }
-        oTypeStkSetRecursionFlag = 39; { (14) }
-        oTypeStkChooseRecursionFlag = 40; { >>14 }
-        oTypeStkLinkToStandardType = 41; { (16) }
-        oTypeStkEnterBounds = 42;
-        oTypeStkVerifyBounds = 43; { >>14 }
-        oTypeStkEnterParameterCount = 44;
-        oTypeStkCompareParameterCount = 45; { >>14 }
-        oTypeStkEnterComponentReference = 46;
-        oTypeStkChooseKind = 47; { >>20 }
-        oTypeStkChooseTypeReference = 48; { >>14 }
-        oTypeStkCompareNames = 49; { >>14 }
-        oTypeStkSwap = 50;
-        oTypeStkPop = 51;
-        oEmitNullAddress = 52;
-        oEmitValue = 53;
-        oEmitString = 54;
-        oEmitDataAddress = 55;
-        oEmitTrapKind = 56; { (21) }
-        oEmitCaseBranchTable = 57;
-        oAllocateAlignOnWord = 58;
-        oAllocateVariable = 59;
-        oAllocateVarParameter = 60;
-        oAllocateDescriptor = 61;
-        oValuePush = 62; { (13) }
-        oValuePushInteger = 63;
-        oValuePushChar = 64;
-        oValuePushStringLength = 65;
-        oValuePushSymbol = 66;
-        oValuePushCount = 67;
-        oValuePushTypeStkLowerBound = 68;
-        oValuePushTypeStkUpperBound = 69;
-        oValuePushCodeAddress = 70;
-        oValueNegate = 71;
-        oValueChoose = 72; { >>13 }
-        oValuePop = 73;
-        oCasePushDisplay = 74;
-        oCasePopDisplay = 75;
-        oCaseLookupLabel = 76; { >>14 }
-        oCasePushLabel = 77;
-        oCountPush = 78; { (13) }
-        oCountPushValue = 79;
-        oCountPop = 80;
-        oCountIncrement = 81;
-        oCountDecrement = 82;
-        oCountChoose = 83; { >>13 }
-        oFixPushForwardBranch = 84;
-        oFixPopForwardBranch = 85;
-        oFixPushTargetAddress = 86;
-        oFixPopTargetAddress = 87;
-        oFixPopAndEnterValue = 88;
-        oFixSwap = 89;
+        oSymbolTblPreserveParameters = 18;
+        oSymbolTblLookupExternal = 19; { >>14 }
+        oSymbolStkPush = 20; { (17) }
+        oSymbolStkPushIdentifier = 21;
+        oSymbolStkPushLocalIdentifier = 22;
+        oSymbolStkPushStandardVariable = 23; { (19) }
+        oSymbolStkPushFormalParameter = 24;
+        oSymbolStkSetKind = 25; { (17) }
+        oSymbolStkEnterValue = 26;
+        oSymbolStkEnterStringValue = 27;
+        oSymbolStkEnterDataAddress = 28;
+        oSymbolStkEnterTypeReference = 29;
+        oSymbolStkChooseKind = 30; { >>17 }
+        oSymbolStkChooseStandardFile = 31; { >>19 }
+        oSymbolStkChooseStandardRoutine = 32; { >>18 }
+        oSymbolStkPop = 33;
+        oTypeTblEnter = 34;
+        oTypeTblUpdate = 35;
+        oTypeStkPush = 36; { (20) }
+        oTypeStkPushSymbol = 37;
+        oTypeStkPushComponent = 38;
+        oTypeStkSetKind = 39; { (20) }
+        oTypeStkSetRecursionFlag = 40; { (14) }
+        oTypeStkChooseRecursionFlag = 41; { >>14 }
+        oTypeStkLinkToStandardType = 42; { (16) }
+        oTypeStkEnterBounds = 43;
+        oTypeStkVerifyBounds = 44; { >>14 }
+        oTypeStkEnterParameterCount = 45;
+        oTypeStkCompareParameterCount = 46; { >>14 }
+        oTypeStkEnterComponentReference = 47;
+        oTypeStkChooseKind = 48; { >>20 }
+        oTypeStkChooseTypeReference = 49; { >>14 }
+        oTypeStkCompareNames = 50; { >>14 }
+        oTypeStkSwap = 51;
+        oTypeStkPop = 52;
+        oEmitNullAddress = 53;
+        oEmitValue = 54;
+        oEmitString = 55;
+        oEmitDataAddress = 56;
+        oEmitTrapKind = 57; { (21) }
+        oEmitCaseBranchTable = 58;
+        oAllocateAlignOnWord = 59;
+        oAllocateVariable = 60;
+        oAllocateVarParameter = 61;
+        oAllocateDescriptor = 62;
+        oValuePush = 63; { (13) }
+        oValuePushInteger = 64;
+        oValuePushChar = 65;
+        oValuePushStringLength = 66;
+        oValuePushSymbol = 67;
+        oValuePushCount = 68;
+        oValuePushTypeStkLowerBound = 69;
+        oValuePushTypeStkUpperBound = 70;
+        oValuePushCodeAddress = 71;
+        oValueNegate = 72;
+        oValueChoose = 73; { >>13 }
+        oValuePop = 74;
+        oCasePushDisplay = 75;
+        oCasePopDisplay = 76;
+        oCaseLookupLabel = 77; { >>14 }
+        oCasePushLabel = 78;
+        oCountPush = 79; { (13) }
+        oCountPushValue = 80;
+        oCountPop = 81;
+        oCountIncrement = 82;
+        oCountDecrement = 83;
+        oCountChoose = 84; { >>13 }
+        oFixPushForwardBranch = 85;
+        oFixPopForwardBranch = 86;
+        oFixPushTargetAddress = 87;
+        oFixPopTargetAddress = 88;
+        oFixPopAndEnterValue = 89;
+        oFixSwap = 90;
 
         { Input Tokens }
         sIdentifier = 0;
@@ -406,81 +407,81 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
 
         { S/SL Rule Table Addresses } {
         Program = 0;
-        ProgramParameter = 41;
-        Block = 107;
-        AllocateVar = 689;
-        ProcedureDefinition = 773;
-        ConstantDefinitions = 143;
-        TypeDefinitions = 268;
-        VariableDeclarations = 612;
-        BeginStmt = 1118;
-        ConstantValue = 183;
-        SymbolStkPushDefaultIntegerConstant = 3807;
-        StringLiteral = 1722;
-        TypeBody = 306;
-        IndexType = 344;
-        ComponentType = 379;
-        SimpleType = 405;
-        TypeTblEnterIfNew = 334;
-        ValuePushValuePlusOne = 3798;
-        SubrangeUpperBound = 550;
-        EnterVariableAttributes = 643;
-        ProcedureHeading = 828;
-        ProcedureParameterType = 874;
-        ProcedurePrologue = 937;
-        CountPushCopy = 3803;
-        EmitStore = 1091;
-        Statement = 982;
-        AssignmentStmt = 1036;
-        CallStmt = 1132;
-        IfStmt = 1371;
-        WhileStmt = 1402;
-        CaseStmt = 1443;
-        RepeatStmt = 1419;
-        Variable = 2182;
-        Expression = 1593;
-        CompareAndSwapTypes = 1956;
-        EmitAssign = 1064;
-        OpenProcedure = 2582;
-        AssignProcedure = 2613;
-        WriteProcedure = 2720;
-        WritelnProcedure = 3192;
-        ReadProcedure = 3250;
-        ReadlnProcedure = 3612;
-        ActualParameters = 1265;
-        FlushActuals = 3878;
-        VarActual = 1333;
-        BooleanControlExpression = 3783;
-        CaseSelectorExpression = 3766;
-        CaseAlternative = 1489;
-        Operand = 1621;
-        UnaryOperator = 1779;
-        BinaryOperator = 1811;
-        FlushExpn = 3857;
-        ConstantOperand = 2293;
-        VariableOperand = 2332;
-        FunctionOperand = 2359;
-        SymbolStkPushDefaultIntegerVariable = 3840;
-        FileOperand = 2557;
-        CompareOperandAndResultTypes = 2056;
-        CompareEqualityOperandTypes = 2117;
-        CompareRelationalOperandTypes = 2067;
-        VariableExtension = 2224;
-        StandardFunctionActual = 2462;
-        FileVariable = 3670;
-        WriteText = 2987;
-        WriteBinary = 3108;
-        WriteStandardExpnList = 2941;
-        TextFileVariable = 3711;
-        ReadTextParameterList = 3380;
-        ReadBinaryParameterList = 3446;
-        ReadText = 3512;
-        ReadBinary = 3541;
-        SymbolStkPushDefaultCharConstant = 3823;
+        ProgramParameter = 45;
+        Block = 111;
+        AllocateVar = 693;
+        ProcedureDefinition = 777;
+        ConstantDefinitions = 147;
+        TypeDefinitions = 272;
+        VariableDeclarations = 616;
+        BeginStmt = 1123;
+        ConstantValue = 187;
+        SymbolStkPushDefaultIntegerConstant = 3812;
+        StringLiteral = 1727;
+        TypeBody = 310;
+        IndexType = 348;
+        ComponentType = 383;
+        SimpleType = 409;
+        TypeTblEnterIfNew = 338;
+        ValuePushValuePlusOne = 3803;
+        SubrangeUpperBound = 554;
+        EnterVariableAttributes = 647;
+        ProcedureHeading = 833;
+        ProcedureParameterType = 879;
+        ProcedurePrologue = 942;
+        CountPushCopy = 3808;
+        EmitStore = 1096;
+        Statement = 987;
+        AssignmentStmt = 1041;
+        CallStmt = 1137;
+        IfStmt = 1376;
+        WhileStmt = 1407;
+        CaseStmt = 1448;
+        RepeatStmt = 1424;
+        Variable = 2187;
+        Expression = 1598;
+        CompareAndSwapTypes = 1961;
+        EmitAssign = 1069;
+        OpenProcedure = 2587;
+        AssignProcedure = 2618;
+        WriteProcedure = 2725;
+        WritelnProcedure = 3197;
+        ReadProcedure = 3255;
+        ReadlnProcedure = 3617;
+        ActualParameters = 1270;
+        FlushActuals = 3883;
+        VarActual = 1338;
+        BooleanControlExpression = 3788;
+        CaseSelectorExpression = 3771;
+        CaseAlternative = 1494;
+        Operand = 1626;
+        UnaryOperator = 1784;
+        BinaryOperator = 1816;
+        FlushExpn = 3862;
+        ConstantOperand = 2298;
+        VariableOperand = 2337;
+        FunctionOperand = 2364;
+        SymbolStkPushDefaultIntegerVariable = 3845;
+        FileOperand = 2562;
+        CompareOperandAndResultTypes = 2061;
+        CompareEqualityOperandTypes = 2122;
+        CompareRelationalOperandTypes = 2072;
+        VariableExtension = 2229;
+        StandardFunctionActual = 2467;
+        FileVariable = 3675;
+        WriteText = 2992;
+        WriteBinary = 3113;
+        WriteStandardExpnList = 2946;
+        TextFileVariable = 3716;
+        ReadTextParameterList = 3385;
+        ReadBinaryParameterList = 3451;
+        ReadText = 3517;
+        ReadBinary = 3546;
+        SymbolStkPushDefaultCharConstant = 3828;
         }
 
         { S/SL Table Parameters }
-        sslTblSize = 3897;
+        sslTblSize = 3902;
         minSslTableValue = -32767;
         maxSslTableValue = 32767;
 
@@ -876,7 +877,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         assert45:
                             write ('compound token is not a string literal in oEmitString');
                         assert46:
-                            ; { Unused }
+                            write ('parent symbol is not procedure in oSymbolTblPreserveParameters');
                         assert47:
                             write ('semantic phase ended without consuming all of semantic token stream');
                         assert48:
@@ -1767,19 +1768,20 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                     i := i - 1
                                 end;
 
-                            { Pop symbol table frame for scope }
+                            { Pop symbol and type table frames for scope }
                             symbolTblTop := symbolTblDisplay[lexicLevelStackTop];
-
-                            { Preserve parameter entries for procedures }
-                            if lexicLevelStackTop > 1 then
-                                symbolTblTop := symbolTblTop +
-                                    typeTblLowerBound [symbolTblTypeTblLink[symbolTblTop]];
-
-                            { No local type definitions need be saved since parameters must be 
-                              declared with global type names. }
                             typeTblTop := typeTblDisplay[lexicLevelStackTop];
+
                             lexicLevelStackTop := lexicLevelStackTop - 1;
                         end;
+
+                    oSymbolTblPreserveParameters:
+                        { Restore procedure parameter entries to the symbol table }
+                        begin
+                            assert (symbolTblKind [symbolTblTop] = syProcedure, assert46);
+                            symbolTblTop := symbolTblTop +
+                                typeTblLowerBound [symbolTblTypeTblLink[symbolTblTop]];
+                        end ;
 
                     oSymbolTblLookupExternal:
                         { Return yes if the symbol table contains an undeclared 

@@ -1,7 +1,7 @@
-%  PT Semantic Analysis Pass Version 5.0
+%  PT Semantic Analysis Pass Version 5.1
 %
 %  Date  30 Jun 1980
-%        (Revised v5.0 - 10 Dec 2020)
+%        (Revised v5.1 - 8 Feb 2021)
 %
 %  Author  Alan Rosselet
 %
@@ -282,8 +282,11 @@ mechanism SymbolTable :
 
     oSymbolTblPopScope
         % Pop the lexic level stack and unlink all names local to the scope.
-        % Remove all local entries from the type table, and all local entries 
-        % except parameter entries from the symbol table. 
+        % Remove all local entries from the symbol and type tables.
+
+    oSymbolTblPreserveParameters
+        % Restore procedure parameter entries to the symbol table 
+        % after popping the scope.
 
     oSymbolTblLookupExternal >> Boolean;
         % Return true if any external names (program parameters)
@@ -699,6 +702,7 @@ Program :
         sProgram
         % Program scope, distinct from implicit scope surrounding
         % program which contains predefined names
+        oSymbolStkPush(syProcedure)
         oSymbolTblPushScope
         % Count is used to assign file descriptors to non-standard
         % files.  We assume that "input" has file descriptor 1,
@@ -721,6 +725,7 @@ Program :
         ]
         % Pop program scope
         oSymbolTblPopScope
+        oSymbolStkPop
         % Return control to the runtime
         % monitor at the end of program execution
         .tTrapBegin
@@ -1208,17 +1213,20 @@ ProcedureDefinition :
         oTypeTblEnter
         oSymbolStkEnterTypeReference
         oSymbolTblEnter
+
         oSymbolTblPushScope     % procedure scope
 
         @ProcedureHeading
         @Block
 
-        oSymbolTblUpdate
-        oSymbolStkPop
         oTypeStkSetRecursionFlag(no)
         oTypeTblUpdate
         oTypeStkPop
+        oSymbolTblUpdate
+        oSymbolStkPop
+
         oSymbolTblPopScope
+        oSymbolTblPreserveParameters
 
         .tProcedureEnd
         oFixPopForwardBranch;   % fix branch around procedure above
