@@ -27,7 +27,18 @@ Input :
         sParmBegin
         sParmEnd
         sConst
-        sType
+        % sType old PT token
+        % new Like tokens
+        sPackage
+        sPublic
+        sConcatenate
+        sRepeatString
+        sSubstring
+        sLength
+        sInitialValue
+        sCaseElse
+        sLike
+
         sVar
         sProcedure
         sBegin
@@ -68,6 +79,7 @@ Input :
         sAnd
         sNot
         sNewLine
+
         sEndOfFile
         lastSemanticToken = sEndOfFile;
 
@@ -785,8 +797,8 @@ Block :
                 @ProcedureDefinition
             | sConst:
                 @ConstantDefinitions
-            | sType:
-                @TypeDefinitions
+            % | sType:
+            %     @TypeDefinitions
             | sVar:
                 @VariableDeclarations
             | *:
