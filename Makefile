@@ -20,6 +20,12 @@ Parser:
 	cd cmd; make $(ACTION)
 	cd parser; make $(ACTION)
 
+Semantic:
+	mkdir -p bin lib/pt
+	cd cmd; make $(ACTION)
+	cd parser; make $(ACTION)
+	cd semantic; make $(ACTION)
+
 install: 
 	make all ACTION=install
 

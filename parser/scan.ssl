@@ -109,7 +109,6 @@ Output :
         % Non-compound tokens - 
         %   These tokens simply represent themselves.
         pNewLine
-        pAlmostEndFile % used for exiting before EOF; avoids S/SL error
         pEndFile
         pPlus
         pMinus
@@ -293,7 +292,6 @@ Scan :
                 ]
             | lNewPage:
             | lEndFile:
-                .pAlmostEndFile
                 .pEndFile
                 >
             | *:

@@ -57,5 +57,4 @@
   .pIdentifier (screened to pVal)
  .pNewLine
   .pIdentifier (screened to pWhen)
-  .pAlmostEndFile
  .pEndFile
