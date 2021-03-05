@@ -6,6 +6,6 @@
     % pop previous 2 pushes
     % mem[0] = 2
     .tStoreInteger
- % call empty main function
+ % halt
  .tTrapBegin
  .tTrap
