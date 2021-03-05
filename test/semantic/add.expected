@@ -1,0 +1,30 @@
+% using output;
+    .tFileDescriptor
+    .tLiteralInteger
+    .tFileBind
+    .tLiteralAddress
+    .tStoreInteger
+
+% put(1+1);
+    .tWriteBegin
+        .tTrapBegin
+            % address for "put" function
+            .tLiteralAddress
+            .tVarParm
+            .tParmEnd
+
+            % parameter (1+1)
+            .tLiteralInteger
+            .tLiteralInteger
+            .tAdd
+            .tParmEnd
+
+            % default field width argument 
+            .tLiteralInteger
+            .tParmEnd
+            .tTrap
+    .tWriteEnd
+
+% call main func
+.tTrapBegin
+.tTrap
