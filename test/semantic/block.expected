@@ -1,0 +1,47 @@
+% using output;
+    .tFileDescriptor
+    .tLiteralInteger
+    .tFileBind
+    .tLiteralAddress
+    .tStoreInteger
+
+% if (1==1) then
+.tIfBegin
+    (1==1)
+    .tLiteralInteger
+    .tLiteralInteger
+    .tEQ
+    % then
+    .tIfThen
+    % put(2);
+    .tWriteBegin
+        .tTrapBegin
+        .tLiteralAddress
+        .tVarParm
+        .tParmEnd
+        .tLiteralInteger
+        .tParmEnd
+        .tLiteralInteger
+        .tParmEnd
+        .tTrap
+    .tWriteEnd
+.tIfEnd
+
+% val x=20;
+
+% put(x);
+.tWriteBegin
+    .tTrapBegin
+    .tLiteralAddress
+    .tVarParm
+    .tParmEnd
+    .tLiteralInteger
+    .tParmEnd
+    .tLiteralInteger
+    .tParmEnd
+    .tTrap
+.tWriteEnd
+
+% halt
+.tTrapBegin
+.tTrap
