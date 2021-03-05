@@ -1,7 +1,11 @@
-   .tFileDescriptor
-   .tLiteralInteger
-   .tFileBind
-   .tLiteralAddress
-   .tStoreInteger
+ % using output;
+    % push 2 for "output"
+    .tFileDescriptor .tLiteralInteger
+    % push 0 for data address
+    .tFileBind .tLiteralAddress 
+    % pop previous 2 pushes
+    % mem[0] = 2
+    .tStoreInteger
+ % call empty main function
  .tTrapBegin
  .tTrap
