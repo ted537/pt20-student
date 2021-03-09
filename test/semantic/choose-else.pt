@@ -1,0 +1,7 @@
+using input, output;
+choose 1 of
+    when 1 then
+		put(2);
+    else
+		put(3);
+end;
