@@ -1,0 +1,6 @@
+using output;
+if (1==1) then
+	put(1);
+elseif (2==2) then
+	put(2);
+end;
