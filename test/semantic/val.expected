@@ -1,0 +1,25 @@
+% using output;
+    .tFileDescriptor
+    .tLiteralInteger
+    .tFileBind
+    .tLiteralAddress
+    .tStoreInteger
+% put(x)
+    .tWriteBegin
+        .tTrapBegin
+            % address for "put"
+            .tLiteralAddress
+            .tVarParm
+            .tParmEnd
+            % integer from constant value
+            .tLiteralInteger
+            .tParmEnd
+            % default field width
+            .tLiteralInteger
+            .tParmEnd
+        .tTrap
+    .tWriteEnd
+
+% halt
+.tTrapBegin
+.tTrap

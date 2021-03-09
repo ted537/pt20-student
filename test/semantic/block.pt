@@ -1,0 +1,8 @@
+// test new block rule by using a mix of declarations and statements
+using output;
+if (1==1) then
+    put(2);
+end;
+// using constant halfway through block (new like feature)
+val x=20;
+put(x);
