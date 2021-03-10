@@ -15,7 +15,7 @@
 .tLiteralInteger
 	% when 1 then
 	.tCaseSelect
-		% put(1);
+		% put(2);
 		.tWriteBegin
 		.tTrapBegin
 		.tLiteralAddress
@@ -30,7 +30,19 @@
 	.tCaseMerge
 .tCaseEnd
 .tCaseElse
-	% put(2);
+	% put(3);
+	.tWriteBegin
+	.tTrapBegin
+	.tLiteralAddress
+	.tVarParm
+	.tParmEnd
+	.tLiteralInteger
+	.tParmEnd
+	.tLiteralInteger
+	.tParmEnd
+	.tTrap
+	.tWriteEnd
+	% put(4);
 	.tWriteBegin
 	.tTrapBegin
 	.tLiteralAddress

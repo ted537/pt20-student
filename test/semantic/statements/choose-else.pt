@@ -4,4 +4,5 @@ choose 1 of
 		put(2);
     else
 		put(3);
+        put(4);
 end;
