@@ -1,0 +1,63 @@
+% using output;
+.tFileDescriptor
+.tLiteralInteger
+.tFileBind
+.tLiteralAddress
+.tStoreInteger
+
+% val x=1;
+
+% choose x of
+.tCaseBegin
+	% x
+	.tLiteralInteger
+	.tCaseSelect
+	% when 1 then
+		% put(1);
+		.tWriteBegin
+		.tTrapBegin
+		.tLiteralAddress
+		.tVarParm
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tTrap
+		.tWriteEnd
+	.tCaseMerge
+	% when 2 then
+		% put(2);
+		.tWriteBegin
+		.tTrapBegin
+		.tLiteralAddress
+		.tVarParm
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tTrap
+		.tWriteEnd
+	.tCaseMerge
+	% when 3 then
+		% put(3);
+		.tWriteBegin
+		.tTrapBegin
+		.tLiteralAddress
+		.tVarParm
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tTrap
+		.tWriteEnd
+	.tCaseMerge
+.tCaseEnd
+% constants for when statements are emitted behind the scenes by
+% EmitCaseBranchTable
+
+% halt
+.tTrapBegin
+.tTrap

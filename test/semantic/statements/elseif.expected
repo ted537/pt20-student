@@ -1,0 +1,48 @@
+% using output;
+.tFileDescriptor
+.tLiteralInteger
+.tFileBind
+.tLiteralAddress
+.tStoreInteger
+
+% if (1==1) then
+.tIfBegin
+.tLiteralInteger
+.tLiteralInteger
+.tEQ
+.tIfThen
+	.tWriteBegin
+	.tTrapBegin
+	.tLiteralAddress
+	.tVarParm
+	.tParmEnd
+	.tLiteralInteger
+	.tParmEnd
+	.tLiteralInteger
+	.tParmEnd
+	.tTrap
+	.tWriteEnd
+.tIfMerge
+	% elseif (2==2) then
+	.tIfBegin
+	.tLiteralInteger
+	.tLiteralInteger
+	.tEQ
+	.tIfThen
+		.tWriteBegin
+		.tTrapBegin
+		.tLiteralAddress
+		.tVarParm
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tTrap
+		.tWriteEnd
+	.tIfEnd
+.tIfEnd
+
+% halt
+.tTrapBegin
+.tTrap

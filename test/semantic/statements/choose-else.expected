@@ -1,0 +1,60 @@
+% using input,output;
+.tFileDescriptor
+.tLiteralInteger
+.tFileBind
+.tLiteralAddress
+.tStoreInteger
+.tFileDescriptor
+.tLiteralInteger
+.tFileBind
+.tLiteralAddress
+.tStoreInteger
+
+% choose 1 of
+.tCaseBegin
+.tLiteralInteger
+	% when 1 then
+	.tCaseSelect
+		% put(2);
+		.tWriteBegin
+		.tTrapBegin
+		.tLiteralAddress
+		.tVarParm
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tLiteralInteger
+		.tParmEnd
+		.tTrap
+		.tWriteEnd
+	.tCaseMerge
+.tCaseEnd
+.tCaseElse
+	% put(3);
+	.tWriteBegin
+	.tTrapBegin
+	.tLiteralAddress
+	.tVarParm
+	.tParmEnd
+	.tLiteralInteger
+	.tParmEnd
+	.tLiteralInteger
+	.tParmEnd
+	.tTrap
+	.tWriteEnd
+	% put(4);
+	.tWriteBegin
+	.tTrapBegin
+	.tLiteralAddress
+	.tVarParm
+	.tParmEnd
+	.tLiteralInteger
+	.tParmEnd
+	.tLiteralInteger
+	.tParmEnd
+	.tTrap
+	.tWriteEnd
+.tCaseElseEnd
+% halt
+.tTrapBegin
+.tTrap
