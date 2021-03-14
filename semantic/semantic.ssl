@@ -1143,7 +1143,7 @@ SubrangeUpperBound :
         ];
 
 VariableDeclarations :
-        [
+        {[
             | sIdentifier:
                 oSymbolStkPushLocalIdentifier
 
@@ -1163,7 +1163,7 @@ VariableDeclarations :
                 oSymbolStkPop
             | *:
                 >
-        ];
+        ]};
 
 EnterVariableAttributes :
         % Enter the type on top of the Type Stack as the type of 
