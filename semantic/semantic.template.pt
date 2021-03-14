@@ -1833,7 +1833,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { Push the value of the last string token to be accepted }
                         begin
                             Assert((compoundToken = sStringLiteral), assert37);
-                            ValueStackPush(compoundTokenText[1]);
+                            ValueStackPush(codeAreaEnd	);
                         end;
 
                     oValuePushStringLength:
@@ -2021,6 +2021,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                     EmitOutputToken(compoundTokenText[i]);
                                     i := i + 1;
                                 end
+							{ Emit output token 0 after the string is over}
+							EmitOutputToken(0);
                         end;
 
                     oEmitCaseBranchTable:
