@@ -1161,7 +1161,8 @@ VariableDeclarations :
                         .tLiteralAddress
                         @EmitStore
                         oTypeStkPop
-                        oSymbolStkPop
+                        oSymbolStkPop % assigned value
+                        oSymbolStkPop % variable
                     | *:
                         @TypeBody
                         @EnterVariableAttributes
