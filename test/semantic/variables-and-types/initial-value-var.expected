@@ -41,9 +41,13 @@
     oSymbolTblEnter
    .tLiteralAddress
     .tStoreInteger
+   oTypeStkPop
+   oSymbolStkPop
+   oSymbolStkPop
  oSymbolTblPopScope
  oSymbolStkPop
  .tTrapBegin
  .tTrap
  oEmitTrapKind(trHalt)
  % value emitted 0
+
