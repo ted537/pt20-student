@@ -25,23 +25,18 @@
   oValuePop
  oCountPop
    oSymbolStkPushLocalIdentifier
-   oSymbolStkSetKind(syConstant)
-    oTypeStkPush(tpInteger)
-    oTypeStkLinkToStandardType(stdInteger)
-    oValuePushInteger
-   oSymbolStkEnterTypeReference
-   oTypeStkPop
-   oSymbolStkEnterValue
-   oValuePop
-   oSymbolTblEnter
-   oSymbolStkPop
-   oSymbolStkPushLocalIdentifier
-     oSymbolStkPushIdentifier
-     oTypeStkPushSymbol
+    oTypeStkPush(tpArray)
+     oValuePush(one)
+      oTypeStkPush(tpInteger)
+      oTypeStkLinkToStandardType(stdInteger)
+      oValuePushInteger
+     oTypeStkEnterBounds
+     oValuePop
+     oValuePop
+      oTypeStkPush(tpInteger)
+      oTypeStkLinkToStandardType(stdInteger)
+     oTypeStkEnterComponentReference
      oTypeStkPop
-     oTypeStkPush(tpInteger)
-     oTypeStkLinkToStandardType(stdInteger)
-     oSymbolStkPop
     oSymbolStkSetKind(syVariable)
      oAllocateAlignOnWord
      oSymbolStkEnterDataAddress

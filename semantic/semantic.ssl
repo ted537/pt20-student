@@ -1007,9 +1007,9 @@ SimpleType :
                                         oTypeStkPop
                                         oTypeStkPush(tpInteger)
                                         oTypeStkLinkToStandardType(stdInteger)
-                                    | tpString:
+                                    | tpChar:
                                         oTypeStkPop
-                                        oTypeStkPush(tpString)
+                                        oTypeStkPush(tpChar)
                                         oTypeStkLinkToStandardType(stdChar) % this may be wrong
                                     | *:
                                         #eConstantReqd
@@ -1143,7 +1143,7 @@ SubrangeUpperBound :
         ];
 
 VariableDeclarations :
-        {[
+    [
             | sIdentifier:
                 oSymbolStkPushLocalIdentifier
 
@@ -1154,16 +1154,42 @@ VariableDeclarations :
                         #eMultiplyDefined
                         % The new definition will obscure the old one
                 ]
+                [
+                    | sInitialValue:
+                        @Expression % pushes attributes to type and symbol stack
+                        @EnterVariableAttributes
+                        .tLiteralInteger
+                        .tLiteralAddress
+                        @EmitStore
+                    | *:
+                        @TypeBody
+                        @EnterVariableAttributes
+                        oTypeStkPop
+                        oSymbolStkPop
+                ]
 
-                % Accepts a type specification and pushes its type to the Type Stack.
-                % Creates type table entries for the type and any new subtypes as necessary.
-                @TypeBody
-                @EnterVariableAttributes
-                oTypeStkPop
-                oSymbolStkPop
-            | *:
-                >
-        ]};
+    ];
+%         {[
+%             | sIdentifier:
+%                 oSymbolStkPushLocalIdentifier
+% 
+%                 % Check not previously defined
+%                 [ oSymbolStkChooseKind
+%                     | syUndefined, syExternal:
+%                     | *:
+%                         #eMultiplyDefined
+%                         % The new definition will obscure the old one
+%                 ]
+% 
+%                 % Accepts a type specification and pushes its type to the Type Stack.
+%                 % Creates type table entries for the type and any new subtypes as necessary.
+%                 @TypeBody
+%                 @EnterVariableAttributes
+%                 oTypeStkPop
+%                 oSymbolStkPop
+%             | *:
+%                 >
+%         ]};
 
 EnterVariableAttributes :
         % Enter the type on top of the Type Stack as the type of 
