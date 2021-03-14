@@ -1160,6 +1160,8 @@ VariableDeclarations :
                         @EnterVariableAttributes
                         .tLiteralAddress
                         @EmitStore
+                        oTypeStkPop
+                        oSymbolStkPop
                     | *:
                         @TypeBody
                         @EnterVariableAttributes
