@@ -960,27 +960,18 @@ TypeTblEnterIfNew:
 
 IndexType :
         % Accept and fill in index bounds of array type stack entry
-        @SimpleType     % pushes index type
-        [ oTypeStkChooseKind
-            | tpSubrange:
-                oValuePushTypeStkLowerBound
-                oValuePushTypeStkUpperBound
-            | *:
-                oValuePush(one)
-                oValuePush(two)
-        ]
-        oTypeStkPop      % index type
-        % Enter and check the bounds of the array type
-        oTypeStkEnterBounds
+        oValuePush(one) % lower bound always 1
+        @ConstantValue % this will push the upper bound 
         [ oTypeStkVerifyBounds
             | yes:
+                oTypeStkEnterBounds
             | *:
                 oValuePop
                 @ValuePushValuePlusOne
                 oTypeStkEnterBounds
         ]
         oValuePop       % subrange upper
-        oValuePop;      %          lower bound
+        oValuePop;      % lower bound
 
 ComponentType :
         % Accept and fill in an  array or file component type
