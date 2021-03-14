@@ -31,15 +31,38 @@
       oTypeStkLinkToStandardType(stdInteger)
       oValuePushInteger
      oTypeStkEnterBounds
+     oTypeStkPop
      oValuePop
      oValuePop
       oTypeStkPush(tpInteger)
       oTypeStkLinkToStandardType(stdInteger)
      oTypeStkEnterComponentReference
      oTypeStkPop
+     oTypeTblEnter
     oSymbolStkSetKind(syVariable)
+     .tArrayDescriptor
      oAllocateAlignOnWord
      oSymbolStkEnterDataAddress
+     .tLiteralInteger
+     oValuePushTypeStkLowerBound
+     oEmitValue
+     % value emitted 0
+     oValuePop
+     .tLiteralAddress
+     oEmitDataAddress
+     % value emitted 4
+     .tStoreInteger
+     oAllocateDescriptor
+     .tLiteralInteger
+     oValuePushTypeStkUpperBound
+     oEmitValue
+     % value emitted 0
+     oValuePop
+     .tLiteralAddress
+     oEmitDataAddress
+     % value emitted 8
+     .tStoreInteger
+     oAllocateDescriptor
      oAllocateVariable
     oSymbolStkEnterTypeReference
     oSymbolTblEnter
