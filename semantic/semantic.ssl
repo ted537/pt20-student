@@ -1018,7 +1018,7 @@ SimpleType :
                             | syType: % a defined variable
                                 oTypeStkPushSymbol % set type same as syType
                             | syUndefined:
-                                #eUnidentifiedIdentifier
+                                #eUndefinedIdentifier
                         ]
                         oSymbolStkPop
                 ]
