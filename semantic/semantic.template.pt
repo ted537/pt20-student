@@ -1901,9 +1901,13 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         case typeStkKind[typeStkTop] of
                             tpInteger, tpSubrange:
                                 dataAreaEnd := dataAreaEnd + wordSize;
-                            tpChar, tpBoolean:
-                                dataAreaEnd := dataAreaEnd + byteSize;
-                            tpArray:
+								
+							{ Replace tpChar with stringSize (256) }
+                            tpChar:
+                                dataAreaEnd := dataAreaEnd + 256;
+                            tpBoolean:
+								dataAreaEnd := dataAreaEnd + byteSize;
+							tpArray:
                                 begin
                                     assert (typeStkComponentLink[typeStkTop] <> null, assert59);
                                     size := typeStkUpperBound[typeStkTop] - 
@@ -1911,6 +1915,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                     kind := typeTblKind[typeStkComponentLink[typeStkTop]];
                                     if (kind = tpInteger) or (kind = tpSubrange) then
                                         size := size * wordSize;
+									else if (kind = tpChar) then 
+										size := size * 256;
 
                                     dataAreaEnd := dataAreaEnd + size
                                 end;
