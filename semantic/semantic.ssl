@@ -1158,7 +1158,6 @@ VariableDeclarations :
                     | sInitialValue:
                         @Expression % pushes attributes to type and symbol stack
                         @EnterVariableAttributes
-                        .tLiteralInteger
                         .tLiteralAddress
                         @EmitStore
                     | *:
