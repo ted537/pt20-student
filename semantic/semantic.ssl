@@ -448,7 +448,6 @@ type TypeKind :
         tpBoolean
         tpSubrange
         tpArray
-        tpString        % special type for string literals
         tpFile
         tpNull;
 
@@ -1906,6 +1905,7 @@ CompareAndSwapTypes :
                     | *:
                         #eTypeMismatch
                 ]
+			% Only need this since char is just string length 1
             | tpChar:
                 oTypeStkSwap
                 [ oTypeStkChooseKind
@@ -1924,13 +1924,6 @@ CompareAndSwapTypes :
                 oTypeStkSwap
                 [ oTypeStkChooseKind
                     | tpArray:
-                    | *:
-                        #eTypeMismatch
-                ]
-            | tpString:
-                oTypeStkSwap
-                [ oTypeStkChooseKind
-                    | tpString:
                     | *:
                         #eTypeMismatch
                 ]
@@ -2100,14 +2093,12 @@ ConstantOperand :
             | tpInteger, tpSubrange:
                 .tLiteralInteger
                 oEmitValue
+			% Strings and char
             | tpChar:
                 .tLiteralChar
                 oEmitValue
             | tpBoolean:
                 .tLiteralBoolean
-                oEmitValue
-            | tpString:         % a named literal string
-                .tLiteralString
                 oEmitValue
         ]
         oValuePop;
@@ -2294,8 +2285,8 @@ AssignProcedure :
                     | *:
                         @Expression                     % pushes symbol and type
                         [ oTypeStkChooseKind
-                            | tpString:
-                                % literal string
+						
+							% Need to change this to accept char/string not a char array
                             | tpArray:
                                 % a char array with lower bound 1
                                 oTypeStkPushComponent
@@ -2509,6 +2500,7 @@ WriteText :
 
         [
             | sFieldWidth:
+				% Could accept string but not char array
                 % Accept a field width specification
                 @Expression
                 [ oTypeStkChooseKind
@@ -2523,9 +2515,7 @@ WriteText :
                 [ oTypeStkChooseKind    % of expression being written
                     | tpInteger, tpSubrange:
                         oValuePush(ten)
-                    | tpString:
-                        oValuePushTypeStkUpperBound     % actual length of string
-                    | *:        
+					| *:        
                         % error flagged below
                         oValuePush(zero)
                 ]
@@ -2541,26 +2531,6 @@ WriteText :
             | tpInteger, tpSubrange:
                 .tTrap
                 oEmitTrapKind(trWriteInteger)
-            | tpString: 
-                .tTrap
-                oEmitTrapKind(trWriteString)
-            | tpArray:                  % must be a char array 
-                oTypeStkPushComponent
-                [ oTypeStkChooseKind
-                    | tpChar:
-                    | *:
-                        #eWriteExpn
-                ]
-                oTypeStkPop             % component type
-                oValuePushTypeStkLowerBound
-                [ oValueChoose
-                    | one:
-                    | *:                % strings have lower bound one
-                        #eWriteExpn
-                ]
-                oValuePop
-                .tTrap
-                oEmitTrapKind(trWriteString)
             | *:
                 #eWriteExpn
         ]
