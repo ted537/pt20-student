@@ -1773,41 +1773,36 @@ StringLiteral :
         % Pushes the type and value. 
         % The value of a packed array is its address.
 
+		% Put string length on the stk
         oValuePushStringLength
-        [ oValueChoose
-			% Should  accept null string
-            | zero:
-                #eNullString
-                oTypeStkPush(tpChar)
-                oTypeStkLinkToStandardType(stdChar)
-                oValuePop
-                oValuePush(zero)
-			% Don't need this because it will be covered by the general case
-            | one:
-                oTypeStkPush(tpChar)
-                oTypeStkLinkToStandardType(stdChar)
-                oValuePop
-                oValuePushChar
-            | *:
-                % branch around the literal string since
-                % it is stored in the code area
-                .tSkipString
-                oFixPushForwardBranch
-                oEmitNullAddress
-                .tStringData
-                oEmitValue                      % string length
-                oValuePop
-                oValuePushCodeAddress           % The string's characters are in the code area
-                oValueNegate                    % encode that with a negative address
-                oEmitString                     % string's characters
-                oFixPopForwardBranch
-                oTypeStkPush(tpString)
-                oValuePush(one)                 % strings are indexed from 1
-                oValuePushStringLength
-                oTypeStkEnterBounds
-                oValuePop
-                oValuePop
-                oTypeTblEnter
+		% Get this string length value
+        oValueChoose
+		% branch around the literal string since
+        % it is stored in the code area
+        .tSkipString
+		oFixPushForwardBranch
+		oEmitNullAddress
+		.tStringData
+		oEmitValue                      % string length
+		oValuePop
+		oValuePushCodeAddress           % The string's characters are in the code area
+		oValueNegate                    % encode that with a negative address
+		oEmitString                     % string's characters
+		
+		oTypeStkPush(tpChar)
+		oTypeStkLinkToStandardType(stdChar)
+		oFixPopForwardBranch
+
+		% This pushes the values of the bounds of the array onto the stack [0 , stringLength]
+		% Then get bounds
+		%oValuePush(one)                 % strings are indexed from 1
+		%oValuePushStringLength
+		%oTypeStkEnterBounds
+		%oValuePop
+		%oValuePop
+		
+		
+		oTypeTblEnter
         ];
 
 UnaryOperator :
