@@ -1754,16 +1754,12 @@ Operand :
             | sStringLiteral:
                 oSymbolStkPush(syExpression)
                 @StringLiteral  % pushes type and value
-                [ oTypeStkChooseKind
-                    | tpChar:
-                        .tLiteralChar
-                        oEmitValue
-                    | *:
-                        % .tLiteralString ; strings are now multi char
-                        .tLiteralAddress
-                        .tFetchChar
-                        oEmitValue
-                ]
+				
+				% Cases not needed since no distinction between char and string
+				oTypeStkChooseKind
+				.tLiteralAddress
+				.tFetchChar
+				oEmitValue
                 oValuePop
             | sFile:
                 @Expression
@@ -1779,12 +1775,14 @@ StringLiteral :
 
         oValuePushStringLength
         [ oValueChoose
+			% Should  accept null string
             | zero:
                 #eNullString
                 oTypeStkPush(tpChar)
                 oTypeStkLinkToStandardType(stdChar)
                 oValuePop
                 oValuePush(zero)
+			% Don't need this because it will be covered by the general case
             | one:
                 oTypeStkPush(tpChar)
                 oTypeStkLinkToStandardType(stdChar)
