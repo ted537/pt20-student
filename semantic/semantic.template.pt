@@ -1900,14 +1900,13 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                           (structure on top). }
                         case typeStkKind[typeStkTop] of
                             tpInteger, tpSubrange:
-                                dataAreaEnd := dataAreaEnd + wordSize;
-								
-							{ Replace tpChar with stringSize (256) }
+                                dataAreaEnd := dataAreaEnd + wordSize;			
+			    { Replace tpChar with stringSize (256) }
                             tpChar:
                                 dataAreaEnd := dataAreaEnd + 256;
                             tpBoolean:
-								dataAreaEnd := dataAreaEnd + byteSize;
-							tpArray:
+				dataAreaEnd := dataAreaEnd + byteSize;
+			    tpArray:
                                 begin
                                     assert (typeStkComponentLink[typeStkTop] <> null, assert59);
                                     size := typeStkUpperBound[typeStkTop] - 
@@ -1915,8 +1914,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                     kind := typeTblKind[typeStkComponentLink[typeStkTop]];
                                     if (kind = tpInteger) or (kind = tpSubrange) then
                                         size := size * wordSize;
-									else if (kind = tpChar) then 
-										size := size * 256;
+				   { else if (kind = tpChar) then } 
+					{ size := size * 256; } 
 
                                     dataAreaEnd := dataAreaEnd + size
                                 end;
@@ -2021,8 +2020,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                     EmitOutputToken(compoundTokenText[i]);
                                     i := i + 1;
                                 end
-							{ Emit output token 0 after the string is over}
-							EmitOutputToken(0);
+				{ Emit output token 0 after the string is over}
+				EmitOutputToken(0);
                         end;
 
                     oEmitCaseBranchTable:
