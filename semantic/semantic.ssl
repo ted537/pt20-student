@@ -1337,38 +1337,39 @@ ProcedureHeading :
 ProcedureParameterType :
         % A local procedure's formal parameters must
         % be declared using named types.
-
-        sIdentifier  oSymbolStkPushIdentifier   % formal parameter type
-        [ oSymbolStkChooseKind
-            | syUndefined:
-                #eUndefinedIdentifier
-            | *:
-        ]
-        [ oSymbolStkChooseKind
-            | syType:
-                oTypeStkPushSymbol
-            | *:
-                #eTypeIdentifierReqd
-                oTypeStkPush(tpInteger)
-                oTypeStkLinkToStandardType(stdInteger)
-        ]
-        oSymbolStkPop                           % parameter type symbol
-
-        [ oSymbolStkChooseKind
-            | syVariable:
-                [ oTypeStkChooseKind
-                    | tpArray, tpFile:
-                        #eNonScalarValParm
-                        oTypeStkPop
-                        oTypeStkPush(tpInteger)
-                        oTypeStkLinkToStandardType(stdInteger)
-                    | *:
-                ]
-            | *:
-        ]
-        oSymbolStkEnterTypeReference
-        @AllocateVar                            % allocate formal parameter
-        oSymbolTblEnter;
+        @SimpleType
+% 
+%         sIdentifier  oSymbolStkPushIdentifier   % formal parameter type
+%         [ oSymbolStkChooseKind
+%             | syUndefined:
+%                 #eUndefinedIdentifier
+%             | *:
+%         ]
+%         [ oSymbolStkChooseKind
+%             | syType:
+%                 oTypeStkPushSymbol
+%             | *:
+%                 #eTypeIdentifierReqd
+%                 oTypeStkPush(tpInteger)
+%                 oTypeStkLinkToStandardType(stdInteger)
+%         ]
+%         oSymbolStkPop                           % parameter type symbol
+% 
+%         [ oSymbolStkChooseKind
+%             | syVariable:
+%                 [ oTypeStkChooseKind
+%                     | tpArray, tpFile:
+%                         #eNonScalarValParm
+%                         oTypeStkPop
+%                         oTypeStkPush(tpInteger)
+%                         oTypeStkLinkToStandardType(stdInteger)
+%                     | *:
+%                 ]
+%             | *:
+%         ]
+%         oSymbolStkEnterTypeReference
+%         @AllocateVar                            % allocate formal parameter
+%         oSymbolTblEnter;
 
 ProcedurePrologue :
         % Now all the formal parameter symbols are stacked on top of the
