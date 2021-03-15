@@ -1,0 +1,3 @@
+using output;
+val str = "hello";
+val str2 = str;
