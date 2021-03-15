@@ -542,12 +542,13 @@ type TrapKind :
         trReadln = 4
         trWrite = 5
         trWriteln = 6
-        trWriteString = 7
         trWriteInteger = 8
-        trWriteChar = 9
         trReadInteger = 10
-        trReadChar = 11
-        trAssign = 12;
+        trAssign = 12
+	
+	% New Like String traps
+	trReadString = 108
+	trWriteString = 109; 
 
 mechanism Emit :
     % Emit writes to the output "t-code" stream (the code area),
@@ -1762,6 +1763,7 @@ Operand :
 		.tLiteralAddress
 		.tFetchChar
 		oEmitValue
+		oValuePop
             | sFile:
                 @Expression
                 @FileOperand
@@ -1775,7 +1777,7 @@ StringLiteral :
         % The value of a packed array is its address.
 	
 	% Push expression onto symbol stack
-	oSymbolStkPush(syExpression)
+	% oSymbolStkPush(syExpression)
 	
 	% Push string length onto stack
 	oValuePushStringLength
@@ -2511,7 +2513,7 @@ WriteText :
                 [ oTypeStkChooseKind    % of expression being written
                     | tpInteger, tpSubrange:
                         oValuePush(ten)
-					| *:        
+	            | *:        
                         % error flagged below
                         oValuePush(zero)
                 ]
@@ -2523,7 +2525,7 @@ WriteText :
         [ oTypeStkChooseKind
             | tpChar:
                 .tTrap
-                oEmitTrapKind(trWriteChar)
+                oEmitTrapKind(trWriteString)
             | tpInteger, tpSubrange:
                 .tTrap
                 oEmitTrapKind(trWriteInteger)
@@ -2788,7 +2790,7 @@ ReadText :
         [ oTypeStkChooseKind
             | tpChar:
                 .tTrap
-                oEmitTrapKind(trReadChar)
+                oEmitTrapKind(trReadString)
             | tpInteger, tpSubrange:
                 .tTrap
                 oEmitTrapKind(trReadInteger)
