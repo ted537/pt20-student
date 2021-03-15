@@ -1,2 +1,2 @@
 using output;
-put("Hello");
+val x = "Hello";

@@ -2021,7 +2021,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                     i := i + 1;
                                 end
 				{ Emit output token 0 after the string is over}
-				EmitOutputToken(0);
+				{ EmitOutputToken(0); }
                         end;
 
                     oEmitCaseBranchTable:

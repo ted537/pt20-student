@@ -1755,10 +1755,14 @@ Operand :
                 oSymbolStkPush(syExpression)
                 @StringLiteral  % pushes type and value	
 		% Cases not needed since no distinction between char and string
-		.tLiteralAddress
-		.tFetchChar
-		oEmitValue
-                oValuePop
+		[ oTypeStkChooseKind
+			| tpChar :
+				.tLiteralAddress
+				.tFetchChar
+				oEmitValue
+			| *:
+				% Some error stuff
+		]
             | sFile:
                 @Expression
                 @FileOperand
@@ -1772,25 +1776,25 @@ StringLiteral :
         % The value of a packed array is its address.
 		
 		.tSkipString
+		% Push the char onto the array
+		oValuePushChar
+		% Push expression onto stack
+		oSymbolStkPush(syExpression)
+		% Push the char onto stack
 		oTypeStkPush(tpChar)
+		% Link it to char type (new string)
 		oTypeStkLinkToStandardType(stdChar)
 		
+		% Output token for the string data
 		.tStringData
-		oValuePop
-        oValuePushChar
-		
+		oEmitString
 
-		% This pushes the values of the bounds of the array onto the stack [0 , stringLength]
-		% Then get bounds
-		%oValuePush(one)                 % strings are indexed from 1
-		%oValuePushStringLength
-		%oTypeStkEnterBounds
-		%oValuePop
-		%oValuePop
-		
-		
-		oTypeTblEnter
-        ;
+		% Emit this value
+		% oEmitValue
+		% Pop it off the stack
+		% oValuePop		
+
+	;
 
 UnaryOperator :
         [
