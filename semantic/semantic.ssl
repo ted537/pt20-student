@@ -903,6 +903,9 @@ ConstantValue :         % push the value and type of the constant value
                 oSymbolStkPop   
             | sStringLiteral:
                 @StringLiteral  % pushes type and value, enters address
+		.tLiteralAddress
+		.tFetchChar
+		oEmitValue
         ];
 
 TypeDefinitions :       % process named type definitions
