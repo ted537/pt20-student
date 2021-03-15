@@ -238,8 +238,8 @@ type Integer :
 
         % These two sizes are machine dependent
         byteSize = 1
-        wordSize = 4;
-		stringSize = 256;
+        wordSize = 4
+	stringSize = 256;
 
 type Boolean :
         no
@@ -1754,10 +1754,10 @@ Operand :
                 oValuePop
             | sStringLiteral:
                 @StringLiteral  % pushes type and value	
-				% Cases not needed since no distinction between char and string
-				.tLiteralAddress
-				.tFetchChar
-				oEmitValue
+		% Cases not needed since no distinction between char and string
+		.tLiteralAddress
+		.tFetchChar
+		oEmitValue
             | sFile:
                 @Expression
                 @FileOperand
@@ -1769,25 +1769,23 @@ StringLiteral :
         % a single character or a packed array of characters.
         % Pushes the type and value. 
         % The value of a packed array is its address.
-		
-		.tSkipString
-		% Push the char onto the array
-		oValuePushChar
-		% Push expression onto stack
-		oSymbolStkPush(syExpression)
-		% Push the char onto stack
-		oTypeStkPush(tpChar)
-		% Link it to char type (new string)
-		oTypeStkLinkToStandardType(stdChar)
-		
-		% Output token for the string data
-		.tStringData
-		oEmitString
 
-		% Emit this value
-		% oEmitValue
-		% Pop it off the stack
-		% oValuePop		
+	% Push expression onto symbol stack
+	oSymbolStkPush(syExpression)
+
+	% Push char onto type stack
+	oTypeStkPush(tpChar)
+	% Link to char type (new string)
+	oTypeStkLinkToStandardType(stdChar)
+
+	% Push the char onto the value stack
+	oValuePushChar
+
+	% Output token for the string data
+	.tStringData
+	oEmitString
+
+	%oTypeTblEnter		
 
 	;
 

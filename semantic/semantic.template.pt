@@ -1913,10 +1913,9 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                         typeStkLowerBound[typeStkTop] + 1;
                                     kind := typeTblKind[typeStkComponentLink[typeStkTop]];
                                     if (kind = tpInteger) or (kind = tpSubrange) then
-                                        size := size * wordSize;
-				   { else if (kind = tpChar) then } 
-					{ size := size * stringSize; } 
-
+                                        size := size * wordSize
+				   else if (kind = tpChar) then
+					size := size * stringSize; 
                                     dataAreaEnd := dataAreaEnd + size
                                 end;
                         end;
@@ -2019,9 +2018,9 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                 begin
                                     EmitOutputToken(compoundTokenText[i]);
                                     i := i + 1;
-                                end
-				{ Emit output token 0 after the string is over}
-				{ EmitOutputToken(0); }
+                                end;
+				{Emit output token 0 after the string is over}
+				EmitOutputToken(0);
                         end;
 
                     oEmitCaseBranchTable:
