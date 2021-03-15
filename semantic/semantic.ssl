@@ -1754,6 +1754,7 @@ Operand :
                 oValuePop
             | sStringLiteral:
                 @StringLiteral  % pushes type and value	
+		oEmitNullAddress
 		% Cases not needed since no distinction between char and string
 		.tLiteralAddress
 		.tFetchChar
@@ -1769,24 +1770,39 @@ StringLiteral :
         % a single character or a packed array of characters.
         % Pushes the type and value. 
         % The value of a packed array is its address.
-
+	
 	% Push expression onto symbol stack
 	oSymbolStkPush(syExpression)
+	
+	% Push string length onto stack
+	oValuePushStringLength
+
+	.tSkipString
+	oFixPushForwardBranch
+	oEmitNullAddress
 
 	% Push char onto type stack
 	oTypeStkPush(tpChar)
 	% Link to char type (new string)
 	oTypeStkLinkToStandardType(stdChar)
 
+	% Specify string data before the length is popped
+	.tStringData
+
+	% Pop length
+	oEmitValue
+	oValuePop
+
 	% Push the char onto the value stack
 	oValuePushChar
 
-	% Output token for the string data
-	.tStringData
+	% Emit string values 
 	oEmitString
 
-	%oTypeTblEnter		
+	oFixPopForwardBranch
 
+	oTypeTblEnter
+	
 	;
 
 UnaryOperator :
