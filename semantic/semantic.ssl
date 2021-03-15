@@ -1762,7 +1762,8 @@ Operand :
                 oEmitValue
                 oValuePop
             | sStringLiteral:
-                @StringLiteral  % pushes type and value	
+		oSymbolStkPush(syExpression) 
+	        @StringLiteral  % pushes type and value	
 		oEmitNullAddress
 		% Cases not needed since no distinction between char and string
 		.tLiteralAddress
