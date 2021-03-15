@@ -1833,7 +1833,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { Push the value of the last string token to be accepted }
                         begin
                             Assert((compoundToken = sStringLiteral), assert37);
-                            ValueStackPush(codeAreaEnd	);
+                            ValueStackPush(codeAreaEnd);
                         end;
 
                     oValuePushStringLength:
@@ -1903,7 +1903,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                 dataAreaEnd := dataAreaEnd + wordSize;			
 			    { Replace tpChar with stringSize (256) }
                             tpChar:
-                                dataAreaEnd := dataAreaEnd + 256;
+                                dataAreaEnd := dataAreaEnd + stringSize;
                             tpBoolean:
 				dataAreaEnd := dataAreaEnd + byteSize;
 			    tpArray:
@@ -1915,7 +1915,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                     if (kind = tpInteger) or (kind = tpSubrange) then
                                         size := size * wordSize;
 				   { else if (kind = tpChar) then } 
-					{ size := size * 256; } 
+					{ size := size * stringSize; } 
 
                                     dataAreaEnd := dataAreaEnd + size
                                 end;

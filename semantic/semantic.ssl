@@ -239,6 +239,7 @@ type Integer :
         % These two sizes are machine dependent
         byteSize = 1
         wordSize = 4;
+		stringSize = 256;
 
 type Boolean :
         no
@@ -1752,17 +1753,11 @@ Operand :
                 oEmitValue
                 oValuePop
             | sStringLiteral:
-                oSymbolStkPush(syExpression)
                 @StringLiteral  % pushes type and value	
-		% Cases not needed since no distinction between char and string
-		[ oTypeStkChooseKind
-			| tpChar :
+				% Cases not needed since no distinction between char and string
 				.tLiteralAddress
 				.tFetchChar
 				oEmitValue
-			| *:
-				% Some error stuff
-		]
             | sFile:
                 @Expression
                 @FileOperand
