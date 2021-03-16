@@ -1833,6 +1833,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { Push the value of the last string token to be accepted }
                         begin
                             Assert((compoundToken = sStringLiteral), assert37);
+			    { Push the code address rather than the string value }
                             ValueStackPush(codeAreaEnd);
                         end;
 
