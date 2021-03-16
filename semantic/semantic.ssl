@@ -311,6 +311,11 @@ mechanism SymbolTable :
         % Pop the lexic level stack and unlink all names local to the scope.
         % Remove all local entries from the symbol and type tables.
 
+    oSymbolTblMergePublicScope
+	% Rather than popping a package's entire scope, simply unlink
+	% everything that is not public from the package's scope and
+	% then merge it with the enclosing one.
+
     oSymbolTblPreserveParameters
         % Restore procedure parameter entries to the symbol table 
         % after popping the scope.
@@ -328,6 +333,7 @@ type SymbolKind :
         syVariable
         syVarParameter
         syProcedure
+	syPackage
         syFunction
         syExternal
         syExpression
@@ -365,6 +371,11 @@ mechanism SymbolStack :
     % to the associated symbol table entry, a name, a symbol kind, a
     % value or address and a reference to the type table entry
     % associated with this symbol.
+
+    oSymbolStkSetPublicFlag
+	% Assign Boolean value to each member of the symbol stack to
+	% indicate whether or not that respective member is a public
+	%  constant, variable or procedure. 
 
     oSymbolStkPush (SymbolKind)
         % Push an entry and set its kind field to the parameter value.
@@ -831,7 +842,9 @@ Block :
                 @CaseStmt
             | sRepeatStmt:
                 @RepeatStmt
-            | sNullStmt:
+            | sPackage:
+		@PackageDefinition
+	    | sNullStmt:
             | *:
                 >
         ]}
@@ -850,6 +863,11 @@ ConstantDefinitions :           % Process named constant definitions
                         #eMultiplyDefined
                         % The new definition will now obscure the old one
                 ]
+		[
+		    | sPublic:
+			oSymbolStkSetPublicFlag
+		    | *:
+		]
                 oSymbolStkSetKind(syConstant)
                 @ConstantValue
                 oSymbolStkEnterTypeReference
@@ -1124,7 +1142,11 @@ VariableDeclarations :
                         #eMultiplyDefined
                         % The new definition will obscure the old one
                 ]
-
+		[
+		    | sPublic:
+			oSymbolStkSetPublicFlag
+		    | *:
+	        ]
                 % Accepts a type specification and pushes its type to the Type Stack.
                 % Creates type table entries for the type and any new subtypes as necessary.
                 @TypeBody
@@ -1229,6 +1251,7 @@ AllocateVar :
                 ]
         ];
 
+% Need to implement oSymbolStkSetPublicFlag somewhere in here
 ProcedureDefinition :
         sIdentifier  oSymbolStkPushLocalIdentifier      % procedure name
         [ oSymbolStkChooseKind
@@ -1240,6 +1263,11 @@ ProcedureDefinition :
                 #eMultiplyDefined
                 % New definition obscures old one.
         ]
+	[
+	    | sPublic:
+		oSymbolStkSetPublicFlag
+	    | *:
+	]
         % Procedure bodies only execute when the routine is called
         % so we need to branch around the procedure's code
         .tSkipProc              % branch around procedure definition
@@ -1373,6 +1401,46 @@ ProcedurePrologue :
         ]}
         oTypeStkEnterParameterCount     % In procedure's type entry
         oCountPop;
+
+PackageDefinition :
+	sIdentifier  oSymbolStkPushLocalIdentifier	% package name
+	[ oSymbolStkChooseKind
+	    | syUndefined:
+	    | syExternal:
+		% Packages should have no parameters, simply access to those declared as public
+		
+	    | *:
+	        #eMultiplyDefined
+		% New definition obsures old one
+	]
+	% Package definitions are much like Procedure definitions except there is no need for tskipProc or tProcedureEnd
+	oFixPushForwardBranch
+	oEmitNullAddress
+
+	oSymbolStksetKind(syPackage)
+	oValuePushCodeAddress
+	oSymbolStkEnterValue
+	oValuePop
+	oTypeStkPush(tpNull)
+	oTypeStkSetRecursionFlag(yes)
+	oTypeTblEnter
+	oSymbolStkEnterTypeReference
+	oSymbolTblEnter
+
+	oSymbolTblPushScope	% Package scope
+
+	@Block
+
+	oTypeStkSetRecursionFlag(no)
+	oTypeTblUpdate
+	oTypeStkPop
+	oSymbolTblUpdate
+	oSymbolStkPop
+
+	oSymbolTblMergePublicScope
+	oSymbolTblPreserveParameters
+
+	ofixPopForwardBranch;	% fix branch around package above
 
 Statement :
         oSymbolTblPushScope

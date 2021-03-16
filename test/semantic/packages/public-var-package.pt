@@ -1,0 +1,5 @@
+using input, output;
+
+pkg publicVal is
+    public val x = 5;
+end;
