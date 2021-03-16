@@ -239,6 +239,7 @@ type Integer :
         % These two sizes are machine dependent
         byteSize = 1
         wordSize = 4
+	% New size for String type
 	stringSize = 256;
 
 type Boolean :
@@ -1074,7 +1075,7 @@ SimpleType :
                 oTypeStkEnterBounds
                 oValuePop
                 oValuePop
-	    % New like handling of String literal simple type
+	    % Handling of new Like identifier declaration using like keyword
 	    | sStringLiteral :
 		oValuePushChar
 		oTypeStkPush(tpChar)
@@ -1765,7 +1766,8 @@ Operand :
 		oSymbolStkPush(syExpression) 
 	        @StringLiteral  % pushes type and value	
 		oEmitNullAddress
-		% Cases not needed since no distinction between char and string
+		% Cases removed since Char type no longer used
+		% All chars are strings
 		.tLiteralAddress
 		.tFetchChar
 		oEmitValue
@@ -1781,9 +1783,6 @@ StringLiteral :
         % a single character or a packed array of characters.
         % Pushes the type and value. 
         % The value of a packed array is its address.
-	
-	% Push expression onto symbol stack
-	% oSymbolStkPush(syExpression)
 	
 	% Push string length onto stack
 	oValuePushStringLength
@@ -1809,11 +1808,8 @@ StringLiteral :
 
 	% Emit string values 
 	oEmitString
-
 	oFixPopForwardBranch
-
 	oTypeTblEnter
-	
 	;
 
 UnaryOperator :
@@ -1909,7 +1905,6 @@ CompareAndSwapTypes :
                     | *:
                         #eTypeMismatch
                 ]
-			% Only need this since char is just string length 1
             | tpChar:
                 oTypeStkSwap
                 [ oTypeStkChooseKind
@@ -1917,6 +1912,7 @@ CompareAndSwapTypes :
                     | *:
                         #eTypeMismatch
                 ]
+	    % Removed tpString case since Like only uses tpChar
             | tpBoolean:
                 oTypeStkSwap
                 [ oTypeStkChooseKind
@@ -2104,6 +2100,7 @@ ConstantOperand :
             | tpBoolean:
                 .tLiteralBoolean
                 oEmitValue
+	    % Remove tpString case
         ]
         oValuePop;
 
@@ -2283,6 +2280,7 @@ AssignProcedure :
                 .tVarParm
                 .tParmEnd
                 % next is the string file name
+		% NOT TESTED 
                 [
                     | sParmEnd:
                         #eFileNameReqd
@@ -2293,7 +2291,8 @@ AssignProcedure :
 			    % Check char is on type stk after the expression call
                             | tpChar:
 				% Not sure what should happen in here
-				% Array checking doesn't need to happen anymore
+				% Array checking bounds checking does not need to happen anymore
+				% Maybe output the address of string? Similar to how it used to point to start of array
 			    | *:
 				#eFileNameReqd
                                 @FlushActuals
@@ -2483,7 +2482,6 @@ WriteText :
 
         [
             | sFieldWidth:
-				% Could accept string but not char array
                 % Accept a field width specification
                 @Expression
                 [ oTypeStkChooseKind
@@ -2775,6 +2773,7 @@ ReadText :
         [ oTypeStkChooseKind
             | tpChar:
                 .tTrap
+		% New Like String trap
                 oEmitTrapKind(trReadString)
             | tpInteger, tpSubrange:
                 .tTrap
