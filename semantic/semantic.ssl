@@ -2341,13 +2341,9 @@ AssignProcedure :
                     | *:
                         @Expression                     % pushes symbol and type
                         [ oTypeStkChooseKind
-			% Need to change this to accept char/string not a char array
-			    % Check char is on type stk after the expression call
-                            | tpChar:
-				% Not sure what should happen in here
-				% Array checking bounds checking does not need to happen anymore
-				% Maybe output the address of string? Similar to how it used to point to start of array
-			    | *:
+			    | tpChar:
+				% Ensures type string otherwise throws error
+			    | *:	
 				#eFileNameReqd
                                 @FlushActuals
                         ]
@@ -2356,7 +2352,8 @@ AssignProcedure :
                         [ oTypeStkChooseKind
                             | tpChar :   
                                 .tLiteralInteger
-                                oValuePushTypeStkUpperBound
+				% Push max size of string as length of string
+                                oValuePush(stringSize)
                                 oEmitValue
                                 oValuePop
                                 sParmEnd
