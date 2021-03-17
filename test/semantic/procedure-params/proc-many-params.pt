@@ -1,0 +1,4 @@
+using input, output;
+fun flag(number : like 1, var y : like 5) is
+    var x = 5;
+end;
