@@ -1,0 +1,3 @@
+using input, output;
+val str = "Hello";
+val len = #str;
