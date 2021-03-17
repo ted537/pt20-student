@@ -1882,11 +1882,11 @@ UnaryOperator :
 			| sLength:
 				[ oTypeStkChooseKind
                     | tpChar:
-						.tLength
-						oTypeStkPush(tpInteger) % String length is type integer
-						% Unchanged from sNegate and sNot
-						@CompareAndSwapTypes
-						oTypeStkPop
+			.tLength
+			oTypeStkPush(tpInteger) % String length is type integer
+			% Unchanged from sNegate and sNot
+			@CompareAndSwapTypes
+			oTypeStkPop
                     | *:
 						% Is this the correct mismatch error code?
                         #eTypeMismatch
@@ -2168,7 +2168,8 @@ ConstantOperand :
                 oEmitValue
 			% Strings and char
             | tpChar:
-                .tLiteralChar
+                .tLiteralAddress
+		.tFetchChar 
                 oEmitValue
             | tpBoolean:
                 .tLiteralBoolean
