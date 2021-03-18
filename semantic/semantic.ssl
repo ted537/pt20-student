@@ -238,7 +238,9 @@ type Integer :
 
         % These two sizes are machine dependent
         byteSize = 1
-        wordSize = 4;
+        wordSize = 4
+	% New size for String type
+	stringSize = 256;
 
 type Boolean :
         no
@@ -448,7 +450,6 @@ type TypeKind :
         tpBoolean
         tpSubrange
         tpArray
-        tpString        % special type for string literals
         tpFile
         tpNull;
 
@@ -542,12 +543,13 @@ type TrapKind :
         trReadln = 4
         trWrite = 5
         trWriteln = 6
-        trWriteString = 7
         trWriteInteger = 8
-        trWriteChar = 9
         trReadInteger = 10
-        trReadChar = 11
-        trAssign = 12;
+        trAssign = 12
+	
+	% New Like String traps
+	trReadString = 108
+	trWriteString = 109; 
 
 mechanism Emit :
     % Emit writes to the output "t-code" stream (the code area),
@@ -903,6 +905,9 @@ ConstantValue :         % push the value and type of the constant value
                 oSymbolStkPop   
             | sStringLiteral:
                 @StringLiteral  % pushes type and value, enters address
+		.tLiteralAddress
+		.tFetchChar
+		oEmitValue
         ];
 
 % ===== No longer needed as like as no explicit types =====
@@ -1812,19 +1817,15 @@ Operand :
                 oEmitValue
                 oValuePop
             | sStringLiteral:
-                oSymbolStkPush(syExpression)
-                @StringLiteral  % pushes type and value
-                [ oTypeStkChooseKind
-                    | tpChar:
-                        .tLiteralChar
-                        oEmitValue
-                    | *:
-                        % .tLiteralString ; strings are now multi char
-                        .tLiteralAddress
-                        .tFetchChar
-                        oEmitValue
-                ]
-                oValuePop
+		oSymbolStkPush(syExpression) 
+	        @StringLiteral  % pushes type and value	
+		oEmitNullAddress
+		% Cases removed since Char type no longer used
+		% All chars are strings
+		.tLiteralAddress
+		.tFetchChar
+		oEmitValue
+		oValuePop
             | sFile:
                 @Expression
                 @FileOperand
@@ -1836,41 +1837,34 @@ StringLiteral :
         % a single character or a packed array of characters.
         % Pushes the type and value. 
         % The value of a packed array is its address.
+	
+	% Push string length onto stack
+	oValuePushStringLength
 
-        oValuePushStringLength
-        [ oValueChoose
-            | zero:
-                #eNullString
-                oTypeStkPush(tpChar)
-                oTypeStkLinkToStandardType(stdChar)
-                oValuePop
-                oValuePush(zero)
-            | one:
-                oTypeStkPush(tpChar)
-                oTypeStkLinkToStandardType(stdChar)
-                oValuePop
-                oValuePushChar
-            | *:
-                % branch around the literal string since
-                % it is stored in the code area
-                .tSkipString
-                oFixPushForwardBranch
-                oEmitNullAddress
-                .tStringData
-                oEmitValue                      % string length
-                oValuePop
-                oValuePushCodeAddress           % The string's characters are in the code area
-                oValueNegate                    % encode that with a negative address
-                oEmitString                     % string's characters
-                oFixPopForwardBranch
-                oTypeStkPush(tpString)
-                oValuePush(one)                 % strings are indexed from 1
-                oValuePushStringLength
-                oTypeStkEnterBounds
-                oValuePop
-                oValuePop
-                oTypeTblEnter
-        ];
+	.tSkipString
+	oFixPushForwardBranch
+	oEmitNullAddress
+
+	% Push char onto type stack
+	oTypeStkPush(tpChar)
+	% Link to char type (new string)
+	oTypeStkLinkToStandardType(stdChar)
+
+	% Specify string data before the length is popped
+	.tStringData
+
+	% Pop length
+	oEmitValue
+	oValuePop
+
+	% Push the char onto the value stack
+	oValuePushChar
+
+	% Emit string values 
+	oEmitString
+	oFixPopForwardBranch
+	oTypeTblEnter
+	;
 
 UnaryOperator :
         [
@@ -1972,6 +1966,7 @@ CompareAndSwapTypes :
                     | *:
                         #eTypeMismatch
                 ]
+	    % Removed tpString case since Like only uses tpChar
             | tpBoolean:
                 oTypeStkSwap
                 [ oTypeStkChooseKind
@@ -1983,13 +1978,6 @@ CompareAndSwapTypes :
                 oTypeStkSwap
                 [ oTypeStkChooseKind
                     | tpArray:
-                    | *:
-                        #eTypeMismatch
-                ]
-            | tpString:
-                oTypeStkSwap
-                [ oTypeStkChooseKind
-                    | tpString:
                     | *:
                         #eTypeMismatch
                 ]
@@ -2159,15 +2147,14 @@ ConstantOperand :
             | tpInteger, tpSubrange:
                 .tLiteralInteger
                 oEmitValue
+			% Strings and char
             | tpChar:
                 .tLiteralChar
                 oEmitValue
             | tpBoolean:
                 .tLiteralBoolean
                 oEmitValue
-            | tpString:         % a named literal string
-                .tLiteralString
-                oEmitValue
+	    % Remove tpString case
         ]
         oValuePop;
 
@@ -2347,48 +2334,26 @@ AssignProcedure :
                 .tVarParm
                 .tParmEnd
                 % next is the string file name
+		% NOT TESTED 
                 [
                     | sParmEnd:
                         #eFileNameReqd
                     | *:
                         @Expression                     % pushes symbol and type
                         [ oTypeStkChooseKind
-                            | tpString:
-                                % literal string
-                            | tpArray:
-                                % a char array with lower bound 1
-                                oTypeStkPushComponent
-                                [ oTypeStkChooseKind
-                                    | tpChar:
-                                    | *:
-                                        #eFileNameReqd
-                                ]
-                                oTypeStkPop
-                                oValuePushTypeStkLowerBound
-                                [ oValueChoose
-                                    | one:
-                                    | *:        
-                                        #eFileNameReqd
-                                ]
-                                oValuePop
-                                % need the address of the first element, not the array descriptor
-                                .tSubscriptBegin
-                                .tLiteralInteger
-                                oValuePush(one)
-                                oEmitValue
-                                oValuePop
-                                .tSubscriptChar
-                                .tVarParm
-                            | *:
-                                #eFileNameReqd
+			    | tpChar:
+				% Ensures type string otherwise throws error
+			    | *:	
+				#eFileNameReqd
                                 @FlushActuals
                         ]
                         .tParmEnd
                         % need the length of the file name as well
                         [ oTypeStkChooseKind
-                            | tpString, tpArray:   
+                            | tpChar :   
                                 .tLiteralInteger
-                                oValuePushTypeStkUpperBound
+				% Push max size of string as length of string
+                                oValuePush(stringSize)
                                 oEmitValue
                                 oValuePop
                                 sParmEnd
@@ -2582,9 +2547,7 @@ WriteText :
                 [ oTypeStkChooseKind    % of expression being written
                     | tpInteger, tpSubrange:
                         oValuePush(ten)
-                    | tpString:
-                        oValuePushTypeStkUpperBound     % actual length of string
-                    | *:        
+	            | *:        
                         % error flagged below
                         oValuePush(zero)
                 ]
@@ -2596,30 +2559,10 @@ WriteText :
         [ oTypeStkChooseKind
             | tpChar:
                 .tTrap
-                oEmitTrapKind(trWriteChar)
+                oEmitTrapKind(trWriteString)
             | tpInteger, tpSubrange:
                 .tTrap
                 oEmitTrapKind(trWriteInteger)
-            | tpString: 
-                .tTrap
-                oEmitTrapKind(trWriteString)
-            | tpArray:                  % must be a char array 
-                oTypeStkPushComponent
-                [ oTypeStkChooseKind
-                    | tpChar:
-                    | *:
-                        #eWriteExpn
-                ]
-                oTypeStkPop             % component type
-                oValuePushTypeStkLowerBound
-                [ oValueChoose
-                    | one:
-                    | *:                % strings have lower bound one
-                        #eWriteExpn
-                ]
-                oValuePop
-                .tTrap
-                oEmitTrapKind(trWriteString)
             | *:
                 #eWriteExpn
         ]
@@ -2881,7 +2824,8 @@ ReadText :
         [ oTypeStkChooseKind
             | tpChar:
                 .tTrap
-                oEmitTrapKind(trReadChar)
+		% New Like String trap
+                oEmitTrapKind(trReadString)
             | tpInteger, tpSubrange:
                 .tTrap
                 oEmitTrapKind(trReadInteger)

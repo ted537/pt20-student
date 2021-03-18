@@ -1833,7 +1833,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { Push the value of the last string token to be accepted }
                         begin
                             Assert((compoundToken = sStringLiteral), assert37);
-                            ValueStackPush(compoundTokenText[1]);
+			    { Push the code address rather than the string value }
+                            ValueStackPush(codeAreaEnd);
                         end;
 
                     oValuePushStringLength:
@@ -1900,18 +1901,22 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                           (structure on top). }
                         case typeStkKind[typeStkTop] of
                             tpInteger, tpSubrange:
-                                dataAreaEnd := dataAreaEnd + wordSize;
-                            tpChar, tpBoolean:
-                                dataAreaEnd := dataAreaEnd + byteSize;
-                            tpArray:
+                                dataAreaEnd := dataAreaEnd + wordSize;			
+			    { Replace tpChar with stringSize (256) }
+                            tpChar:
+                                dataAreaEnd := dataAreaEnd + stringSize;
+                            tpBoolean:
+				dataAreaEnd := dataAreaEnd + byteSize;
+			    tpArray:
                                 begin
                                     assert (typeStkComponentLink[typeStkTop] <> null, assert59);
                                     size := typeStkUpperBound[typeStkTop] - 
                                         typeStkLowerBound[typeStkTop] + 1;
                                     kind := typeTblKind[typeStkComponentLink[typeStkTop]];
                                     if (kind = tpInteger) or (kind = tpSubrange) then
-                                        size := size * wordSize;
-
+                                        size := size * wordSize
+				   else if (kind = tpChar) then
+					size := size * stringSize; 
                                     dataAreaEnd := dataAreaEnd + size
                                 end;
                         end;
@@ -2014,7 +2019,9 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                 begin
                                     EmitOutputToken(compoundTokenText[i]);
                                     i := i + 1;
-                                end
+                                end;
+				{Emit output token 0 after the string is over}
+				EmitOutputToken(0);
                         end;
 
                     oEmitCaseBranchTable:
