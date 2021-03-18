@@ -1879,18 +1879,18 @@ UnaryOperator :
                 @CompareAndSwapTypes
                 oTypeStkPop
 			% String length
-			| sLength:
-				[ oTypeStkChooseKind
-                    | tpChar:
+	    | sLength:
+		[ oTypeStkChooseKind
+		   | tpChar:
 			.tLength
 			oTypeStkPush(tpInteger) % String length is type integer
 			% Unchanged from sNegate and sNot
 			@CompareAndSwapTypes
 			oTypeStkPop
-                    | *:
-						% Is this the correct mismatch error code?
-                        #eTypeMismatch
-                ]
+	           | *:
+			% Is this the correct mismatch error code?
+			#eTypeMismatch
+               ]
             | *:
                 >>
         ]

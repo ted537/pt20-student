@@ -377,7 +377,6 @@ ConstantValue :
             | pIdentifier: .sIdentifier
             | '-': @UnsignedIntegerConstant .sNegate
             | '+': @UnsignedIntegerConstant
-	    | pHash : @Factor .sLength 
             | *: #eUnexpectedToken
         ];
 
