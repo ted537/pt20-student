@@ -2,6 +2,6 @@ using input, output;
 
 pkg localProcedure is 
     fun procedure is 
-	var x = 5;
+	val x = 5;
     end;
 end;

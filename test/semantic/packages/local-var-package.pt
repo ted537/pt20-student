@@ -1,5 +1,0 @@
-using input, output;
-
-pkg localVar is 
-    var x = 5;
-end;

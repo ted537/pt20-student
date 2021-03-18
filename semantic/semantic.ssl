@@ -316,6 +316,8 @@ mechanism SymbolTable :
 	% everything that is not public from the package's scope and
 	% then merge it with the enclosing one.
 
+    oSymbolTblPkgPreserveParameters
+
     oSymbolTblPreserveParameters
         % Restore procedure parameter entries to the symbol table 
         % after popping the scope.
@@ -1408,22 +1410,23 @@ PackageDefinition :
 	    | syUndefined:
 	    | syExternal:
 		% Packages should have no parameters, simply access to those declared as public
-		
+		#eExternaldeclare
 	    | *:
 	        #eMultiplyDefined
 		% New definition obsures old one
 	]
 	% Package definitions are much like Procedure definitions except there is no need for tskipProc or tProcedureEnd
-	oFixPushForwardBranch
-	oEmitNullAddress
 
-	oSymbolStksetKind(syPackage)
+	oSymbolStkSetKind(syPackage)
 	oValuePushCodeAddress
+	
 	oSymbolStkEnterValue
 	oValuePop
+	
 	oTypeStkPush(tpNull)
 	oTypeStkSetRecursionFlag(yes)
 	oTypeTblEnter
+	
 	oSymbolStkEnterTypeReference
 	oSymbolTblEnter
 
@@ -1437,10 +1440,7 @@ PackageDefinition :
 	oSymbolTblUpdate
 	oSymbolStkPop
 
-	oSymbolTblMergePublicScope
-	oSymbolTblPreserveParameters
-
-	ofixPopForwardBranch;	% fix branch around package above
+	oSymbolTblMergePublicScope;
 
 Statement :
         oSymbolTblPushScope
