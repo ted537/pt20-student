@@ -1884,7 +1884,8 @@ UnaryOperator :
 		oTypeStkPush(tpChar) % String length is type integer
 		% Unchanged from sNegate and sNot
 		@CompareAndSwapTypes
-		oTypeStkPop
+		oTypeStkPop % Pop tpChar
+		oTypeStkPush(tpInteger)
 	    | *:
                 >>
         ]
@@ -1946,44 +1947,44 @@ BinaryOperator :
                 .tModulus
                 oTypeStkPush(tpInteger)
                 @CompareOperandAndResultTypes
-			| sConcatenate:
-				.tConcatenate
-				oTypeStkPush(tpChar)
-				@CompareOperandAndResultTypes
-			| sRepeatString:
-				.tRepeatString
-				% Check first integer
-				[ oTypeStkChooseKind
-					| tpInteger, tpIdentifier:
-					| *:
-						#eTypeMismatch
-				]
-				oTypeStkPop
-				% Push result
-				oTypeStkPush(tpChar)
-				oSymbolStkPop
-				oSymbolStkSetKind(syExpression)
-				
-			| sSubstring:
-				.tSubstring
-				% Second integer in substring operation
-				[ oTypeStkChooseKind
-					| tpInteger, tpIdentifier:
-					| *:
-						#eTypeMismatch
-				]
-				oTypeStkPop
-				% First integer in substring operation
-				[ oTypeStkChooseKind
-					| tpInteger, tpIdentifier:
-					| *:
-						#eTypeMismatch
-				]
-				oTypeStkPop
-				oTypeStkPush(tpChar)
-				% Not sure I need this
-				oSymbolStkPop
-				oSymbolStkSetKind(syExpression)
+		| sConcatenate:
+			.tConcatenate
+			oTypeStkPush(tpChar)
+			@CompareOperandAndResultTypes
+		| sRepeatString:
+			.tRepeatString
+			% Check first integer
+			[ oTypeStkChooseKind
+				| tpInteger:
+				| *:
+					#eTypeMismatch
+			]
+			oTypeStkPop
+			% Push result
+			oTypeStkPush(tpChar)
+			oSymbolStkPop
+			oSymbolStkSetKind(syExpression)
+			
+		| sSubstring:
+			.tSubstring
+			% Second integer in substring operation
+			[ oTypeStkChooseKind
+				| tpInteger:
+				| *:
+					#eTypeMismatch
+			]
+			oTypeStkPop
+			% First integer in substring operation
+			[ oTypeStkChooseKind
+				| tpInteger:
+				| *:
+					#eTypeMismatch
+			]
+			oTypeStkPop
+			oTypeStkPush(tpChar)
+			% Not sure I need this
+			oSymbolStkPop
+			oSymbolStkSetKind(syExpression)
             | *:
                 >>
         ]
