@@ -1,2 +1,3 @@
 using input, output;
-var len = #"Hello";
+val str = "Hello";
+var len = #str;
