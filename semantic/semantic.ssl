@@ -316,8 +316,6 @@ mechanism SymbolTable :
 	% everything that is not public from the package's scope and
 	% then merge it with the enclosing one.
 
-    oSymbolTblPkgPreserveParameters
-
     oSymbolTblPreserveParameters
         % Restore procedure parameter entries to the symbol table 
         % after popping the scope.
@@ -1253,7 +1251,6 @@ AllocateVar :
                 ]
         ];
 
-% Need to implement oSymbolStkSetPublicFlag somewhere in here
 ProcedureDefinition :
         sIdentifier  oSymbolStkPushLocalIdentifier      % procedure name
         [ oSymbolStkChooseKind
