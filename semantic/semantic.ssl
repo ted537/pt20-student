@@ -1871,17 +1871,20 @@ UnaryOperator :
             | sNegate:
                 .tNegate
                 oTypeStkPush(tpInteger) % result type
+		oTypeStkLinkToStandardType(stdInteger)
                 @CompareAndSwapTypes
                 oTypeStkPop
             | sNot:
                 .tNot
                 oTypeStkPush(tpBoolean) % result type
+		oTypeStkLinkToStandardType(stdBoolean) 
                 @CompareAndSwapTypes
                 oTypeStkPop
 	    % String length
 	    | sLength:
 		.tLength
-		oTypeStkPush(tpChar) % String length is type integer
+		oTypeStkPush(tpChar)
+		oTypeStkLinkToStandardType(stdChar)
 		% Unchanged from sNegate and sNot
 		@CompareAndSwapTypes
 		oTypeStkPop % Pop tpChar
@@ -1900,23 +1903,27 @@ BinaryOperator :
             | sAdd:
                 .tAdd
                 oTypeStkPush(tpInteger) % result type
-                @CompareOperandAndResultTypes
+                oTypeStkLinkToStandardType(stdInteger)
+		@CompareOperandAndResultTypes
             | sSubtract:
                 .tSubtract
                 oTypeStkPush(tpInteger)
-                @CompareOperandAndResultTypes
-            | sInfixAnd:        % marker without semantic significance
+		oTypeStkLinkToStandardType(stdInteger)
+                @CompareOperandAndResultTypes 
+           | sInfixAnd:        % marker without semantic significance
                 .tInfixAnd
             | sAnd:
                 .tAnd
                 oTypeStkPush(tpBoolean)
-                @CompareOperandAndResultTypes
+                oTypeStkLinkToStandardType(stdBoolean)
+		@CompareOperandAndResultTypes
             | sInfixOr:
                 .tInfixOr
             | sOr:
                 .tOr
                 oTypeStkPush(tpBoolean)
-                @CompareOperandAndResultTypes
+                oTypeStkLinkToStandardType(stdBoolean)
+		@CompareOperandAndResultTypes
             | sEq:
                 .tEQ
                 @CompareEqualityOperandTypes
@@ -1938,53 +1945,77 @@ BinaryOperator :
             | sMultiply:
                 .tMultiply
                 oTypeStkPush(tpInteger)
+		oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes
             | sDivide:
                 .tDivide
                 oTypeStkPush(tpInteger)
-                @CompareOperandAndResultTypes
+                oTypeStkLinkToStandardType(stdInteger)
+		@CompareOperandAndResultTypes
             | sModulus:
                 .tModulus
                 oTypeStkPush(tpInteger)
+		oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes
-		| sConcatenate:
-			.tConcatenate
-			oTypeStkPush(tpChar)
-			@CompareOperandAndResultTypes
-		| sRepeatString:
-			.tRepeatString
-			% Check first integer
-			[ oTypeStkChooseKind
-				| tpInteger:
-				| *:
-					#eTypeMismatch
-			]
-			oTypeStkPop
-			% Push result
-			oTypeStkPush(tpChar)
-			oSymbolStkPop
-			oSymbolStkSetKind(syExpression)
-			
-		| sSubstring:
-			.tSubstring
-			% Second integer in substring operation
-			[ oTypeStkChooseKind
-				| tpInteger:
-				| *:
-					#eTypeMismatch
-			]
-			oTypeStkPop
-			% First integer in substring operation
-			[ oTypeStkChooseKind
-				| tpInteger:
-				| *:
-					#eTypeMismatch
-			]
-			oTypeStkPop
-			oTypeStkPush(tpChar)
-			% Not sure I need this
-			oSymbolStkPop
-			oSymbolStkSetKind(syExpression)
+	    | sConcatenate:
+		.tConcatenate
+		oTypeStkPush(tpChar)
+		oTypeStkLinkToStandardType(stdChar)
+		@CompareOperandAndResultTypes
+	    | sRepeatString:
+		.tRepeatString
+		% Cannot use @CompareOperandAndResultType since operand is different result
+		% Check first integer
+		[ oTypeStkChooseKind
+			| tpInteger:
+			| *:
+				#eTypeMismatch
+		]
+		oTypeStkPop
+		% Check first string
+		[ oTypeStkChooseKind
+                        | tpChar:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+		% Push result
+		oTypeStkPush(tpChar)
+		oTypeStkLinkToStandardType(stdChar)
+		oSymbolStkPop
+		oSymbolStkSetKind(syExpression)
+	     | sSubstring:
+		.tSubstring
+		% Second integer in substring operation
+		[ oTypeStkChooseKind
+			| tpInteger:
+			| *:
+				#eTypeMismatch
+		]
+		oTypeStkPop
+		% First integer in substring operation
+		[ oTypeStkChooseKind
+			| tpInteger:
+			| *:
+				#eTypeMismatch
+		]
+		oTypeStkPop
+
+		% Check first string
+		[ oTypeStkChooseKind
+			| tpChar:
+			| *:
+				#eTypeMismatch
+		]
+		oTypeStkPop
+		
+		% Push result
+		oTypeStkPush(tpChar)
+		oTypeStkLinkToStandardType(stdChar)
+		oSymbolStkPop
+		% Second pop for second symbol?
+		oSymbolStkPop
+		oSymbolStkSetKind(syExpression)
             | *:
                 >>
         ]
