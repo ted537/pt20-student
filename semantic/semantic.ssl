@@ -1947,11 +1947,43 @@ BinaryOperator :
                 oTypeStkPush(tpInteger)
                 @CompareOperandAndResultTypes
 			| sConcatenate:
-				>>
+				.tConcatenate
+				oTypeStkPush(tpChar)
+				@CompareOperandAndResultTypes
 			| sRepeatString:
-				>>
+				.tRepeatString
+				% Check first integer
+				[ oTypeStkChooseKind
+					| tpInteger, tpIdentifier:
+					| *:
+						#eTypeMismatch
+				]
+				oTypeStkPop
+				% Push result
+				oTypeStkPush(tpChar)
+				oSymbolStkPop
+				oSymbolStkSetKind(syExpression)
+				
 			| sSubstring:
-				>>
+				.tSubstring
+				% Second integer in substring operation
+				[ oTypeStkChooseKind
+					| tpInteger, tpIdentifier:
+					| *:
+						#eTypeMismatch
+				]
+				oTypeStkPop
+				% First integer in substring operation
+				[ oTypeStkChooseKind
+					| tpInteger, tpIdentifier:
+					| *:
+						#eTypeMismatch
+				]
+				oTypeStkPop
+				oTypeStkPush(tpChar)
+				% Not sure I need this
+				oSymbolStkPop
+				oSymbolStkSetKind(syExpression)
             | *:
                 >>
         ]
