@@ -1178,11 +1178,11 @@ VariableDeclarations :
                         #eMultiplyDefined
                         % The new definition will obscure the old one
                 ]
-		            [
-		                | sPublic:
-			                  oSymbolStkSetPublicFlag
-		                | *:
-	              ]
+		[
+		    | sPublic:
+			oSymbolStkSetPublicFlag
+		    | *:
+	        ]
                 [
                     | sInitialValue:
                         @Expression % pushes attributes to type and symbol stack
