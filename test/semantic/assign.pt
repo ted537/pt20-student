@@ -1,3 +1,0 @@
-using output;
-var F : file;
-assign(F, "a");
