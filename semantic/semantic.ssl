@@ -239,8 +239,8 @@ type Integer :
         % These two sizes are machine dependent
         byteSize = 1
         wordSize = 4
-	% New size for String type
-	stringSize = 256;
+        % New size for String type
+        stringSize = 256;
 
 type Boolean :
         no
@@ -557,10 +557,10 @@ type TrapKind :
         trWriteInteger = 8
         trReadInteger = 10
         trAssign = 12
-	
-	% New Like String traps
-	trReadString = 108
-	trWriteString = 109; 
+        
+        % New Like String traps
+        trReadString = 108
+        trWriteString = 109; 
 
 mechanism Emit :
     % Emit writes to the output "t-code" stream (the code area),
@@ -923,9 +923,9 @@ ConstantValue :         % push the value and type of the constant value
                 oSymbolStkPop   
             | sStringLiteral:
                 @StringLiteral  % pushes type and value, enters address
-		.tLiteralAddress
-		.tFetchChar
-		oEmitValue
+                .tLiteralAddress
+                .tFetchChar
+                oEmitValue
         ];
 
 % ===== No longer needed as like as no explicit types =====
@@ -1754,13 +1754,13 @@ CaseStmt :
         .tCaseEnd
         oFixPopForwardBranch
         oEmitCaseBranchTable
-		[
-			| sCaseElse:
-				.tCaseElse
-				@Statement
-				.tCaseElseEnd
-			| *:
-		]
+                [
+                        | sCaseElse:
+                                .tCaseElse
+                                @Statement
+                                .tCaseElseEnd
+                        | *:
+                ]
         % emit merge branches for case alternatives
         {[ oCountChoose         % number of case alternatives
             | zero:
@@ -1883,15 +1883,15 @@ Operand :
                 oEmitValue
                 oValuePop
             | sStringLiteral:
-		oSymbolStkPush(syExpression) 
-	        @StringLiteral  % pushes type and value	
-		oEmitNullAddress
-		% Cases removed since Char type no longer used
-		% All chars are strings
-		.tLiteralAddress
-		.tFetchChar
-		oEmitValue
-		oValuePop
+                oSymbolStkPush(syExpression) 
+                @StringLiteral  % pushes type and value 
+                oEmitNullAddress
+                % Cases removed since Char type no longer used
+                % All chars are strings
+                .tLiteralAddress
+                .tFetchChar
+                oEmitValue
+                oValuePop
             | sFile:
                 @Expression
                 @FileOperand
@@ -1903,47 +1903,57 @@ StringLiteral :
         % a single character or a packed array of characters.
         % Pushes the type and value. 
         % The value of a packed array is its address.
-	
-	% Push string length onto stack
-	oValuePushStringLength
+        
+        % Push string length onto stack
+        oValuePushStringLength
 
-	.tSkipString
-	oFixPushForwardBranch
-	oEmitNullAddress
+        .tSkipString
+        oFixPushForwardBranch
+        oEmitNullAddress
 
-	% Push char onto type stack
-	oTypeStkPush(tpChar)
-	% Link to char type (new string)
-	oTypeStkLinkToStandardType(stdChar)
+        % Push char onto type stack
+        oTypeStkPush(tpChar)
+        % Link to char type (new string)
+        oTypeStkLinkToStandardType(stdChar)
 
-	% Specify string data before the length is popped
-	.tStringData
+        % Specify string data before the length is popped
+        .tStringData
 
-	% Pop length
-	oEmitValue
-	oValuePop
+        % Pop length
+        oEmitValue
+        oValuePop
 
-	% Push the char onto the value stack
-	oValuePushChar
+        % Push the char onto the value stack
+        oValuePushChar
 
-	% Emit string values 
-	oEmitString
-	oFixPopForwardBranch
-	oTypeTblEnter
-	;
+        % Emit string values 
+        oEmitString
+        oFixPopForwardBranch
+        oTypeTblEnter
+        ;
 
 UnaryOperator :
         [
             | sNegate:
                 .tNegate
                 oTypeStkPush(tpInteger) % result type
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareAndSwapTypes
                 oTypeStkPop
             | sNot:
                 .tNot
                 oTypeStkPush(tpBoolean) % result type
+                oTypeStkLinkToStandardType(stdBoolean) 
                 @CompareAndSwapTypes
                 oTypeStkPop
+            | sLength:
+                .tLength
+                oTypeStkPush(tpChar)
+                @CompareAndSwapTypes
+                oTypeStkPop
+                oTypeStkPop
+                oTypeStkPush(tpInteger)
+                oTypeStkLinkToStandardType(stdInteger)
             | *:
                 >>
         ]
@@ -1958,29 +1968,48 @@ BinaryOperator :
             | sAdd:
                 .tAdd
                 oTypeStkPush(tpInteger) % result type
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes
             | sSubtract:
                 .tSubtract
                 oTypeStkPush(tpInteger)
-                @CompareOperandAndResultTypes
-            | sInfixAnd:        % marker without semantic significance
+                oTypeStkLinkToStandardType(stdInteger)
+                @CompareOperandAndResultTypes 
+           | sInfixAnd:        % marker without semantic significance
                 .tInfixAnd
             | sAnd:
                 .tAnd
                 oTypeStkPush(tpBoolean)
+                oTypeStkLinkToStandardType(stdBoolean)
                 @CompareOperandAndResultTypes
             | sInfixOr:
                 .tInfixOr
             | sOr:
                 .tOr
                 oTypeStkPush(tpBoolean)
+                oTypeStkLinkToStandardType(stdBoolean)
                 @CompareOperandAndResultTypes
             | sEq:
-                .tEQ
-                @CompareEqualityOperandTypes
+                [oTypeStkChooseKind
+                        | tpChar:
+                                .tStringEQ
+                                oTypeStkPop
+                                @CompareStringEquality
+                        | *:
+                                .tEq
+                                @CompareEqualityOperandTypes
+                ]
             | sNE:
-                .tNE
-                @CompareEqualityOperandTypes
+                [oTypeStkChooseKind
+                        | tpChar:
+                                .tNot
+                                .tStringEQ
+                                oTypeStkPop
+                                @CompareStringEquality
+                        | *:
+                                .tNE
+                                @CompareEqualityOperandTypes
+                ]
             | sGT:
                 .tGT
                 @CompareRelationalOperandTypes
@@ -1996,19 +2025,93 @@ BinaryOperator :
             | sMultiply:
                 .tMultiply
                 oTypeStkPush(tpInteger)
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes
             | sDivide:
                 .tDivide
                 oTypeStkPush(tpInteger)
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes
             | sModulus:
                 .tModulus
                 oTypeStkPush(tpInteger)
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes
+            | sConcatenate:
+                .tConcatenate
+                oTypeStkPush(tpChar)
+                oTypeStkLinkToStandardType(stdChar)
+                @CompareOperandAndResultTypes
+            | sRepeatString:
+                .tRepeatString
+                % Cannot use @CompareOperandAndResultType since operand is different result
+                % Check first integer
+                [ oTypeStkChooseKind
+                        | tpInteger:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+                % Check first string
+                [ oTypeStkChooseKind
+                        | tpChar:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+                % Push result
+                oTypeStkPush(tpChar)
+                oTypeStkLinkToStandardType(stdChar)
+                oSymbolStkPop
+                oSymbolStkSetKind(syExpression)
+             | sSubstring:
+                .tSubstring
+                % Second integer in substring operation
+                [ oTypeStkChooseKind
+                        | tpInteger:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+                % First integer in substring operation
+                [ oTypeStkChooseKind
+                        | tpInteger:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+
+                % Check first string
+                [ oTypeStkChooseKind
+                        | tpChar:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+                
+                % Push result
+                oTypeStkPush(tpChar)
+                oTypeStkLinkToStandardType(stdChar)
+                oSymbolStkPop
+                % Second pop for second symbol?
+                oSymbolStkPop
+                oSymbolStkSetKind(syExpression)
             | *:
                 >>
         ]
         % If an operator is present the result is an expression
+        oSymbolStkSetKind(syExpression);
+
+CompareStringEquality :
+        % Compare top values for string equality
+        [ oTypeStkChooseKind
+                | tpChar:
+                | * :
+                        #eTypeMismatch
+        ]
+        oTypeStkPop
+        oTypeStkPush(tpBoolean)
+        oSymbolStkPop
         oSymbolStkSetKind(syExpression);
 
 CompareAndSwapTypes :
@@ -2032,7 +2135,7 @@ CompareAndSwapTypes :
                     | *:
                         #eTypeMismatch
                 ]
-	    % Removed tpString case since Like only uses tpChar
+            % Removed tpString case since Like only uses tpChar
             | tpBoolean:
                 oTypeStkSwap
                 [ oTypeStkChooseKind
@@ -2080,13 +2183,6 @@ CompareRelationalOperandTypes :
                 oTypeStkPop
                 [ oTypeStkChooseKind
                     | tpInteger, tpSubrange:
-                    | *:
-                        #eOperandOperatorTypeMismatch
-                ]
-            | tpChar:
-                oTypeStkPop
-                [ oTypeStkChooseKind
-                    | tpChar:
                     | *:
                         #eOperandOperatorTypeMismatch
                 ]
@@ -2213,14 +2309,15 @@ ConstantOperand :
             | tpInteger, tpSubrange:
                 .tLiteralInteger
                 oEmitValue
-			% Strings and char
+                        % Strings and char
             | tpChar:
-                .tLiteralChar
+                .tLiteralAddress
+                .tFetchChar 
                 oEmitValue
             | tpBoolean:
                 .tLiteralBoolean
                 oEmitValue
-	    % Remove tpString case
+            % Remove tpString case
         ]
         oValuePop;
 
@@ -2400,17 +2497,17 @@ AssignProcedure :
                 .tVarParm
                 .tParmEnd
                 % next is the string file name
-		% NOT TESTED 
+                % NOT TESTED 
                 [
                     | sParmEnd:
                         #eFileNameReqd
                     | *:
                         @Expression                     % pushes symbol and type
                         [ oTypeStkChooseKind
-			    | tpChar:
-				% Ensures type string otherwise throws error
-			    | *:	
-				#eFileNameReqd
+                            | tpChar:
+                                % Ensures type string otherwise throws error
+                            | *:        
+                                #eFileNameReqd
                                 @FlushActuals
                         ]
                         .tParmEnd
@@ -2418,7 +2515,7 @@ AssignProcedure :
                         [ oTypeStkChooseKind
                             | tpChar :   
                                 .tLiteralInteger
-				% Push max size of string as length of string
+                                % Push max size of string as length of string
                                 oValuePush(stringSize)
                                 oEmitValue
                                 oValuePop
@@ -2613,7 +2710,7 @@ WriteText :
                 [ oTypeStkChooseKind    % of expression being written
                     | tpInteger, tpSubrange:
                         oValuePush(ten)
-	            | *:        
+                    | *:        
                         % error flagged below
                         oValuePush(zero)
                 ]
@@ -2890,7 +2987,7 @@ ReadText :
         [ oTypeStkChooseKind
             | tpChar:
                 .tTrap
-		% New Like String trap
+                % New Like String trap
                 oEmitTrapKind(trReadString)
             | tpInteger, tpSubrange:
                 .tTrap
