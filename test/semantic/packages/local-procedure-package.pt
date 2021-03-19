@@ -1,0 +1,7 @@
+using input, output;
+
+pkg localProcedure is 
+    fun procedure is 
+	val x = 5;
+    end;
+end;

@@ -1,0 +1,5 @@
+using input, output;
+
+pkg localVal is 
+    val x = 5;
+end;

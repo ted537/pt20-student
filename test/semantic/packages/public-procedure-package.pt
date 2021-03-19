@@ -1,0 +1,7 @@
+using input, output;
+
+pkg publicProcedure is
+    public fun procedure is 
+	val x = 5;
+    end;
+end;
