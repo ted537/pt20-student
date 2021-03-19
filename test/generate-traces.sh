@@ -13,6 +13,6 @@ for test_case in $(./test/find_test_cases.sh $parser_test_dirs); do
 done
 
 # run semantic on just semantic tests
-for test_case in $(./test/find_test_cases.sh test/semantic test/examples); do
+for test_case in $(./test/find_test_cases.sh test/semantic); do
     ./test/semantic-trace.sh $test_case;
 done
