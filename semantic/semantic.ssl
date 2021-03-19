@@ -239,8 +239,8 @@ type Integer :
         % These two sizes are machine dependent
         byteSize = 1
         wordSize = 4
-	% New size for String type
-	stringSize = 256;
+        % New size for String type
+        stringSize = 256;
 
 type Boolean :
         no
@@ -313,6 +313,11 @@ mechanism SymbolTable :
         % Pop the lexic level stack and unlink all names local to the scope.
         % Remove all local entries from the symbol and type tables.
 
+    oSymbolTblMergePublicScope
+        % Rather than popping a package's entire scope, simply unlink
+        % everything that is not public from the package's scope and
+        % then merge it with the enclosing one.
+
     oSymbolTblPreserveParameters
         % Restore procedure parameter entries to the symbol table 
         % after popping the scope.
@@ -330,6 +335,7 @@ type SymbolKind :
         syVariable
         syVarParameter
         syProcedure
+        syPackage
         syFunction
         syExternal
         syExpression
@@ -367,6 +373,11 @@ mechanism SymbolStack :
     % to the associated symbol table entry, a name, a symbol kind, a
     % value or address and a reference to the type table entry
     % associated with this symbol.
+
+    oSymbolStkSetPublicFlag
+        % Assign Boolean value to each member of the symbol stack to
+        % indicate whether or not that respective member is a public
+        %  constant, variable or procedure. 
 
     oSymbolStkPush (SymbolKind)
         % Push an entry and set its kind field to the parameter value.
@@ -546,10 +557,10 @@ type TrapKind :
         trWriteInteger = 8
         trReadInteger = 10
         trAssign = 12
-	
-	% New Like String traps
-	trReadString = 108
-	trWriteString = 109; 
+        
+        % New Like String traps
+        trReadString = 108
+        trWriteString = 109; 
 
 mechanism Emit :
     % Emit writes to the output "t-code" stream (the code area),
@@ -833,6 +844,8 @@ Block :
                 @CaseStmt
             | sRepeatStmt:
                 @RepeatStmt
+            | sPackage:
+                @PackageDefinition
             | sNullStmt:
             | *:
                 >
@@ -851,6 +864,11 @@ ConstantDefinitions :           % Process named constant definitions
                     | *:
                         #eMultiplyDefined
                         % The new definition will now obscure the old one
+                ]
+                [
+                    | sPublic:
+                        oSymbolStkSetPublicFlag
+                    | *:
                 ]
                 oSymbolStkSetKind(syConstant)
                 @ConstantValue
@@ -905,9 +923,9 @@ ConstantValue :         % push the value and type of the constant value
                 oSymbolStkPop   
             | sStringLiteral:
                 @StringLiteral  % pushes type and value, enters address
-		.tLiteralAddress
-		.tFetchChar
-		oEmitValue
+                .tLiteralAddress
+                .tFetchChar
+                oEmitValue
         ];
 
 % ===== No longer needed as like as no explicit types =====
@@ -1164,6 +1182,11 @@ VariableDeclarations :
                         % The new definition will obscure the old one
                 ]
                 [
+                    | sPublic:
+                        oSymbolStkSetPublicFlag
+                    | *:
+                ]
+                [
                     | sInitialValue:
                         @Expression % pushes attributes to type and symbol stack
                         @EnterVariableAttributes
@@ -1307,6 +1330,11 @@ ProcedureDefinition :
                 #eMultiplyDefined
                 % New definition obscures old one.
         ]
+        [
+            | sPublic:
+                oSymbolStkSetPublicFlag
+            | *:
+        ]
         % Procedure bodies only execute when the routine is called
         % so we need to branch around the procedure's code
         .tSkipProc              % branch around procedure definition
@@ -1374,35 +1402,35 @@ ProcedureHeading :
 ProcedureParameterType :
         % A local procedure's formal parameters must
         % be declared using named types.
-
-        sIdentifier  oSymbolStkPushIdentifier   % formal parameter type
-        [ oSymbolStkChooseKind
-            | syUndefined:
-                #eUndefinedIdentifier
-            | *:
-        ]
-        [ oSymbolStkChooseKind
-            | syType:
-                oTypeStkPushSymbol
-            | *:
-                #eTypeIdentifierReqd
-                oTypeStkPush(tpInteger)
-                oTypeStkLinkToStandardType(stdInteger)
-        ]
-        oSymbolStkPop                           % parameter type symbol
-
-        [ oSymbolStkChooseKind
-            | syVariable:
-                [ oTypeStkChooseKind
-                    | tpArray, tpFile:
-                        #eNonScalarValParm
-                        oTypeStkPop
-                        oTypeStkPush(tpInteger)
-                        oTypeStkLinkToStandardType(stdInteger)
-                    | *:
-                ]
-            | *:
-        ]
+        @SimpleType
+%         sIdentifier  oSymbolStkPushIdentifier   % formal parameter type
+%         [ oSymbolStkChooseKind
+%             | syUndefined:
+%                 #eUndefinedIdentifier
+%             | *:
+%         ]
+%         [ oSymbolStkChooseKind
+%             | syType:
+%                 oTypeStkPushSymbol
+%             | *:
+%                 #eTypeIdentifierReqd
+%                 oTypeStkPush(tpInteger)
+%                 oTypeStkLinkToStandardType(stdInteger)
+%         ]
+%         oSymbolStkPop                           % parameter type symbol
+% 
+%         [ oSymbolStkChooseKind
+%             | syVariable:
+%                 [ oTypeStkChooseKind
+%                     | tpArray, tpFile:
+%                         #eNonScalarValParm
+%                         oTypeStkPop
+%                         oTypeStkPush(tpInteger)
+%                         oTypeStkLinkToStandardType(stdInteger)
+%                     | *:
+%                 ]
+%             | *:
+%         ]
         oSymbolStkEnterTypeReference
         @AllocateVar                            % allocate formal parameter
         oSymbolTblEnter;
@@ -1440,6 +1468,44 @@ ProcedurePrologue :
         ]}
         oTypeStkEnterParameterCount     % In procedure's type entry
         oCountPop;
+
+PackageDefinition :
+        sIdentifier  oSymbolStkPushLocalIdentifier	% package name
+        [ oSymbolStkChooseKind
+            | syUndefined:
+            | syExternal:
+                % Packages should have no parameters, simply access to those declared as public
+                #eExternaldeclare
+            | *:
+                #eMultiplyDefined
+                % New definition obsures old one
+        ]
+        % Package definitions are much like Procedure definitions except there is no need for tskipProc or tProcedureEnd
+
+        oSymbolStkSetKind(syPackage)
+        oValuePushCodeAddress
+	
+        oSymbolStkEnterValue
+        oValuePop
+	
+        oTypeStkPush(tpNull)
+        oTypeStkSetRecursionFlag(yes)
+        oTypeTblEnter
+	
+        oSymbolStkEnterTypeReference
+        oSymbolTblEnter
+
+        oSymbolTblPushScope	% Package scope
+
+        @Block
+
+        oTypeStkSetRecursionFlag(no)
+        oTypeTblUpdate
+        oTypeStkPop
+        oSymbolTblUpdate
+        oSymbolStkPop
+
+        oSymbolTblMergePublicScope;
 
 Statement :
         oSymbolTblPushScope
@@ -1691,13 +1757,13 @@ CaseStmt :
         .tCaseEnd
         oFixPopForwardBranch
         oEmitCaseBranchTable
-		[
-			| sCaseElse:
-				.tCaseElse
-				@Statement
-				.tCaseElseEnd
-			| *:
-		]
+                [
+                        | sCaseElse:
+                                .tCaseElse
+                                @Statement
+                                .tCaseElseEnd
+                        | *:
+                ]
         % emit merge branches for case alternatives
         {[ oCountChoose         % number of case alternatives
             | zero:
@@ -1820,15 +1886,15 @@ Operand :
                 oEmitValue
                 oValuePop
             | sStringLiteral:
-		oSymbolStkPush(syExpression) 
-	        @StringLiteral  % pushes type and value	
-		oEmitNullAddress
-		% Cases removed since Char type no longer used
-		% All chars are strings
-		.tLiteralAddress
-		.tFetchChar
-		oEmitValue
-		oValuePop
+                oSymbolStkPush(syExpression) 
+                @StringLiteral  % pushes type and value 
+                oEmitNullAddress
+                % Cases removed since Char type no longer used
+                % All chars are strings
+                .tLiteralAddress
+                .tFetchChar
+                oEmitValue
+                oValuePop
             | sFile:
                 @Expression
                 @FileOperand
@@ -1840,59 +1906,58 @@ StringLiteral :
         % a single character or a packed array of characters.
         % Pushes the type and value. 
         % The value of a packed array is its address.
-	
-	% Push string length onto stack
-	oValuePushStringLength
+        
+        % Push string length onto stack
+        oValuePushStringLength
 
-	.tSkipString
-	oFixPushForwardBranch
-	oEmitNullAddress
+        .tSkipString
+        oFixPushForwardBranch
+        oEmitNullAddress
 
-	% Push char onto type stack
-	oTypeStkPush(tpChar)
-	% Link to char type (new string)
-	oTypeStkLinkToStandardType(stdChar)
+        % Push char onto type stack
+        oTypeStkPush(tpChar)
+        % Link to char type (new string)
+        oTypeStkLinkToStandardType(stdChar)
 
-	% Specify string data before the length is popped
-	.tStringData
+        % Specify string data before the length is popped
+        .tStringData
 
-	% Pop length
-	oEmitValue
-	oValuePop
+        % Pop length
+        oEmitValue
+        oValuePop
 
-	% Push the char onto the value stack
-	oValuePushChar
+        % Push the char onto the value stack
+        oValuePushChar
 
-	% Emit string values 
-	oEmitString
-	oFixPopForwardBranch
-	oTypeTblEnter
-	;
+        % Emit string values 
+        oEmitString
+        oFixPopForwardBranch
+        oTypeTblEnter
+        ;
 
 UnaryOperator :
         [
             | sNegate:
                 .tNegate
                 oTypeStkPush(tpInteger) % result type
-		oTypeStkLinkToStandardType(stdInteger)
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareAndSwapTypes
                 oTypeStkPop
             | sNot:
                 .tNot
                 oTypeStkPush(tpBoolean) % result type
-		oTypeStkLinkToStandardType(stdBoolean) 
+                oTypeStkLinkToStandardType(stdBoolean) 
                 @CompareAndSwapTypes
                 oTypeStkPop
-	    % String length
-	    | sLength:
-		% Same format as sNot and sNegate
-		.tLength
-		[ oTypeStkChooseKind
-			| tpChar:
-			| *:
-				#eTypeMismatch	
-		]
-	    | *:
+            | sLength:
+                .tLength
+                oTypeStkPush(tpChar)
+                @CompareAndSwapTypes
+                oTypeStkPop
+                oTypeStkPop
+                oTypeStkPush(tpInteger)
+                oTypeStkLinkToStandardType(stdInteger)
+            | *:
                 >>
         ]
         % If an operator is present the result is an expression
@@ -1907,11 +1972,11 @@ BinaryOperator :
                 .tAdd
                 oTypeStkPush(tpInteger) % result type
                 oTypeStkLinkToStandardType(stdInteger)
-		@CompareOperandAndResultTypes
+                @CompareOperandAndResultTypes
             | sSubtract:
                 .tSubtract
                 oTypeStkPush(tpInteger)
-		oTypeStkLinkToStandardType(stdInteger)
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes 
            | sInfixAnd:        % marker without semantic significance
                 .tInfixAnd
@@ -1919,20 +1984,35 @@ BinaryOperator :
                 .tAnd
                 oTypeStkPush(tpBoolean)
                 oTypeStkLinkToStandardType(stdBoolean)
-		@CompareOperandAndResultTypes
+                @CompareOperandAndResultTypes
             | sInfixOr:
                 .tInfixOr
             | sOr:
                 .tOr
                 oTypeStkPush(tpBoolean)
                 oTypeStkLinkToStandardType(stdBoolean)
-		@CompareOperandAndResultTypes
+                @CompareOperandAndResultTypes
             | sEq:
-                .tEQ
-                @CompareEqualityOperandTypes
+                [oTypeStkChooseKind
+                        | tpChar:
+                                .tStringEQ
+                                oTypeStkPop
+                                @CompareStringEquality
+                        | *:
+                                .tEq
+                                @CompareEqualityOperandTypes
+                ]
             | sNE:
-                .tNE
-                @CompareEqualityOperandTypes
+                [oTypeStkChooseKind
+                        | tpChar:
+                                .tNot
+                                .tStringEQ
+                                oTypeStkPop
+                                @CompareStringEquality
+                        | *:
+                                .tNE
+                                @CompareEqualityOperandTypes
+                ]
             | sGT:
                 .tGT
                 @CompareRelationalOperandTypes
@@ -1948,81 +2028,93 @@ BinaryOperator :
             | sMultiply:
                 .tMultiply
                 oTypeStkPush(tpInteger)
-		oTypeStkLinkToStandardType(stdInteger)
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes
             | sDivide:
                 .tDivide
                 oTypeStkPush(tpInteger)
                 oTypeStkLinkToStandardType(stdInteger)
-		@CompareOperandAndResultTypes
+                @CompareOperandAndResultTypes
             | sModulus:
                 .tModulus
                 oTypeStkPush(tpInteger)
-		oTypeStkLinkToStandardType(stdInteger)
+                oTypeStkLinkToStandardType(stdInteger)
                 @CompareOperandAndResultTypes
-	    | sConcatenate:
-		.tConcatenate
-		oTypeStkPush(tpChar)
-		oTypeStkLinkToStandardType(stdChar)
-		@CompareOperandAndResultTypes
-	    | sRepeatString:
-		.tRepeatString
-		% Cannot use @CompareOperandAndResultType since operand is different result
-		% Check first integer
-		[ oTypeStkChooseKind
-			| tpInteger:
-			| *:
-				#eTypeMismatch
-		]
-		oTypeStkPop
-		% Check first string
-		[ oTypeStkChooseKind
+            | sConcatenate:
+                .tConcatenate
+                oTypeStkPush(tpChar)
+                oTypeStkLinkToStandardType(stdChar)
+                @CompareOperandAndResultTypes
+            | sRepeatString:
+                .tRepeatString
+                % Cannot use @CompareOperandAndResultType since operand is different result
+                % Check first integer
+                [ oTypeStkChooseKind
+                        | tpInteger:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+                % Check first string
+                [ oTypeStkChooseKind
                         | tpChar:
                         | *:
                                 #eTypeMismatch
                 ]
                 oTypeStkPop
-		% Push result
-		oTypeStkPush(tpChar)
-		oTypeStkLinkToStandardType(stdChar)
-		oSymbolStkPop
-		oSymbolStkSetKind(syExpression)
-	     | sSubstring:
-		.tSubstring
-		% Second integer in substring operation
-		[ oTypeStkChooseKind
-			| tpInteger:
-			| *:
-				#eTypeMismatch
-		]
-		oTypeStkPop
-		% First integer in substring operation
-		[ oTypeStkChooseKind
-			| tpInteger:
-			| *:
-				#eTypeMismatch
-		]
-		oTypeStkPop
+                % Push result
+                oTypeStkPush(tpChar)
+                oTypeStkLinkToStandardType(stdChar)
+                oSymbolStkPop
+                oSymbolStkSetKind(syExpression)
+             | sSubstring:
+                .tSubstring
+                % Second integer in substring operation
+                [ oTypeStkChooseKind
+                        | tpInteger:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+                % First integer in substring operation
+                [ oTypeStkChooseKind
+                        | tpInteger:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
 
-		% Check first string
-		[ oTypeStkChooseKind
-			| tpChar:
-			| *:
-				#eTypeMismatch
-		]
-		oTypeStkPop
-		
-		% Push result
-		oTypeStkPush(tpChar)
-		oTypeStkLinkToStandardType(stdChar)
-		oSymbolStkPop
-		% Second pop for second symbol?
-		oSymbolStkPop
-		oSymbolStkSetKind(syExpression)
+                % Check first string
+                [ oTypeStkChooseKind
+                        | tpChar:
+                        | *:
+                                #eTypeMismatch
+                ]
+                oTypeStkPop
+                
+                % Push result
+                oTypeStkPush(tpChar)
+                oTypeStkLinkToStandardType(stdChar)
+                oSymbolStkPop
+                % Second pop for second symbol?
+                oSymbolStkPop
+                oSymbolStkSetKind(syExpression)
             | *:
                 >>
         ]
         % If an operator is present the result is an expression
+        oSymbolStkSetKind(syExpression);
+
+CompareStringEquality :
+        % Compare top values for string equality
+        [ oTypeStkChooseKind
+                | tpChar:
+                | * :
+                        #eTypeMismatch
+        ]
+        oTypeStkPop
+        oTypeStkPush(tpBoolean)
+        oSymbolStkPop
         oSymbolStkSetKind(syExpression);
 
 CompareAndSwapTypes :
@@ -2046,7 +2138,7 @@ CompareAndSwapTypes :
                     | *:
                         #eTypeMismatch
                 ]
-	    % Removed tpString case since Like only uses tpChar
+            % Removed tpString case since Like only uses tpChar
             | tpBoolean:
                 oTypeStkSwap
                 [ oTypeStkChooseKind
@@ -2094,13 +2186,6 @@ CompareRelationalOperandTypes :
                 oTypeStkPop
                 [ oTypeStkChooseKind
                     | tpInteger, tpSubrange:
-                    | *:
-                        #eOperandOperatorTypeMismatch
-                ]
-            | tpChar:
-                oTypeStkPop
-                [ oTypeStkChooseKind
-                    | tpChar:
                     | *:
                         #eOperandOperatorTypeMismatch
                 ]
@@ -2227,15 +2312,15 @@ ConstantOperand :
             | tpInteger, tpSubrange:
                 .tLiteralInteger
                 oEmitValue
-			% Strings and char
+                        % Strings and char
             | tpChar:
                 .tLiteralAddress
-		.tFetchChar 
+                .tFetchChar 
                 oEmitValue
             | tpBoolean:
                 .tLiteralBoolean
                 oEmitValue
-	    % Remove tpString case
+            % Remove tpString case
         ]
         oValuePop;
 
@@ -2415,17 +2500,17 @@ AssignProcedure :
                 .tVarParm
                 .tParmEnd
                 % next is the string file name
-		% NOT TESTED 
+                % NOT TESTED 
                 [
                     | sParmEnd:
                         #eFileNameReqd
                     | *:
                         @Expression                     % pushes symbol and type
                         [ oTypeStkChooseKind
-			    | tpChar:
-				% Ensures type string otherwise throws error
-			    | *:	
-				#eFileNameReqd
+                            | tpChar:
+                                % Ensures type string otherwise throws error
+                            | *:        
+                                #eFileNameReqd
                                 @FlushActuals
                         ]
                         .tParmEnd
@@ -2433,7 +2518,7 @@ AssignProcedure :
                         [ oTypeStkChooseKind
                             | tpChar :   
                                 .tLiteralInteger
-				% Push max size of string as length of string
+                                % Push max size of string as length of string
                                 oValuePush(stringSize)
                                 oEmitValue
                                 oValuePop
@@ -2628,7 +2713,7 @@ WriteText :
                 [ oTypeStkChooseKind    % of expression being written
                     | tpInteger, tpSubrange:
                         oValuePush(ten)
-	            | *:        
+                    | *:        
                         % error flagged below
                         oValuePush(zero)
                 ]
@@ -2905,7 +2990,7 @@ ReadText :
         [ oTypeStkChooseKind
             | tpChar:
                 .tTrap
-		% New Like String trap
+                % New Like String trap
                 oEmitTrapKind(trReadString)
             | tpInteger, tpSubrange:
                 .tTrap

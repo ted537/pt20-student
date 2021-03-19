@@ -39,7 +39,7 @@
       % value emitted 22
      .tLength
    .tLiteralAddress
-    .tStoreChar
+    .tStoreInteger
  .tTrapBegin
  .tTrap
  oEmitTrapKind(trHalt)
