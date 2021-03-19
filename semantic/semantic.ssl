@@ -1880,15 +1880,14 @@ UnaryOperator :
                 oTypeStkLinkToStandardType(stdBoolean) 
                 @CompareAndSwapTypes
                 oTypeStkPop
-            % String length
             | sLength:
-                % Same format as sNot and sNegate
                 .tLength
-                [ oTypeStkChooseKind
-                        | tpChar:
-                        | *:
-                                #eTypeMismatch  
-                ]
+                oTypeStkPush(tpChar)
+                @CompareAndSwapTypes
+                oTypeStkPop
+                oTypeStkPop
+                oTypeStkPush(tpInteger)
+                oTypeStkLinkToStandardType(stdInteger)
             | *:
                 >>
         ]
