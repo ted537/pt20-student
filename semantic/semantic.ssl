@@ -1925,11 +1925,26 @@ BinaryOperator :
                 oTypeStkLinkToStandardType(stdBoolean)
 		@CompareOperandAndResultTypes
             | sEq:
-                .tEQ
-                @CompareEqualityOperandTypes
-            | sNE:
-                .tNE
-                @CompareEqualityOperandTypes
+		[oTypeStkChooseKind
+			| tpChar:
+				.tStringEQ
+				oTypeStkPop
+				@CompareStringEquality
+			| *:
+				.tEq
+				@CompareEqualityOperandTypes
+		]
+	    | sNE:
+                [oTypeStkChooseKind
+			| tpChar:
+				.tNot
+				.tStringEQ
+				oTypeStkPop
+				@CompareStringEquality
+			| *:
+				.tNE
+				@CompareEqualityOperandTypes
+		]
             | sGT:
                 .tGT
                 @CompareRelationalOperandTypes
@@ -2021,6 +2036,18 @@ BinaryOperator :
         ]
         % If an operator is present the result is an expression
         oSymbolStkSetKind(syExpression);
+
+CompareStringEquality :
+	% Compare top values for string equality
+	[ oTypeStkChooseKind
+		| tpChar:
+		| * :
+			#eTypeMismatch
+	]
+	oTypeStkPop
+	oTypeStkPush(tpBoolean)
+	oSymbolStkPop
+	oSymbolStkSetKind(syExpression);
 
 CompareAndSwapTypes :
         % Compare the top two type stack entries for assignment
