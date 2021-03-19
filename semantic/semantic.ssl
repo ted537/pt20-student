@@ -1882,13 +1882,13 @@ UnaryOperator :
                 oTypeStkPop
 	    % String length
 	    | sLength:
+		% Same format as sNot and sNegate
 		.tLength
-		oTypeStkPush(tpChar)
-		oTypeStkLinkToStandardType(stdChar)
-		% Unchanged from sNegate and sNot
-		@CompareAndSwapTypes
-		oTypeStkPop % Pop tpChar
-		oTypeStkPush(tpInteger)
+		[ oTypeStkChooseKind
+			| tpChar:
+			| *:
+				#eTypeMismatch	
+		]
 	    | *:
                 >>
         ]
