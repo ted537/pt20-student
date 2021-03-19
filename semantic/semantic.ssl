@@ -1875,8 +1875,8 @@ UnaryOperator :
                 @CompareAndSwapTypes
                 oTypeStkPop
             | sNot:
-                .tNot
-                oTypeStkPush(tpBoolean) % result type
+	        .tNot
+		oTypeStkPush(tpBoolean) % result type
 		oTypeStkLinkToStandardType(stdBoolean) 
                 @CompareAndSwapTypes
                 oTypeStkPop
