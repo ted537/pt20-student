@@ -1044,7 +1044,7 @@ SimpleType :
                                         #eConstantReqd
                                         oTypeStkPop
                                 ]
-                            | syType: % a defined variable
+                            | syVariable: % a defined variable
                                 oTypeStkPushSymbol % set type same as syType
                             | syUndefined:
                                 #eUndefinedIdentifier
