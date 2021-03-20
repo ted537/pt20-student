@@ -1187,13 +1187,13 @@ VariableDeclarations :
                     | sInitialValue:
                         .tInitialValue
                         @Expression % pushes attributes to type and symbol stack
+                        .tInitEnd
                         oSymbolStkPop % assigned value
                         @EnterVariableAttributes
                         .tLiteralAddress
                         @EmitStore
                         oTypeStkPop
                         oSymbolStkPop % variable
-                        .tInitEnd
                     | *:
                         @TypeBody
                         @EnterVariableAttributes
