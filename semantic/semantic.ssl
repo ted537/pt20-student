@@ -200,6 +200,7 @@ Error :
         eIntegerConstReqd
         eBounds
         eSimpleTypeReqd
+        eLikeClauseReqd
         eExternalUndeclared
         eExternalDeclare
         eFileVarReqd
@@ -1045,9 +1046,14 @@ SimpleType :
                                 #eUndefinedIdentifier
                         ]
                         oSymbolStkPop
+                    | sStringLiteral:
+                        oTypeStkPush(tpChar)
+                        oTypeStkLinkToStandardType(stdChar)
+                    | *:
+                        #eSimpleTypeReqd
                 ]
             | *:
-                #eSimpleTypeReqd
+                #eLikeClauseReqd
         ];
 
 % ===== Old SimpleType =====        
