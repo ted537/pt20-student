@@ -200,6 +200,7 @@ Error :
         eIntegerConstReqd
         eBounds
         eSimpleTypeReqd
+        eLikeClauseReqd
         eExternalUndeclared
         eExternalDeclare
         eFileVarReqd
@@ -1038,19 +1039,28 @@ SimpleType :
                                         oTypeStkPop
                                         oTypeStkPush(tpChar)
                                         oTypeStkLinkToStandardType(stdChar) % this may be wrong
+                                    | tpBoolean:
+                                        oTypeStkPop
+                                        oTypeStkPush(tpBoolean)
+                                        oTypeStkLinkToStandardType(stdBoolean)
                                     | *:
                                         #eConstantReqd
                                         oTypeStkPop
                                 ]
-                            | syType: % a defined variable
+                            | syVariable: % a defined variable
                                 oTypeStkPushSymbol % set type same as syType
                             | syUndefined:
                                 #eUndefinedIdentifier
                         ]
                         oSymbolStkPop
+                    | sStringLiteral:
+                        oTypeStkPush(tpChar)
+                        oTypeStkLinkToStandardType(stdChar)
+                    | *:
+                        #eSimpleTypeReqd
                 ]
             | *:
-                #eSimpleTypeReqd
+                #eLikeClauseReqd
         ];
 
 % ===== Old SimpleType =====        
@@ -1188,12 +1198,14 @@ VariableDeclarations :
                 ]
                 [
                     | sInitialValue:
+                        .tInitialValue
                         @Expression % pushes attributes to type and symbol stack
+                        .tInitEnd
+                        oSymbolStkPop % assigned value
                         @EnterVariableAttributes
                         .tLiteralAddress
                         @EmitStore
                         oTypeStkPop
-                        oSymbolStkPop % assigned value
                         oSymbolStkPop % variable
                     | *:
                         @TypeBody
@@ -2005,8 +2017,8 @@ BinaryOperator :
             | sNE:
                 [oTypeStkChooseKind
                         | tpChar:
-                                .tNot
                                 .tStringEQ
+                                .tNot
                                 oTypeStkPop
                                 @CompareStringEquality
                         | *:

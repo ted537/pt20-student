@@ -28,8 +28,8 @@
     .tFetchChar
     .tLiteralAddress
     .tFetchChar
-    .tNot
     .tStringEQ
+    .tNot
 .tIfThen
     % put(1);
     .tWriteBegin

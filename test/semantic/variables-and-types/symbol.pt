@@ -1,0 +1,3 @@
+using output;
+var x = "hello world";
+var y = x | x;
