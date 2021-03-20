@@ -2004,8 +2004,8 @@ BinaryOperator :
             | sNE:
                 [oTypeStkChooseKind
                         | tpChar:
-                                .tNot
                                 .tStringEQ
+                                .tNot
                                 oTypeStkPop
                                 @CompareStringEquality
                         | *:
