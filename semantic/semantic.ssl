@@ -1021,6 +1021,9 @@ SimpleType :
                     | sInteger:
                         oTypeStkPush(tpInteger)
                         oTypeStkLinkToStandardType(stdInteger)
+		    | sStringLiteral:
+			oTypeStkPush(tpChar)
+			oTypeStkLinkToStandardType(stdChar)
                     | sIdentifier:
                         oSymbolStkPushIdentifier
                         [ oSymbolStkChooseKind
