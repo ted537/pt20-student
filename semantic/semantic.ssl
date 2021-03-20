@@ -1036,6 +1036,10 @@ SimpleType :
                                         oTypeStkPop
                                         oTypeStkPush(tpChar)
                                         oTypeStkLinkToStandardType(stdChar) % this may be wrong
+                                    | tpBoolean:
+                                        oTypeStkPop
+                                        oTypeStkPush(tpBoolean)
+                                        oTypeStkLinkToStandardType(stdBoolean)
                                     | *:
                                         #eConstantReqd
                                         oTypeStkPop
