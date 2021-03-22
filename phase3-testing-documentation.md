@@ -17,6 +17,13 @@ project
 
 ### Test Case Description
 
+**block**
+
+The test cases contained within this folder are to test the functionality
+of Like blocks.
+A simple program is found, 
+omitting the top level program statement present in PT pascal.
+
 **Operations**
 
 The test cases contained within this folder are to test the functionality
