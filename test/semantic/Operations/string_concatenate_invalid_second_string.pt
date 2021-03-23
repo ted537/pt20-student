@@ -1,0 +1,2 @@
+using input;
+var str = "Hello" | 5;

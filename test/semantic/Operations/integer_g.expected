@@ -10,11 +10,11 @@
    .tIfBegin
        .tLiteralInteger
        oEmitValue
-       % value emitted 5
+       % value emitted 6
        .tLiteralInteger
        oEmitValue
        % value emitted 5
-      .tEQ
+      .tGT
    .tIfThen
    oEmitNullAddress
    % value emitted -32767
