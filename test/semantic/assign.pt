@@ -1,0 +1,3 @@
+using output;
+var x : file like 2;
+assign(x, "myfile.txt");
