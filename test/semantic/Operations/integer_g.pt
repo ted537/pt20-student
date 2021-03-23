@@ -1,0 +1,7 @@
+using output;
+val int1 = 5;
+val int2 = 6;
+
+if (int2 > int1) then
+	put(1);
+end;

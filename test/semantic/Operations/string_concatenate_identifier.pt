@@ -1,0 +1,5 @@
+using input;
+val str1 = "Hello";
+val str2 = "World";
+
+var str = str1 | str2;

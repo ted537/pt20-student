@@ -1,0 +1,2 @@
+using input;
+var str = 5 || 4;

@@ -1,7 +1,7 @@
 using output;
-val str1 = "hello";
-val str2 = "hello";
+val int1 = 5;
+val int2 = 5;
 
-if (str1 == str2) then
+if (int1 == int2) then
     put(1);
 end;

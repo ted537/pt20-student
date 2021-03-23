@@ -1,0 +1,2 @@
+using input, output;
+var out = 10 / 2;
