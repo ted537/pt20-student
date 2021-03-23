@@ -1022,9 +1022,9 @@ SimpleType :
                                 #eUndefinedIdentifier
                         ]
                         oSymbolStkPop
- %                    | sStringLiteral:
- %                        oTypeStkPush(tpChar)
- %                        oTypeStkLinkToStandardType(stdChar)
+                    | sStringLiteral:
+                        oTypeStkPush(tpChar)
+                        oTypeStkLinkToStandardType(stdChar)
                     | *:
                         #eSimpleTypeReqd
                 ]
