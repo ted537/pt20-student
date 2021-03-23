@@ -32,9 +32,15 @@ of Like string operations.
 test. As such, a single example will be provided for clarity sake
 * `string_concatenate.pt` tests that two strings can be concatentated using
 `|` to form a new string
-* the rest of the test cases within this folder follow a similar structure
+* Some tests are also included that use identifiers instead of raw string literals for input (ex. `string_concatenate_identifier.pt`)
+* Tests are also included to check type mismatch error in all operations. An example is `string_concatenate_invalid_first_string.pt` which tests the first required string if it is another type. In this example it is an integer which results in an error. 
+* Tests are included to test the new string equality and inequality tokens. Also error test cases are included to show that strings cannot be used for greater or less than.
+* Integer tests are included to show that integers are still supported after the changes for strings. Tests are included for binary and unary operators
 
 **Strings**
+Test cases contained here are for testing the new Like string literals.
+* Testing for strings, string identifiers and chars are included
+* Also test for null string since Like now accepts these
 
 **packages**
 
