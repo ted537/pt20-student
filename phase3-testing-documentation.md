@@ -17,14 +17,28 @@ project
 
 ### Test Case Description
 
-**block**
+### Block
 
 The test cases contained within this folder are to test the functionality
 of Like blocks.
 A simple program is found, 
 omitting the top level program statement present in PT pascal.
 
-**Operations**
+### packages
+The tests cases contained within this folder are to test the functionality of new Like Packages.
+* All files are clearly labelled according to their naming convention as to what functionality within Packages they are testing
+* `local-procedure-package.pt` tests the functionality of declaring a local procedure within the scope of a package
+* `local-val-package.pt` test the functionality of declaring a local constant/variable within the scope of a package
+* `public-procedure-package.pt` tests the functionality of declaring a public procedure within the scope of a package
+* `public-val-package.pt` tests the functionality of declaring a public constant/varaible within the scope of a package
+
+### Strings
+
+Test cases contained here are for testing the new Like string literals.
+* Testing for strings, string identifiers and chars are included
+* Also test for null string since Like now accepts these
+
+### Operations
 
 The test cases contained within this folder are to test the functionality
 of Like string operations.
@@ -37,20 +51,8 @@ test. As such, a single example will be provided for clarity sake
 * Tests are included to test the new string equality and inequality tokens. Also error test cases are included to show that strings cannot be used for greater or less than.
 * Integer tests are included to show that integers are still supported after the changes for strings. Tests are included for binary and unary operators
 
-**Strings**
-Test cases contained here are for testing the new Like string literals.
-* Testing for strings, string identifiers and chars are included
-* Also test for null string since Like now accepts these
 
-**packages**
-The tests cases contained within this folder are to test the functionality of new Like Packages.
-* All files are clearly labelled according to their naming convention as to what functionality within Packages they are testing
-* `local-procedure-package.pt` tests the functionality of declaring a local procedure within the scope of a package
-* `local-val-package.pt` test the functionality of declaring a local constant/variable within the scope of a package
-* `public-procedure-package.pt` tests the functionality of declaring a public procedure within the scope of a package
-* `public-val-package.pt` tests the functionality of declaring a public constant/varaible within the scope of a package
-
-**procedure-params**
+### procedure-params
 
 The test cases contained within this folder are to test the functionality
 of Like `fun` or Like program routines.
@@ -61,9 +63,9 @@ parameters (`fun flag is`)
 * `proc-one-param.pt` tests that a function can be declared with a single
 parameter (`var number : like 1`)
 
-**statements**
+### statements
 
-**variables-and-types**
+### variables-and-types
 
 The test cases contained within this folder are to test the functionality
 of Like variables and the different ways in which they can be declared.
