@@ -65,6 +65,14 @@ parameter (`var number : like 1`)
 
 ### statements
 
+The test cases contained within this folder are to test the functionality
+of Like self-contained statements.
+
+* `choose.pt` tests that the choose statement works
+* `choose-else.pt` tests that the default `else` within a `choose` statement 
+* `elseif.pt` tests that the new `elseif` keyword acts identically to
+`else` followed by `if`
+
 ### variables-and-types
 
 The test cases contained within this folder are to test the functionality
