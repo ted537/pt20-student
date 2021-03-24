@@ -101,3 +101,221 @@ and was replaced with a call to `SimpleType`
         oSymbolTblEnter;
 ```
 * This is required parameters are defined using a like clause
+
+## STRINGS
+
+The `StringLiteral` rule in `semantic.ssl`:
+* Complete overhaul to handling of string literals in Like
+* Remove old char and char array handling and treat all inputs as base string type
+```
+StringLiteral :
+
+        oValuePushStringLength
+
+        .tSkipString
+        oFixPushForwardBranch
+        oEmitNullAddress
+
+        oTypeStkPush(tpChar)
+        oTypeStkLinkToStandardType(stdChar)
+
+        .tStringData
+
+        oEmitValue
+        oValuePop
+
+        oValuePushChar
+
+        oEmitString
+        oFixPopForwardBranch
+        oTypeTblEnter
+        ;
+```
+* Now handle whole string data through one case.
+* Code added to `operand` rule of `semantic.ssl` to complete string changes
+```
+   | sStringLiteral:
+                oSymbolStkPush(syExpression) 
+                @StringLiteral  % pushes type and value 
+                oEmitNullAddress
+                % Cases removed since Char type no longer used
+                % All chars are strings
+                .tLiteralAddress
+                .tFetchChar
+                oEmitValue
+                oValuePop
+```
+The `WriteText` rule in `semantic.ssl`:
+* Remove handling of old PT character arrays. Handle them now as built in string type in Like
+* Change trap to new Like write string trap
+```
+| tpChar:
+    .tTrap
+    oEmitTrapKind(trWriteString)
+```
+
+The `AssignProcedure` rule in `semantic.ssl`:
+* Change file name description to use the new Like string literal type
+```
+   | tpChar :   
+       .tLiteralInteger
+       % Push max size of string as length of string
+       oValuePush(stringSize)
+       oEmitValue
+       oValuePop
+       sParmEnd
+```
+
+The `oAllocateVariable` mechanism in `semantic.pt`:
+* Update the size a string to be the new Like 256 instead of the original char
+```
+      { Replace tpChar with stringSize (256) }
+      tpChar:
+           dataAreaEnd := dataAreaEnd + stringSize;
+```
+* Also size of string in arrays
+```
+tpArray: 
+    else if (kind = tpChar) then
+         size := size * stringSize; 
+```
+
+The `oValuePushChar` mechanism in `semantic.pt`:
+* Add the null value at the end of Like strings 
+```
+oValuePushChar:
+    { Push the value of the last string token to be accepted }
+    begin
+         Assert((compoundToken = sStringLiteral), assert37);
+			      { Push the code address rather than the string value }
+         ValueStackPush(codeAreaEnd);
+    end;
+```
+Changes to the SimpleType handling of string literals are included above in the SimpleType section
+
+
+## STRING OPERATIONS
+The `UnaryOperator` rule in `semantic.ssl`:
+* Add support for the new string length unary operator
+```
+| sLength:
+    .tLength
+    oTypeStkPush(tpChar)
+    @CompareAndSwapTypes
+    oTypeStkPop
+    oTypeStkPop
+    oTypeStkPush(tpInteger)
+    oTypeStkLinkToStandardType(stdInteger)
+```
+The `BinaryOperator` rule in `semantic.ssl`:
+* Add handling for three new operations in Like
+* Substring
+* Added manual handling for type checking as the types in this operation do not match
+```
+| sSubstring:
+     .tSubstring
+     % Second integer in substring operation
+     [ oTypeStkChooseKind
+         | tpInteger:
+         | *:
+             #eTypeMismatch
+      ]
+      oTypeStkPop
+      % First integer in substring operation
+      [ oTypeStkChooseKind
+          | tpInteger:
+          | *:
+              #eTypeMismatch
+      ]
+      oTypeStkPop
+
+      % Check first string
+      [ oTypeStkChooseKind
+          | tpChar:
+          | *:
+              #eTypeMismatch
+      ]
+      oTypeStkPop
+      
+      % Push result
+      oTypeStkPush(tpChar)
+      oTypeStkLinkToStandardType(stdChar)
+      oSymbolStkPop
+      % Second pop for second symbol?
+      oSymbolStkPop
+      oSymbolStkSetKind(syExpression)
+```
+* Concatenate
+```
+| sConcatenate:
+    .tConcatenate
+    oTypeStkPush(tpChar)
+    oTypeStkLinkToStandardType(stdChar)
+    @CompareOperandAndResultTypes
+```
+* Repeat
+* Added manual handling for type checking as the types in this operation do not match
+```
+| sRepeatString:
+    .tRepeatString
+    % Cannot use @CompareOperandAndResultType since operand is different result
+    % Check first integer
+    [ oTypeStkChooseKind
+        | tpInteger:
+        | *:
+            #eTypeMismatch
+    ]
+    oTypeStkPop
+    % Check first string
+    [ oTypeStkChooseKind
+        | tpChar:
+        | *:
+            #eTypeMismatch
+    ]
+    oTypeStkPop
+    % Push result
+    oTypeStkPush(tpChar)
+    oTypeStkLinkToStandardType(stdChar)
+    oSymbolStkPop
+    oSymbolStkSetKind(syExpression)
+```
+* Add handling for the string equals (sEQ) and not equals (sNEQ) tokens
+```
+| sEq:
+    [oTypeStkChooseKind
+        | tpChar:
+            .tStringEQ
+            oTypeStkPop
+            @CompareStringEquality
+        | *:
+            .tEq
+            @CompareEqualityOperandTypes
+    ]
+     
+| sNE:
+    [oTypeStkChooseKind
+        | tpChar:
+            .tStringEQ
+            .tNot
+            oTypeStkPop
+            @CompareStringEquality
+        | *:
+            .tNE
+            @CompareEqualityOperandTypes
+    ]
+```
+* New rule `@CompareStringEquality` added to handle string type checking
+```
+CompareStringEquality :
+        % Compare top values for string equality
+        [ oTypeStkChooseKind
+                | tpChar:
+                | * :
+                        #eTypeMismatch
+        ]
+        oTypeStkPop
+        oTypeStkPush(tpBoolean)
+        oSymbolStkPop
+        oSymbolStkSetKind(syExpression);
+```
+* Removed support for string greater than, less than, greater than or equal, and less than or equal
