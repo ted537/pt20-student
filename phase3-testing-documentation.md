@@ -86,4 +86,15 @@ clause and a string with the type being set to char (`var y: like "Hello";`)
 * `symbol` ensures that the symbol table is updating and that a Like
 variable can be declared with reference to another declared variable
 
-**tests no in folders**
+### Misc Tests not in folders
+
+There are some miscellaneous tests that are within test/semantic which are
+not within a folder.
+* `add.pt` tests that two numbers can be added and printed using `put`
+* `assign.pt` tests that function `assign()` within Like to assign a name
+to a file
+* `if.pt` tests that Like if statements work. **Note**: if-else handling
+was done in the parser phase
+* `null.pt` tests that the null program exists and can be run
+* `val.pt` verifies that constants can be declared using `val`
+

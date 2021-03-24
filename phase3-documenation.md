@@ -19,13 +19,7 @@ declarations and statements unlike in PT Pascal
 * Declarations and statements were merged into a single rule
 that also pushes and pops the scope on the symbol stack.
 
-```
-- where (what file and rule)
-- how was it modified (code snippet or describe)
-- any hanges as a result
-- why was this done
-```
-
+## Variables
 The `TypeDeclarations` rule in `semantic.ssl`:
 * The rule was deleted from `semantic.ssl`
 * This change was required as Like does not have explicit type
@@ -88,6 +82,7 @@ oValuePop;      % lower bound
 ```
 * This change was required as `SimpleType` no longer accepts subranges
 
+## Procedure Parameters with Like Clauses
 The `ProcedureParameterType` rule in `semantic.ssl`:
 * All formal parameter handling was removed from `ProcedureParameterType`
 and was replaced with a call to `SimpleType`
