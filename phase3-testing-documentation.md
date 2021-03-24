@@ -17,14 +17,28 @@ project
 
 ### Test Case Description
 
-**block**
+### Block
 
 The test cases contained within this folder are to test the functionality
 of Like blocks.
 A simple program is found, 
 omitting the top level program statement present in PT pascal.
 
-**Operations**
+### packages
+The tests cases contained within this folder are to test the functionality of new Like Packages.
+* All files are clearly labelled according to their naming convention as to what functionality within Packages they are testing
+* `local-procedure-package.pt` tests the functionality of declaring a local procedure within the scope of a package
+* `local-val-package.pt` test the functionality of declaring a local constant/variable within the scope of a package
+* `public-procedure-package.pt` tests the functionality of declaring a public procedure within the scope of a package
+* `public-val-package.pt` tests the functionality of declaring a public constant/varaible within the scope of a package
+
+### Strings
+
+Test cases contained here are for testing the new Like string literals.
+* Testing for strings, string identifiers and chars are included
+* Also test for null string since Like now accepts these
+
+### Operations
 
 The test cases contained within this folder are to test the functionality
 of Like string operations.
@@ -32,13 +46,13 @@ of Like string operations.
 test. As such, a single example will be provided for clarity sake
 * `string_concatenate.pt` tests that two strings can be concatentated using
 `|` to form a new string
-* the rest of the test cases within this folder follow a similar structure
+* Some tests are also included that use identifiers instead of raw string literals for input (ex. `string_concatenate_identifier.pt`)
+* Tests are also included to check type mismatch error in all operations. An example is `string_concatenate_invalid_first_string.pt` which tests the first required string if it is another type. In this example it is an integer which results in an error. 
+* Tests are included to test the new string equality and inequality tokens. Also error test cases are included to show that strings cannot be used for greater or less than.
+* Integer tests are included to show that integers are still supported after the changes for strings. Tests are included for binary and unary operators
 
-**Strings**
 
-**packages**
-
-**procedure-params**
+### procedure-params
 
 The test cases contained within this folder are to test the functionality
 of Like `fun` or Like program routines.
@@ -49,9 +63,9 @@ parameters (`fun flag is`)
 * `proc-one-param.pt` tests that a function can be declared with a single
 parameter (`var number : like 1`)
 
-**statements**
+### statements
 
-**variables-and-types**
+### variables-and-types
 
 The test cases contained within this folder are to test the functionality
 of Like variables and the different ways in which they can be declared.
