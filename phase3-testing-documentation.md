@@ -43,6 +43,12 @@ Test cases contained here are for testing the new Like string literals.
 * Also test for null string since Like now accepts these
 
 **packages**
+The tests cases contained within this folder are to test the functionality of new Like Packages.
+* All files are clearly labelled according to their naming convention as to what functionality within Packages they are testing
+* `local-procedure-package.pt` tests the functionality of declaring a local procedure within the scope of a package
+* `local-val-package.pt` test the functionality of declaring a local constant/variable within the scope of a package
+* `public-procedure-package.pt` tests the functionality of declaring a public procedure within the scope of a package
+* `public-val-package.pt` tests the functionality of declaring a public constant/varaible within the scope of a package
 
 **procedure-params**
 
