@@ -1,2 +1,2 @@
 using output;
-put(123);
+put(123:3);
