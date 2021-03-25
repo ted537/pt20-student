@@ -24,3 +24,8 @@ done
 for test_case in $(./test/find_test_cases.sh test/semantic); do
 	echo $compare $test_case.semantic $test_case.expected;
 done
+
+# run our coder tests
+for test_case in $(./test/find_test_cases.sh test/coder); do
+	echo $compare $test_case.coder $test_case.expected;
+done

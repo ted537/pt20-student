@@ -19,3 +19,4 @@ test/**/*.output
 *.parsed
 *.scanned
 *.semantic
+*.coder
