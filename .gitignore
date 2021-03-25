@@ -20,4 +20,5 @@ test/**/*.output
 *.scanned
 *.semantic
 *.coder
+*.log
 test/coder/**.s
