@@ -37,6 +37,7 @@ type BOOLEAN :
         bTRUE;
 
 type INSTRUCTION :      % corresponds to semantic.ssl output
+        % Non-compound T-codes - T-code operations take no operands
         tMultiply 
         firstTcode = tMultiply
         tDivide
@@ -95,9 +96,24 @@ type INSTRUCTION :      % corresponds to semantic.ssl output
         tTrapBegin
         tWriteEnd
         tReadEnd
+        % new like T-codes
+        tConcatenate
+        tRepeatString
+        tSubstring
+        tLength
+        % we are technically redefining these but they already appear
+        % so no need to declare them again
+        % tChr
+        % tOrd
+        tStringEQ
+        % null like T-codes ( used for structure only )
+        tInitialValue
+        tInitEnd
+        tCaseElse
+        tCaseElseEnd
 
-        % Compound T-codes are those that take operands
-        tLiteralAddress 
+        % Compound T-codes - T-code operations that take an operand
+        tLiteralAddress
         firstCompoundTcode = tLiteralAddress
         tLiteralInteger
         tLiteralChar
@@ -119,6 +135,7 @@ type INSTRUCTION :      % corresponds to semantic.ssl output
         tTrap
         lastCompoundTcode = tTrap
 
+        % End of file marker T-code
         tEndOfFile
         lastTcode = tEndOfFile;
 

@@ -6,6 +6,7 @@ lib
 cmd/ptc
 parser/parser.pt
 semantic/semantic.pt
+coder/coder.pt
 
 *.def
 *.out
