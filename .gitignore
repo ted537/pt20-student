@@ -20,3 +20,4 @@ test/**/*.output
 *.scanned
 *.semantic
 *.coder
+test/coder/**.s
