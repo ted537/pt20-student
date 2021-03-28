@@ -168,7 +168,8 @@ type Integer:
 
         % Data kinds
         byte = 1
-        word = 2;   % 4 bytes on x86
+        word = 2   % 4 bytes on x86
+        string = 3;
 
 
 type Boolean:
@@ -1662,7 +1663,12 @@ OperandCheckedSubscriptNonManifestIntegerPop:
     % Scale subscript by word size              % ... arraydesc, %T
     oOperandPushMode(mManifest)
     oOperandSetLength(word)
-    oOperandSetValue(two)                       % ... arraydesc, %T, 2
+    [ oOperandChooseLength
+        | word, byte:
+            oOperandSetValue(two)               % ... arraydesc, %T, 2
+        | string:
+            oOperandSetValue(eight)
+    ]
     oEmitDouble(iShl)                           %       shll    $2, %T
     oOperandPop                                 % ... arraydesc, %T
 
@@ -3026,6 +3032,9 @@ OperandForceIntoTemp:
                     @OperandPushTempByte
                 | word:
                     @OperandPushTempWord
+                | string:
+                    @OperandForceAddressIntoTemp
+                    >>
             ]
             oOperandSwap
             oEmitDouble(iMov)   % mov(b) operand, dN
@@ -3149,6 +3158,8 @@ OperandForceToStack:
                 @OperandForceIntoTemp
                 oOperandSetLength(word)
         | word:
+        | string:
+                @OperandForceAddressIntoTemp
     ]
     oEmitSingle(iPush)
     @OperandPopAndFreeTemp
