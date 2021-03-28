@@ -95,6 +95,7 @@ program Coder (output, coderSsl, tCode, object, options);
 
         { Machine word size }
         wordSize = 4;           { longword (4 bytes) on SUN }
+        stringSize = 256;
 
         { Temporary regs - %ebx, %ecx, %esi, %edi }
         firstTempReg = 1;       
