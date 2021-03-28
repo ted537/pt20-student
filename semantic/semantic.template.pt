@@ -1880,7 +1880,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { Push the length of the last literal string token accepted }
                         begin
                             Assert((compoundToken = sStringLiteral), assert37);
-                            ValueStackPush(compoundTokenLength)
+                            { Include null terminator character }
+                            ValueStackPush(compoundTokenLength+1);
                         end;
 
                     oValuePushSymbol:
