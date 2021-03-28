@@ -1,0 +1,2 @@
+using output;
+put(3+4:1);

@@ -11,6 +11,9 @@ all:  coder
 
 install:  coder
 
+coder.pt: coder.sst
+	../include.sh coder.template.pt > coder.pt
+
 coder.out:  coder.pt coder.sst coder.consistency
 	@echo "ptc coder.pt"
 	@ptc coder.pt > coder.err
