@@ -1404,6 +1404,8 @@ program Coder (output, coderSsl, tCode, object, options);
                     if operandStkLength[operandStkTop-1] = word then
                         { Convert a byte offset to a word offset }
                         subscript := subscript * wordSize;
+                    else if operandStkLength[operandStkTop-1] = string then
+                        subscript := subcript * stringSize;
                     { Set the subscripted varable's address.  Note that the array variable's 
                       address points to the base of a 2 word descriptor (lower, upper bound). }
                     operandStkValue[operandStkTop-1] := 
