@@ -561,7 +561,7 @@ type TrapKind :
         
         % New Like String traps
         trReadString = 108
-        trWriteString = 109; 
+        trWriteString = 7; 
 
 mechanism Emit :
     % Emit writes to the output "t-code" stream (the code area),
@@ -1746,8 +1746,8 @@ Operand :
                 % Cases removed since Char type no longer used
                 % All chars are strings
                 .tLiteralAddress
-                .tFetchChar
                 oEmitValue
+                .tFetchChar
                 oValuePop
             | sFile:
                 @Expression
@@ -2565,7 +2565,7 @@ WriteText :
             | *:
                 % No field width specified, supply a default
                 [ oTypeStkChooseKind    % of expression being written
-                    | tpInteger, tpSubrange:
+                    | tpChar, tpInteger, tpSubrange:
                         oValuePush(ten)
                     | *:        
                         % error flagged below
