@@ -1559,8 +1559,10 @@ OperandPushVariable:
     ]
     [
         | tFetchInteger:
-        | tFetchChar, tFetchBoolean:
+        | tFetchBoolean:
             oOperandSetLength(byte)
+        | tFetchChar:
+            oOperandSetLength(string)
         | *: 
             % Value is not to be loaded
     ] ;
@@ -2537,8 +2539,6 @@ OperandOrd:
     % Fill a register with integer zero
     oOperandPushMode(mManifest)
     oOperandSetValue(zero)
-    oOperandSetLength(word)
-    @OperandForceIntoTemp       %       movl    $0, %T
     % Move the character value into the low order byte
     oOperandSetLength(byte)
     oOperandSwap
