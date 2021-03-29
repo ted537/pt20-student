@@ -1184,7 +1184,7 @@ program Coder (output, coderSsl, tCode, object, options);
     procedure OperandPushStringAddress;
         { Push an operand stack entry for the string's address }
         begin
-            Assert ( (compoundToken = tLiteralString), assert28);
+            { Assert ( (compoundToken = tStringData), assert28); }
             OperandPush (mStatic, compoundTokenValue, undefined, word);
         end { OperandPushStringAddress };
 
@@ -1490,10 +1490,9 @@ program Coder (output, coderSsl, tCode, object, options);
                                         read (tCode, compoundTokenText[i]);
                                         i := i + 1
                                     end;
-                                { read null terminator + address }
+                                { read null terminator }
                                 read(tCode,i);
-                                read(tCode,i);
-                                nextTCodeAddress := nextTCodeAddress + compoundTokenLength + 2;
+                                nextTCodeAddress := nextTCodeAddress + compoundTokenLength + 1;
                             end;
                     end         { case compoundToken }
                 end;
