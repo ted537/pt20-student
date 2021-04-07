@@ -759,11 +759,29 @@ Block:
             @Routine
             oFixForwardBranch   
             oFixPopAddress
-
+		
+		% Cases copied from the Statements rule to mix declarations and statements
+		| tAssignBegin:
+            @AssignStmt
+        | tCallBegin:
+            @CallStmt
+        | tIfBegin:
+            @IfStmt
+        | tWhileBegin:
+            @WhileStmt
+        | tRepeatBegin:
+            @RepeatStmt
+        | tCaseBegin:
+            @CaseStmt
+        | tWriteBegin:
+            @WriteProc
+        | tReadBegin:
+            @ReadProc
+        | tTrapBegin:
+            @TrapStmt
         | *:
             >
     ]}
-    @Statements;
 
 
 Routine:
@@ -829,28 +847,8 @@ OperandNextArgument:
 
 Statements:
     % Previous passes have removed redundant begin-end markers.
-    {[
-        | tAssignBegin:
-            @AssignStmt
-        | tCallBegin:
-            @CallStmt
-        | tIfBegin:
-            @IfStmt
-        | tWhileBegin:
-            @WhileStmt
-        | tRepeatBegin:
-            @RepeatStmt
-        | tCaseBegin:
-            @CaseStmt
-        | tWriteBegin:
-            @WriteProc
-        | tReadBegin:
-            @ReadProc
-        | tTrapBegin:
-            @TrapStmt
-        | *:
-            >   % End of statement list or empty statement
-    ]};
+	@Block
+	;
 
 
 AssignStmt:
