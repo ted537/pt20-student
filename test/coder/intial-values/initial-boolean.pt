@@ -1,3 +1,3 @@
 using output;
-val x = true;
+var x = true;
 put(x);
