@@ -760,6 +760,17 @@ Block:
             oFixForwardBranch   
             oFixPopAddress
 
+        | tInitialValue:
+            @OperandPushExpression % accept initial value expression
+            % oOperandPushVariable
+            [
+                | tStoreInteger:
+                    @OperandAssignIntegerPopPop
+                | tStoreChar:
+                    @OperandAssignCharPopPop
+                | tStoreBoolean:
+                    @OperandAssignBooleanPopPop
+            ]
         | *:
             >
     ]}

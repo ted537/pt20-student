@@ -1,0 +1,3 @@
+using output;
+val x = true;
+put(x);
