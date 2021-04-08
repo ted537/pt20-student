@@ -762,7 +762,7 @@ Block:
 
         | tInitialValue:
             @OperandPushExpression % accept initial value expression
-            % oOperandPushVariable
+            oOperandPushVariable
             [
                 | tStoreInteger:
                     @OperandAssignIntegerPopPop
