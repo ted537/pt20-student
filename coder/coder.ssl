@@ -762,15 +762,18 @@ Block:
 
         | tInitialValue:
             @OperandPushExpression % accept initial value expression
-            oOperandPushVariable
             [
                 | tStoreInteger:
+                    oOperandSetLength(word)
                     @OperandAssignIntegerPopPop
                 | tStoreChar:
+                    oOperandSetLength(byte)
                     @OperandAssignCharPopPop
                 | tStoreBoolean:
+                    oOperandSetLength(byte)
                     @OperandAssignBooleanPopPop
             ]
+            tInitEnd
         | *:
             >
     ]}
