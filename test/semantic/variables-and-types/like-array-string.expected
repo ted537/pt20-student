@@ -1,0 +1,19 @@
+% using output;
+.tFileDescriptor
+.tLiteralInteger
+.tFileBind
+.tLiteralAddress
+.tStoreInteger
+
+.tArrayDescriptor
+.tLiteralInteger
+.tLiteralAddress
+.tStoreInteger
+.tLiteralInteger
+.tLiteralAddress
+.tStoreInteger
+
+% halt
+.tTrapBegin
+.tTrap
+

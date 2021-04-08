@@ -11,6 +11,9 @@ all:  ptam
 
 install:  ptam
 
+ptam.pt: ptam.template.pt ptam.sst
+	../include.sh ptam.template.pt > ptam.pt
+
 ptam.out:  ptam.pt ptam.sst ptam.consistency
 	@echo "ptc ptam.pt"
 	@ptc ptam.pt > ptam.err

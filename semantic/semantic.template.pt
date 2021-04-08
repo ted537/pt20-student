@@ -268,7 +268,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
         identSymbolTblRef:  array [1 .. identTblSize] of integer;
 
         { Symbol Table }
-	symbolTblPublicFlag:	array [1 .. symbolTblSize] of Boolean;
+        symbolTblPublicFlag:    array [1 .. symbolTblSize] of Boolean;
         symbolTblIdentLink:     array [1 .. symbolTblSize] of integer;
         symbolTblKind:          array [1 .. symbolTblSize] of SymbolKinds;
         symbolTblValue:         array [1 .. symbolTblSize] of integer;
@@ -281,7 +281,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
         lexicLevelStackTop:  0 .. lexicLevelStackSize;   { initially 0 }
 
         { Symbol Stack }
-	symbolStkPublicFlag:	array [1 .. symbolStkSize] of Boolean;
+        symbolStkPublicFlag:    array [1 .. symbolStkSize] of Boolean;
         symbolStkIdentTblRef:   array [1 .. symbolStkSize] of integer;
         symbolStkSymbolTblRef:  array [1 .. symbolStkSize] of SymbolTblReference;
         symbolStkKind:          array [1 .. symbolStkSize] of SymbolKinds;
@@ -887,7 +887,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                 begin
                     symbolStkTop := symbolStkTop + 1;
                     symbolStkKind[symbolStkTop] := kind;
-		    symbolStkPublicFlag[symbolStkTop] := false;
+                    symbolStkPublicFlag[symbolStkTop] := false;
                     symbolStkIdentTblRef[symbolStkTop] := null;
                     symbolStkSymbolTblRef[symbolStkTop] := null;
                     symbolStkTypeTblLink[symbolStkTop] := null;
@@ -914,7 +914,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                     symbolStkSymbolTblRef[symbolStkTop] := symbolRef;
                     symbolStkKind[symbolStkTop] := symbolTblKind[symbolRef];
                     symbolStkValue[symbolStkTop] := symbolTblValue[symbolRef];
-		    symbolStkPublicFlag[symbolStkTop] := symbolTblPublicFlag[symbolRef];
+                    symbolStkPublicFlag[symbolStkTop] := symbolTblPublicFlag[symbolRef];
                     symbolStkTypeTblLink[symbolStkTop] :=
                         symbolTblTypeTblLink[symbolRef]
                 end
@@ -1267,7 +1267,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                 symbolTblTop := symbolTblTop + 1;
                                 symbolTblKind[symbolTblTop] := symbolStkKind[symbolStkTop];
                                 symbolTblValue[symbolTblTop] := symbolStkValue[symbolStkTop];
-				symbolTblPublicFlag[symbolTblTop] := symbolStkPublicFlag[symbolStkTop];
+                                symbolTblPublicFlag[symbolTblTop] := symbolStkPublicFlag[symbolStkTop];
                                 symbolTblTypeTblLink[symbolTblTop] := 
                                     symbolStkTypeTblLink[symbolStkTop];
                                 symbolStkSymbolTblRef[symbolStkTop] := symbolTblTop;
@@ -1295,7 +1295,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                             symbolRef := symbolStkSymbolTblRef[symbolStkTop];
                             symbolTblKind[symbolRef] := symbolStkKind[symbolStkTop];
                             symbolTblValue[symbolRef] := symbolStkValue[symbolStkTop];
-			    symbolTblPublicFlag[symbolRef] := symbolStkPublicFlag[symbolStkTop];
+                            symbolTblPublicFlag[symbolRef] := symbolStkPublicFlag[symbolStkTop];
                             symbolTblTypeTblLink[symbolRef] := symbolStkTypeTblLink[symbolStkTop];
                         end;
 
@@ -1344,35 +1344,34 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                             lexicLevelStackTop := lexicLevelStackTop - 1;
                         end;		
 
-		    oSymbolTblMergePublicScope:
-			{ Pop the lexical level stack, remove all non Public entries from the type table,
-			  remove non Public entries but leave parameter entries on the symbol stack. }
+                    oSymbolTblMergePublicScope:
+                        { Pop the lexical level stack, remove all non Public entries from the type table,
+                          remove non Public entries but leave parameter entries on the symbol stack. }
 			
-			begin
-			    Assert((lexicLevelStackTop >= 1), assert31);
-			    i := symbolTblTop;
-		            { Set the identifier table pointer to the identifier entry in the 
-			      closest enclosing scope if there is one. }
-			    while i > symbolTblDisplay[lexicLevelStackTop] do
-				begin
-				    link := symbolTblIdentLink[i];
+                        begin
+                            Assert((lexicLevelStackTop >= 1), assert31);
+                            i := symbolTblTop;
+                            { Set the identifier table pointer to the identifier entry in the 
+                              closest enclosing scope if there is one. }
+                            while i > symbolTblDisplay[lexicLevelStackTop] do
+                                begin
+                                    link := symbolTblIdentLink[i];
 					    
-				    if not symbolTblPublicFlag[i] then
-					begin
-				            if link <> null then 
-					        { This is not a dummy identifier generated by 
-					          the parser's syntax error recovery procedure. }
-					        begin
-					            while link > 0 do
-						        link := symbolTblIdentLink[link];
-					            identSymbolTblRef[-link] := symbolTblIdentLink[i];
-					        end;
-					end;
-				    i := i - 1
-				end;
-
-			    lexicLevelStackTop := lexiclevelStacktop - 1;
-			end;
+                                    if not symbolTblPublicFlag[i] then
+                                        begin
+                                            if link <> null then 
+                                                { This is not a dummy identifier generated by 
+                                                  the parser's syntax error recovery procedure. }
+                                                begin
+                                                    while link > 0 do
+                                                        link := symbolTblIdentLink[link];
+                                                    identSymbolTblRef[-link] := symbolTblIdentLink[i];
+                                                end;
+                                        end;
+                                    i := i - 1
+                                end;
+                            lexicLevelStackTop := lexiclevelStacktop - 1;
+                        end;
 
                     oSymbolTblPreserveParameters:
                         { Restore procedure parameter entries to the symbol table }
@@ -1501,9 +1500,9 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { Set the top entry's value field from the top of the value stack. }
                         symbolStkValue[symbolStkTop] := valueStack[valueStackTop];
 
-		    oSymbolStkSetPublicFlag:
-	                { Set the top entry's public flag of the stack to true. }
-			symbolStkPublicFlag[symbolStkTop] := true;
+                    oSymbolStkSetPublicFlag:
+                        { Set the top entry's public flag of the stack to true. }
+                          symbolStkPublicFlag[symbolStkTop] := true;
 
                     oSymbolStkEnterStringValue:
                         { Set the top entry's value field from the first character 
@@ -1873,7 +1872,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { Push the value of the last string token to be accepted }
                         begin
                             Assert((compoundToken = sStringLiteral), assert37);
-                            ValueStackPush(compoundTokenText[1]);
+			    { Push the code address rather than the string value }
+                            ValueStackPush(codeAreaEnd);
                         end;
 
                     oValuePushStringLength:
@@ -1940,18 +1940,22 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                           (structure on top). }
                         case typeStkKind[typeStkTop] of
                             tpInteger, tpSubrange:
-                                dataAreaEnd := dataAreaEnd + wordSize;
-                            tpChar, tpBoolean:
-                                dataAreaEnd := dataAreaEnd + byteSize;
-                            tpArray:
+                                dataAreaEnd := dataAreaEnd + wordSize;			
+			    { Replace tpChar with stringSize (256) }
+                            tpChar:
+                                dataAreaEnd := dataAreaEnd + stringSize;
+                            tpBoolean:
+				dataAreaEnd := dataAreaEnd + byteSize;
+			    tpArray:
                                 begin
                                     assert (typeStkComponentLink[typeStkTop] <> null, assert59);
                                     size := typeStkUpperBound[typeStkTop] - 
                                         typeStkLowerBound[typeStkTop] + 1;
                                     kind := typeTblKind[typeStkComponentLink[typeStkTop]];
                                     if (kind = tpInteger) or (kind = tpSubrange) then
-                                        size := size * wordSize;
-
+                                        size := size * wordSize
+				   else if (kind = tpChar) then
+					size := size * stringSize; 
                                     dataAreaEnd := dataAreaEnd + size
                                 end;
                         end;
@@ -2054,7 +2058,9 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                 begin
                                     EmitOutputToken(compoundTokenText[i]);
                                     i := i + 1;
-                                end
+                                end;
+				{Emit output token 0 after the string is over}
+				EmitOutputToken(0);
                         end;
 
                     oEmitCaseBranchTable:

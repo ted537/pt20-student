@@ -1,0 +1,7 @@
+using output;
+val int1 = 5;
+val int2 = 5;
+
+if (int1 == int2) then
+    put(1);
+end;

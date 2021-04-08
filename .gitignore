@@ -6,6 +6,8 @@ lib
 cmd/ptc
 parser/parser.pt
 semantic/semantic.pt
+coder/coder.pt
+ptam/ptam.pt
 
 *.def
 *.out
@@ -17,3 +19,6 @@ test/**/*.output
 *.parsed
 *.scanned
 *.semantic
+*.coder
+*.log
+test/coder/**.s

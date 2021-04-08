@@ -1,0 +1,3 @@
+using input, output;
+val str = 5;
+var len = #str;

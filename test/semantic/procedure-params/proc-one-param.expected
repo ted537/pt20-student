@@ -1,0 +1,1 @@
+.tFileDescriptor .tLiteralInteger .tFileBind .tLiteralAddress .tStoreInteger .tFileDescriptor .tLiteralInteger .tFileBind .tLiteralAddress .tStoreInteger .tSkipProc .tLiteralAddress .tStoreAddress .tParmEnd .tInitialValue .tLiteralInteger .tInitEnd .tLiteralAddress .tStoreInteger .tProcedureEnd .tTrapBegin .tTrap

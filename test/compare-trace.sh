@@ -23,7 +23,7 @@ function yellow {
 
 tokens() {
 	trace=$1
-	echo $(cat $trace | grep \\. | grep -v %)
+	echo $(cat $trace | grep -e \\. -e \# | grep -v %)
 }
 
 expected_tokens=$(tokens $expected)

@@ -1,0 +1,50 @@
+% using output;
+.tFileDescriptor
+.tLiteralInteger
+.tFileBind
+.tLiteralAddress
+.tStoreInteger
+.tFileDescriptor
+.tLiteralInteger
+.tFileBind
+.tLiteralAddress
+.tStoreInteger
+
+% val str1 = "hello";
+.tSkipString
+.tStringData
+.tLiteralAddress
+.tFetchChar
+
+% val str2 = "world";
+.tSkipString
+.tStringData
+.tLiteralAddress
+.tFetchChar
+
+% if (str1 != str2) then
+.tIfBegin
+    .tLiteralAddress
+    .tFetchChar
+    .tLiteralAddress
+    .tFetchChar
+    .tStringEQ
+    .tNot
+.tIfThen
+    % put(1);
+    .tWriteBegin
+    .tTrapBegin
+    .tLiteralAddress
+    .tVarParm
+    .tParmEnd
+    .tLiteralInteger
+    .tParmEnd
+    .tLiteralInteger
+    .tParmEnd
+    .tTrap
+    .tWriteEnd
+.tIfEnd
+
+% halt
+.tTrapBegin
+.tTrap

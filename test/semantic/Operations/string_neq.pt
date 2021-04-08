@@ -1,0 +1,7 @@
+using input, output;
+val str1 = "hello";
+val str2 = "world";
+
+if (str1 != str2) then
+	put(1);
+end;
