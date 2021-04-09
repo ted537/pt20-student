@@ -761,6 +761,25 @@ Block:
             oFixForwardBranch   
             oFixPopAddress
 
+        | tInitialValue:
+            @OperandPushExpression % accept initial value expression
+            tInitEnd % end of expression
+            tLiteralAddress
+            oOperandPushVariable
+            [
+                | tStoreInteger:
+                    oOperandSetLength(word)
+                    oOperandSwap
+                    @OperandAssignIntegerPopPop
+                | tStoreChar:
+                    oOperandSetLength(byte)
+                    oOperandSwap
+                    @OperandAssignCharPopPop
+                | tStoreBoolean:
+                    oOperandSetLength(byte)
+                    oOperandSwap
+                    @OperandAssignBooleanPopPop
+            ]
         | *:
             >
     ]}

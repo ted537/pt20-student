@@ -1,0 +1,3 @@
+using output;
+var x = "something";
+put(x);
