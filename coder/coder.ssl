@@ -778,7 +778,6 @@ Block:
                     oOperandSetLength(byte)
                     oOperandSwap
                     @OperandAssignBooleanPopPop
-                | *:
             ]
         | *:
             >
