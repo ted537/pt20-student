@@ -1094,6 +1094,9 @@ VariableDeclarations :
                         oSymbolStkPop % assigned value
                         @EnterVariableAttributes
                         .tLiteralAddress
+                        oValuePushSymbol
+                        oEmitValue
+                        oValuePop
                         @EmitStore
                         oTypeStkPop
                         oSymbolStkPop % variable
