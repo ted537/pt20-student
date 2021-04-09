@@ -762,6 +762,9 @@ Block:
 
         | tInitialValue:
             @OperandPushExpression % accept initial value expression
+            tInitEnd % end of expression
+            tLiteralAddress
+            oOperandPushVariable
             [
                 | tStoreInteger:
                     oOperandSetLength(word)
@@ -773,7 +776,6 @@ Block:
                     oOperandSetLength(byte)
                     @OperandAssignBooleanPopPop
             ]
-            tInitEnd
         | *:
             >
     ]}
