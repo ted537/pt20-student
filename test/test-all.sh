@@ -12,4 +12,5 @@ while IFS= read -r command; do
 	echo "$output";
 done <<< "$commands"
 
+./test/compile-all.sh
 ./test/compare-compiled.sh

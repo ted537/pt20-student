@@ -1873,14 +1873,14 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         begin
                             Assert((compoundToken = sStringLiteral), assert37);
 			    { Push the code address rather than the string value }
-                            ValueStackPush(codeAreaEnd);
+                            ValueStackPush(-codeAreaEnd);
                         end;
 
                     oValuePushStringLength:
                         { Push the length of the last literal string token accepted }
                         begin
                             Assert((compoundToken = sStringLiteral), assert37);
-                            ValueStackPush(compoundTokenLength)
+                            ValueStackPush(compoundTokenLength);
                         end;
 
                     oValuePushSymbol:

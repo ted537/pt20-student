@@ -156,6 +156,15 @@ pttrap7 (fieldWidth, string, fileNumber)        /* write string */
              string, fieldWidth);
    }
 
+pttrap109 (fieldWidth, string, fileNumber)        /* write string */
+    char  *string;
+    int  fieldWidth;
+    int fileNumber;
+    {
+        PutStr (OpenTest (fileNumber, WRITE), strlen (string), 
+             string, fieldWidth);
+   }
+
 pttrap8 (fieldWidth, value, fileNumber)         /* write integer */
     int  fileNumber;
     int fieldWidth, value;
