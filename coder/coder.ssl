@@ -765,16 +765,18 @@ Block:
             tInitEnd % end of expression
             tLiteralAddress
             oOperandPushVariable
-            oOperandSwap
             [
                 | tStoreInteger:
                     oOperandSetLength(word)
+                    oOperandSwap
                     @OperandAssignIntegerPopPop
                 | tStoreChar:
                     oOperandSetLength(byte)
+                    oOperandSwap
                     @OperandAssignCharPopPop
                 | tStoreBoolean:
                     oOperandSetLength(byte)
+                    oOperandSwap
                     @OperandAssignBooleanPopPop
             ]
         | *:
