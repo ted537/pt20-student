@@ -1745,13 +1745,13 @@ Operand :
             | sStringLiteral:
                 oSymbolStkPush(syExpression) 
                 @StringLiteral  % pushes type and value 
-                oEmitNullAddress
+                % oEmitNullAddress
                 % Cases removed since Char type no longer used
                 % All chars are strings
                 .tLiteralAddress
-                .tFetchChar
                 oEmitValue
                 oValuePop
+                .tFetchChar
             | sFile:
                 @Expression
                 @FileOperand

@@ -11,7 +11,7 @@ all:  coder
 
 install:  coder
 
-coder.pt: coder.sst
+coder.pt: coder.sst coder.template.pt
 	../include.sh coder.template.pt > coder.pt
 
 coder.out:  coder.pt coder.sst coder.consistency
