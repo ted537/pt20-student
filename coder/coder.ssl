@@ -765,6 +765,7 @@ Block:
             tInitEnd % end of expression
             tLiteralAddress
             oOperandPushVariable
+            oOperandSwap
             [
                 | tStoreInteger:
                     oOperandSetLength(word)
