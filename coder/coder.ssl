@@ -166,6 +166,8 @@ type Integer:
         trEoln = 15
         trEof = 16
 
+		trLength=201
+
         % Data kinds
         byte = 1
         word = 2   % 4 bytes on x86
@@ -1537,6 +1539,8 @@ OperandPushExpression:
             @OperandEolnFunction
         | tEOF:
             @OperandEofFunction
+		| tLength:
+			@OperandLengthPop
         | *:
             >
     ]};
@@ -2950,6 +2954,15 @@ OperandEqualPop:
             ]
     ];
 
+OperandLengthPop:
+	@OperandForcetoStack
+	oOperandPushMode(mTrap)
+	oOperandSetValue(trLength)
+	oEmitSingle(iCall)
+	oOperandPop % pop function address
+	oOperandPop % pop string pointer - we don't need it anymore
+	% TODO do we need to push something back to operand stack?
+	;
 
 OperandGreaterPop:
     % Compare the top 2 operands to see if the left (second) operand
