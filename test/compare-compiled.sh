@@ -13,7 +13,7 @@ function green {
     printf "${GREEN}$@${NC}\n"
 }
 
-executables=$(find test/coder -name *.out)
+executables=$(find test/coder -name "*.out")
 
 for executable in $executables; do
     ./$executable > $executable.log
