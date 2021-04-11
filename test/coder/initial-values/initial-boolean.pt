@@ -1,7 +1,6 @@
 using output;
 var x = true;
-var y = true;
-if (x==y) then
+if (x) then
     put("x is a bool with value true");
     putln;
 end;
