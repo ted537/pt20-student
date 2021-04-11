@@ -166,7 +166,7 @@ type Integer:
         trEoln = 15
         trEof = 16
 
-		trLength=201
+		trLength=105
 
         % Data kinds
         byte = 1
@@ -1345,6 +1345,7 @@ ReadParameter:
     tLiteralAddress
     @OperandPushVariable
     @OperandForceToStack                %       pushl   filedesc
+
     @OperandPopAndFreeTemp
     tVarParm
     tParmEnd
@@ -2955,13 +2956,37 @@ OperandEqualPop:
     ];
 
 OperandLengthPop:
-	@OperandForcetoStack
+	@SaveTempRegsToStack
+	@OperandForceToStack
+	% call trap
 	oOperandPushMode(mTrap)
 	oOperandSetValue(trLength)
 	oEmitSingle(iCall)
-	oOperandPop % pop function address
-	oOperandPop % pop string pointer - we don't need it anymore
-	% TODO do we need to push something back to operand stack?
+	oOperandPop
+	% pop argument
+	oOperandPushMode(mStackReg)
+	oOperandSetLength(word)
+	oOperandPushMode(mManifest)
+	oOperandSetLength(word)
+	oOperandSetValue(four)
+	oEmitDouble(iAdd)
+	oOperandPop
+	oOperandPop
+	% move to scratch register
+	oOperandPushMode(mScratchReg1)
+	oOperandSetLength(word)
+	oOperandPushTemp
+	oEmitDouble(iMov)
+	oOperandPop
+	oOperandPop
+	
+	@RestoreTempRegsFromStack
+	
+	% put scratch register back to temp register
+	@OperandPushTempWord
+	oOperandPushMode(mScratchReg1)
+	oEmitDouble(iMov)
+	oOperandPop
 	;
 
 OperandGreaterPop:
