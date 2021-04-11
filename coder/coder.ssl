@@ -1194,14 +1194,9 @@ EmitDefaultCaseAbort:
     @Statements
     tCaseElseEnd                        %       jmp    mN
 
-    % Call case abort trap (never returns)
-    % oOperandPushMode(mLineNum)          % ... n
-    % oOperandSetLength(word)
-    % @OperandForceToStack                %       pushl   n
-    % oOperandPop                         % ...
-    % oOperandPushMode(mTrap)
-    % oOperandSetValue(trCaseAbort)
-    % oEmitSingle(iCall)                  %       call  caseAbort
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trCaseAbort)
+    oEmitSingle(iCall)                  %       call  caseAbort
 
     oOperandPop;
 

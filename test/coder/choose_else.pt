@@ -1,0 +1,10 @@
+using output;
+
+val x = 2;
+
+choose x of
+    when 1 then
+        put(1:1);
+    else
+        put(x:1);
+end;
