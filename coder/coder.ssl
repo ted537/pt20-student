@@ -2821,8 +2821,10 @@ OperandAssignCharPopPop:
     % Generate code to assign the right (top) operand's value to
     % the left (second) operand and pop both operands.
     % get the string on the stack
+    oOperandSetLength(string)
     @OperandForceToStack
     oOperandPop
+    oOperandSetLength(string)
     @OperandForceToStack
     oOperandPop
     % emit assignment trap
