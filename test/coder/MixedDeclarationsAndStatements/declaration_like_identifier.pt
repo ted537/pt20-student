@@ -2,4 +2,5 @@ using output;
 val x = 1;
 var y: like x;
 y = 10;
-put(y);
+put(y:1);
+putln;

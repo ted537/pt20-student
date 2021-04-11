@@ -1,3 +1,4 @@
 using output;
 val x = 1;
-put(x);
+put(x:1);
+putln;
