@@ -1190,15 +1190,22 @@ EmitDefaultCaseAbort:
     oFixSwapAddresses                   % (keep branch around case body on top)
     oEmitMergeSourceCoordinate
 
-    tCaseElse
-    @Statements
-    tCaseElseEnd                        %       jmp    mN
-
-    oOperandPushMode(mTrap)
-    oOperandSetValue(trCaseAbort)
-    oEmitSingle(iCall)                  %       call  caseAbort
-
-    oOperandPop;
+    oOperandPushMode(mLineNum)
+    oOperandSetLength(word)
+    @OperandForceToStack
+    oOperandPop
+    
+    [
+        | tCaseElse:
+            @Statements
+            tCaseElseEnd                        %       jmp    mN
+            oEmitCaseMergeBranch
+        | *:
+            oOperandPushMode(mTrap)
+            oOperandSetValue(trCaseAbort)
+            oEmitSingle(iCall)                  %       call  caseAbort
+            oOperandPop
+    ];
 
 
 EmitCaseSubscriptJump:
