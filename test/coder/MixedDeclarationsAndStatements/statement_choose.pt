@@ -1,0 +1,10 @@
+using output;
+val x=1;
+choose x of
+	when 1 then
+		put(1);
+	when 2 then
+		put(2);
+	when 3 then
+		put(3);
+end;
