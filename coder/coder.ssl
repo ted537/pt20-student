@@ -2957,7 +2957,9 @@ OperandEqualPop:
 
 OperandLengthPop:
 	@SaveTempRegsToStack
+	% move string address from operand stack to general stack
 	@OperandForceToStack
+	oOperandPop 
 	% call trap
 	oOperandPushMode(mTrap)
 	oOperandSetValue(trLength)
