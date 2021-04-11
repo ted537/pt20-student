@@ -166,6 +166,8 @@ type Integer:
         trEoln = 15
         trEof = 16
 
+        trLength=105
+
         % Data kinds
         byte = 1
         word = 2   % 4 bytes on x86
@@ -761,7 +763,7 @@ Block:
             oFixForwardBranch   
             oFixPopAddress
         % Cases copied from the Statements rule to mix declarations and statements
-		    | tAssignBegin:
+		| tAssignBegin:
             @AssignStmt
         | tCallBegin:
             @CallStmt
@@ -867,8 +869,8 @@ OperandNextArgument:
 
 Statements:
     % Previous passes have removed redundant begin-end markers.
-	@Block
-	;
+    @Block
+    ;
 
 
 AssignStmt:
@@ -1343,6 +1345,7 @@ ReadParameter:
     tLiteralAddress
     @OperandPushVariable
     @OperandForceToStack                %       pushl   filedesc
+
     @OperandPopAndFreeTemp
     tVarParm
     tParmEnd
@@ -1537,6 +1540,8 @@ OperandPushExpression:
             @OperandEolnFunction
         | tEOF:
             @OperandEofFunction
+        | tLength:
+            @OperandLengthPop
         | *:
             >
     ]};
@@ -2950,6 +2955,41 @@ OperandEqualPop:
             ]
     ];
 
+OperandLengthPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to general stack
+    @OperandForceToStack
+    oOperandPop 
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trLength)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop argument
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(four)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+    % move to scratch register
+    oOperandPushMode(mScratchReg1)
+    oOperandSetLength(word)
+    oOperandPushTemp
+    oEmitDouble(iMov)
+    oOperandPop
+    oOperandPop
+    
+    @RestoreTempRegsFromStack
+    
+    % put scratch register back to temp register
+    @OperandPushTempWord
+    oOperandPushMode(mScratchReg1)
+    oEmitDouble(iMov)
+    oOperandPop
+    ;
 
 OperandGreaterPop:
     % Compare the top 2 operands to see if the left (second) operand
