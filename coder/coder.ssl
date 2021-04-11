@@ -166,6 +166,7 @@ type Integer:
         trEoln = 15
         trEof = 16
 
+        trSubstring=104
         trLength=105
         trStringEq=107
 
@@ -1545,6 +1546,8 @@ OperandPushExpression:
             @OperandLengthPop
         | tStringEq:
             @OperandStrEqPopPop
+        | tSubstring:
+            @OperandSubstrPopPopPop
         | *:
             >
     ]};
@@ -2960,7 +2963,7 @@ OperandEqualPop:
 
 OperandLengthPop:
     @SaveTempRegsToStack
-    % move string address from operand stack to general stack
+    % move string address from operand stack to runtime stack
     @OperandForceToStack
     oOperandPop 
     % call trap
@@ -2994,12 +2997,26 @@ OperandLengthPop:
     oOperandPop
     ;
 
+TempToScratch:
+    oOperandPushMode(mScratchReg1)
+    oOperandSetLength(word)
+    oOperandPushTemp
+    oEmitDouble(iMov)
+    oOperandPop
+    oOperandPop;
+
+ScratchToTemp:
+    @OperandPushTempWord
+    oOperandPushMode(mScratchReg1)
+    oEmitDouble(iMov)
+    oOperandPop;
+
 OperandStrEqPopPop:
     @SaveTempRegsToStack
-    % move string address from operand stack to general stack
+    % move string address from operand stack to runtime stack
     @OperandForceToStack
     oOperandPop
-    % move string address from operand stack to general stack
+    % move string address from operand stack to runtime stack
     @OperandForceToStack
     oOperandPop
     % call trap
@@ -3031,6 +3048,35 @@ OperandStrEqPopPop:
     oOperandPushMode(mScratchReg1)
     oEmitDouble(iMov)
     oOperandPop
+    ;
+
+OperandSubstrPopPopPop:
+    @SaveTempRegsToStack
+    % pop args from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trSubstring)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop args
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(twelve)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
     ;
 
 OperandGreaterPop:
