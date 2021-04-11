@@ -2961,6 +2961,21 @@ OperandEqualPop:
             ]
     ];
 
+
+TempToScratch:
+    oOperandPushMode(mScratchReg1)
+    oOperandSetLength(word)
+    oOperandPushTemp
+    oEmitDouble(iMov)
+    oOperandPop
+    oOperandPop;
+
+ScratchToTemp:
+    @OperandPushTempWord
+    oOperandPushMode(mScratchReg1)
+    oEmitDouble(iMov)
+    oOperandPop;
+
 OperandLengthPop:
     @SaveTempRegsToStack
     % move string address from operand stack to runtime stack
@@ -2980,36 +2995,11 @@ OperandLengthPop:
     oEmitDouble(iAdd)
     oOperandPop
     oOperandPop
-    % move to scratch register
-    oOperandPushMode(mScratchReg1)
-    oOperandSetLength(word)
-    oOperandPushTemp
-    oEmitDouble(iMov)
-    oOperandPop
-    oOperandPop
-    
+
+    @TemptoScratch
     @RestoreTempRegsFromStack
-    
-    % put scratch register back to temp register
-    @OperandPushTempWord
-    oOperandPushMode(mScratchReg1)
-    oEmitDouble(iMov)
-    oOperandPop
+    @ScratchToTemp
     ;
-
-TempToScratch:
-    oOperandPushMode(mScratchReg1)
-    oOperandSetLength(word)
-    oOperandPushTemp
-    oEmitDouble(iMov)
-    oOperandPop
-    oOperandPop;
-
-ScratchToTemp:
-    @OperandPushTempWord
-    oOperandPushMode(mScratchReg1)
-    oEmitDouble(iMov)
-    oOperandPop;
 
 OperandStrEqPopPop:
     @SaveTempRegsToStack
@@ -3041,13 +3031,9 @@ OperandStrEqPopPop:
     oOperandPop
     oOperandPop
     
+    @TempToScratch
     @RestoreTempRegsFromStack
-    
-    % put scratch register back to temp register
-    @OperandPushTempWord
-    oOperandPushMode(mScratchReg1)
-    oEmitDouble(iMov)
-    oOperandPop
+    @ScratchToTemp
     ;
 
 OperandSubstrPopPopPop:
