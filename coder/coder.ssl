@@ -1549,6 +1549,8 @@ OperandPushExpression:
             @OperandStrEqPopPop
         | tSubstring:
             @OperandSubstrPopPopPop
+	| tConcatenate:
+		@OperandConcatenatePopPop
         | *:
             >
     ]};

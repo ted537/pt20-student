@@ -1,0 +1,3 @@
+using output;
+put("hello" | "world");
+putln;
