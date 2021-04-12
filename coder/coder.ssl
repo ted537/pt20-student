@@ -170,6 +170,7 @@ type Integer:
         trSubstring=104
         trLength=105
         trStringEq=107
+        trRepeatString=110
 
         % Data kinds
         byte = 1
@@ -1552,6 +1553,8 @@ OperandPushExpression:
             @OperandStrEqPopPop
         | tSubstring:
             @OperandSubstrPopPopPop
+        | tRepeatString:
+            @OperandRepeatStringPop
         | *:
             >
     ]};
@@ -3068,6 +3071,33 @@ OperandSubstrPopPopPop:
     oOperandPushMode(mManifest)
     oOperandSetLength(word)
     oOperandSetValue(twelve)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+
+OperandRepeatStringPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trRepeatString)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop arguements
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(eight)
     oEmitDouble(iAdd)
     oOperandPop
     oOperandPop
