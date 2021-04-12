@@ -5,6 +5,8 @@ val x = 2;
 choose x of
     when 1 then
         put(1:1);
+        putln;
     else
         put(x:1);
+        putln;
 end;
