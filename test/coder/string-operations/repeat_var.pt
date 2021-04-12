@@ -1,0 +1,7 @@
+using output;
+val x = "hello";
+put(x);
+putln;
+var y = x || 3;
+put(y);
+putln;
