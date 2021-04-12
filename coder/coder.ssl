@@ -166,6 +166,7 @@ type Integer:
         trEoln = 15
         trEof = 16
 
+        trAssignStr=101
         trSubstring=104
         trLength=105
         trStringEq=107
@@ -794,7 +795,7 @@ Block:
                     oOperandSwap
                     @OperandAssignIntegerPopPop
                 | tStoreChar:
-                    oOperandSetLength(byte)
+                    oOperandSetLength(word)
                     oOperandSwap
                     @OperandAssignCharPopPop
                 | tStoreBoolean:
@@ -837,7 +838,7 @@ Routine:
                             oOperandSetLength(word)
                             @OperandAssignIntegerPopPop
                         | tStoreChar:
-                            oOperandSetLength(byte)
+                            oOperandSetLength(word)
                             @OperandAssignCharPopPop
                         | tStoreBoolean:
                             oOperandSetLength(byte)
@@ -1473,6 +1474,13 @@ TrapStmt:
             oOperandPop                                 
     ];
 
+EmitString:
+    % Emit string literal to data area
+    oEmitNone(iData)                    %       .data
+    tStringData
+    oEmitString                         % sNNN: .asciz  "SSSSS"
+    oEmitNone(iText)                    %       .text
+    ;
 
 OperandPushExpression:
     {[
@@ -1489,11 +1497,7 @@ OperandPushExpression:
             oOperandPushStringAddress
             @EmitStringAddress                  %       lea     sNNN, %T
         | tSkipString:
-            % Emit string literal to data area
-            oEmitNone(iData)                    %       .data
-            tStringData
-            oEmitString                         % sNNN: .asciz  "SSSSS"
-            oEmitNone(iText)                    %       .text
+            @EmitString
         | tNegate:
             @OperandNegate
         | tAdd:
@@ -1990,6 +1994,8 @@ OperandPushExpressionAssignPopPop:
         | tAssignBoolean:
             @OperandAssignBooleanPopPop
             >
+        | tSkipString:
+            @EmitString
         | tNegate:
             [
                 | tAssignInteger:
@@ -2814,12 +2820,18 @@ OperandAssignIntegerPopPop:
 OperandAssignCharPopPop:
     % Generate code to assign the right (top) operand's value to
     % the left (second) operand and pop both operands.
-
-    oOperandSetLength(byte)
-    @EmitMove                   %       movb    y, x
-    @OperandPopAndFreeTemp
-    @OperandPopAndFreeTemp;
-
+    % get the string on the stack
+    oOperandSetLength(string)
+    @OperandForceToStack
+    oOperandPop
+    oOperandSetLength(string)
+    @OperandForceToStack
+    oOperandPop
+    % emit assignment trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trAssignStr)
+    oEmitSingle(iCall)
+    oOperandPop;
 
 OperandAssignBooleanPopPop:
     % Generate code to assign the right (top) operand's value to
