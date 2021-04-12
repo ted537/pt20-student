@@ -169,6 +169,7 @@ type Integer:
         trSubstring=104
         trLength=105
         trStringEq=107
+		trConcatenate=103
 
         % Data kinds
         byte = 1
@@ -3064,6 +3065,38 @@ OperandSubstrPopPopPop:
     @RestoreTempRegsFromStack
     @ScratchToTemp
     ;
+	
+OperandConcatenatePopPop: 
+
+	@SaveTempRegsToStack
+	% First string
+    @OperandForceToStack
+    oOperandPop
+	% Second string
+    @OperandForceToStack
+    oOperandPop
+    
+	% Concatenate String
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trConcatenate)
+    oEmitSingle(iCall)				% call pttrap 103
+    oOperandPop
+	
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(eight)
+    oEmitDouble(iAdd) 				% addl $8, %esp
+    oOperandPop
+    oOperandPop
+	
+	@TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+	
+	;
+
 
 OperandGreaterPop:
     % Compare the top 2 operands to see if the left (second) operand
