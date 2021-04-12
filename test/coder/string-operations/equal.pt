@@ -1,0 +1,15 @@
+using output;
+if ("hello"=="hello") then
+	put("hello equals hello");
+	putln;
+else
+	put("uh oh");
+	putln;
+end;
+if ("red"=="blue") then
+	put("uh oh");
+	putln;
+else
+	put("red does not equal blue");
+	putln;
+end;

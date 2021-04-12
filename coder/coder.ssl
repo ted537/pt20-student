@@ -166,9 +166,16 @@ type Integer:
         trEoln = 15
         trEof = 16
 
+        trAssignStr=101
+        trSubstring=104
+        trLength=105
+        trStringEq=107
+        trRepeatString=110
+
         % Data kinds
         byte = 1
-        word = 2;   % 4 bytes on x86
+        word = 2   % 4 bytes on x86
+        string = 3;
 
 
 type Boolean:
@@ -759,11 +766,48 @@ Block:
             @Routine
             oFixForwardBranch   
             oFixPopAddress
+        % Cases copied from the Statements rule to mix declarations and statements
+        | tAssignBegin:
+            @AssignStmt
+        | tCallBegin:
+            @CallStmt
+        | tIfBegin:
+            @IfStmt
+        | tWhileBegin:
+            @WhileStmt
+        | tRepeatBegin:
+            @RepeatStmt
+        | tCaseBegin:
+            @CaseStmt
+        | tWriteBegin:
+            @WriteProc
+        | tReadBegin:
+            @ReadProc
+        | tTrapBegin:
+            @TrapStmt
+        | tInitialValue:
+            @OperandPushExpression % accept initial value expression
+            tInitEnd % end of expression
+            tLiteralAddress
+            oOperandPushVariable
+            [
+                | tStoreInteger:
+                    oOperandSetLength(word)
+                    oOperandSwap
+                    @OperandAssignIntegerPopPop
+                | tStoreChar:
+                    oOperandSetLength(word)
+                    oOperandSwap
+                    @OperandAssignCharPopPop
+                | tStoreBoolean:
+                    oOperandSetLength(byte)
+                    oOperandSwap
+                    @OperandAssignBooleanPopPop
+            ]
 
         | *:
             >
-    ]}
-    @Statements;
+    ]};
 
 
 Routine:
@@ -795,7 +839,7 @@ Routine:
                             oOperandSetLength(word)
                             @OperandAssignIntegerPopPop
                         | tStoreChar:
-                            oOperandSetLength(byte)
+                            oOperandSetLength(word)
                             @OperandAssignCharPopPop
                         | tStoreBoolean:
                             oOperandSetLength(byte)
@@ -829,28 +873,8 @@ OperandNextArgument:
 
 Statements:
     % Previous passes have removed redundant begin-end markers.
-    {[
-        | tAssignBegin:
-            @AssignStmt
-        | tCallBegin:
-            @CallStmt
-        | tIfBegin:
-            @IfStmt
-        | tWhileBegin:
-            @WhileStmt
-        | tRepeatBegin:
-            @RepeatStmt
-        | tCaseBegin:
-            @CaseStmt
-        | tWriteBegin:
-            @WriteProc
-        | tReadBegin:
-            @ReadProc
-        | tTrapBegin:
-            @TrapStmt
-        | *:
-            >   % End of statement list or empty statement
-    ]};
+    @Block
+    ;
 
 
 AssignStmt:
@@ -1331,6 +1355,7 @@ ReadParameter:
     tLiteralAddress
     @OperandPushVariable
     @OperandForceToStack                %       pushl   filedesc
+
     @OperandPopAndFreeTemp
     tVarParm
     tParmEnd
@@ -1456,6 +1481,13 @@ TrapStmt:
             oOperandPop                                 
     ];
 
+EmitString:
+    % Emit string literal to data area
+    oEmitNone(iData)                    %       .data
+    tStringData
+    oEmitString                         % sNNN: .asciz  "SSSSS"
+    oEmitNone(iText)                    %       .text
+    ;
 
 OperandPushExpression:
     {[
@@ -1472,11 +1504,7 @@ OperandPushExpression:
             oOperandPushStringAddress
             @EmitStringAddress                  %       lea     sNNN, %T
         | tSkipString:
-            % Emit string literal to data area
-            oEmitNone(iData)                    %       .data
-            tStringData
-            oEmitString                         % sNNN: .asciz  "SSSSS"
-            oEmitNone(iText)                    %       .text
+            @EmitString
         | tNegate:
             @OperandNegate
         | tAdd:
@@ -1525,6 +1553,14 @@ OperandPushExpression:
             @OperandEolnFunction
         | tEOF:
             @OperandEofFunction
+        | tLength:
+            @OperandLengthPop
+        | tStringEq:
+            @OperandStrEqPopPop
+        | tSubstring:
+            @OperandSubstrPopPopPop
+        | tRepeatString:
+            @OperandRepeatStringPop
         | *:
             >
     ]};
@@ -1564,8 +1600,10 @@ OperandPushVariable:
     ]
     [
         | tFetchInteger:
-        | tFetchChar, tFetchBoolean:
+        | tFetchBoolean:
             oOperandSetLength(byte)
+        | tFetchChar:
+            oOperandSetLength(string)
         | *: 
             % Value is not to be loaded
     ] ;
@@ -1668,7 +1706,12 @@ OperandCheckedSubscriptNonManifestIntegerPop:
     % Scale subscript by word size              % ... arraydesc, %T
     oOperandPushMode(mManifest)
     oOperandSetLength(word)
-    oOperandSetValue(two)                       % ... arraydesc, %T, 2
+    [ oOperandChooseLength
+        | word, byte:
+            oOperandSetValue(two)               % ... arraydesc, %T, 2
+        | string:
+            oOperandSetValue(eight)
+    ]
     oEmitDouble(iShl)                           %       shll    $2, %T
     oOperandPop                                 % ... arraydesc, %T
 
@@ -1960,6 +2003,8 @@ OperandPushExpressionAssignPopPop:
         | tAssignBoolean:
             @OperandAssignBooleanPopPop
             >
+        | tSkipString:
+            @EmitString
         | tNegate:
             [
                 | tAssignInteger:
@@ -2537,8 +2582,6 @@ OperandOrd:
     % Fill a register with integer zero
     oOperandPushMode(mManifest)
     oOperandSetValue(zero)
-    oOperandSetLength(word)
-    @OperandForceIntoTemp       %       movl    $0, %T
     % Move the character value into the low order byte
     oOperandSetLength(byte)
     oOperandSwap
@@ -2786,12 +2829,18 @@ OperandAssignIntegerPopPop:
 OperandAssignCharPopPop:
     % Generate code to assign the right (top) operand's value to
     % the left (second) operand and pop both operands.
-
-    oOperandSetLength(byte)
-    @EmitMove                   %       movb    y, x
-    @OperandPopAndFreeTemp
-    @OperandPopAndFreeTemp;
-
+    % get the string on the stack
+    oOperandSetLength(string)
+    @OperandForceToStack
+    oOperandPop
+    oOperandSetLength(string)
+    @OperandForceToStack
+    oOperandPop
+    % emit assignment trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trAssignStr)
+    oEmitSingle(iCall)
+    oOperandPop;
 
 OperandAssignBooleanPopPop:
     % Generate code to assign the right (top) operand's value to
@@ -2934,6 +2983,136 @@ OperandEqualPop:
     ];
 
 
+TempToScratch:
+    oOperandPushMode(mScratchReg1)
+    oOperandSetLength(word)
+    oOperandPushTemp
+    oEmitDouble(iMov)
+    oOperandPop
+    oOperandPop;
+
+ScratchToTemp:
+    @OperandPushTempWord
+    oOperandPushMode(mScratchReg1)
+    oEmitDouble(iMov)
+    oOperandPop;
+
+OperandLengthPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop 
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trLength)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop argument
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(four)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TemptoScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+
+OperandStrEqPopPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trStringEq)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop argument
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(four)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+    % move to scratch register
+    oOperandPushMode(mScratchReg1)
+    oOperandSetLength(word)
+    oOperandPushTemp
+    oEmitDouble(iMov)
+    oOperandPop
+    oOperandPop
+    
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+
+OperandSubstrPopPopPop:
+    @SaveTempRegsToStack
+    % pop args from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trSubstring)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop args
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(twelve)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+
+OperandRepeatStringPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trRepeatString)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop arguements
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(eight)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+
 OperandGreaterPop:
     % Compare the top 2 operands to see if the left (second) operand
     % is greater than the right (top) operand.  Pop both operands and push
@@ -3032,6 +3211,9 @@ OperandForceIntoTemp:
                     @OperandPushTempByte
                 | word:
                     @OperandPushTempWord
+                | string:
+                    @OperandForceAddressIntoTemp
+                    >>
             ]
             oOperandSwap
             oEmitDouble(iMov)   % mov(b) operand, dN
@@ -3155,6 +3337,8 @@ OperandForceToStack:
                 @OperandForceIntoTemp
                 oOperandSetLength(word)
         | word:
+        | string:
+                @OperandForceAddressIntoTemp
     ]
     oEmitSingle(iPush)
     @OperandPopAndFreeTemp

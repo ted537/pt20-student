@@ -6,9 +6,15 @@
 
    Date 30 Jun 1980
          (x86 conversion 6 Jan 2011)
+         (Like additions Jan 2021)
 */
 
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+
+/* Safe string duplicates */
+char * NewStr(); 
 
 #define BLANK ' '
 #define ERROR -1
@@ -43,8 +49,8 @@ struct fileStreams
     }; 
 struct fileStreams fileStreams[MAXFILES] = 
     {
-        READ,        0, "stdin",
-        WRITE,        0, "stdout"
+        READ,   0, "stdin",
+        WRITE,  0, "stdout"
     };
 
 FILE * OpenTest ();
@@ -315,6 +321,106 @@ pttrap16 (fileNumber)        /* eof function */
     }
 
 
+/* Like additions */
+
+pttrap101 (s1, s2)      /* assign string */
+    char *s1,*s2;
+    {
+        /* s1 := s2 */
+        strncpy (s1, s2, 256);
+    }
+
+char * pttrap102 (i1)      /* chr string */
+    int i1;
+    {
+        /* chr (i1) */
+        char s1 [256];
+        char *s3;
+        s1 [0] = i1;
+        s1 [1] = '\0';
+        s3 = NewStr (s1);
+        return (s3);
+    }
+
+char * pttrap103 (s1, s2)        /* concatenate */
+    char *s1,*s2;
+    {
+        char *s3;
+        s3 = NewStr (s1);
+        /* s3 := s1 + s2 */
+        strncpy (s3, s1, 256);
+        strncat (s3, s2, 256);
+        return (s3);
+    }
+
+char * pttrap104 (s, start, end)        /* substring */
+    char *s;
+    int start,end;
+    {
+        int count;
+        char *s3;
+        s3 = NewStr (s);
+        /* s3 := s3 / start : end */
+        count = end - start + 1;
+        sprintf(s3, "%.*s", count, s + start - 1);
+        return (s3);
+    }
+
+int pttrap105 (s1)        /* string length */
+    char *s1;
+    {
+        return (strlen (s1));
+    }
+
+int pttrap106 (s1, s2)        /* string index */
+    char  *s1, *s2;
+    {
+        char *x;
+        x = strstr (s1, s2);
+        if (x == NULL)
+            return (0);
+        else
+            return (x - s1 + 1);
+   }
+
+
+int pttrap107 (s1, s2)        /* strings equal */
+    char *s1, *s2;
+    {
+        if (strcmp (s1, s2) == 0) 
+            return (1);
+        else
+            return (0);
+    }
+
+pttrap108 (string, fileNumber)        /* read string */
+    char  *string;
+    int   fileNumber;
+    {
+        GetStr (OpenTest (fileNumber, READ), string);
+   }
+
+pttrap109 (fieldWidth, string, fileNumber)        /* write string */
+    char  *string;
+    int   fieldWidth, fileNumber;
+    {
+        PutStr (OpenTest (fileNumber, WRITE), strlen (string), 
+             string, fieldWidth);
+   }
+
+char * pttrap110 (s, n)        /* repeat string */
+    char *s;
+    int n;
+    {
+        char *s3;
+        s3 = NewStr (s);
+        /* s3 := s3 * n */
+        for (int i=2; i <= n; i++) {
+            strncat (s3, s, 256);
+	}
+        return (s3);
+    }
+
 /* auxiliary helper routines */
 
 char * NameFile (fileNumber)
@@ -375,6 +481,15 @@ PutStr (f, length, str, width)
         if ( (n=length) > 0) do fputc (*str++, f); while (--n);
     }
 
+GetStr (f, str)
+        FILE *f;
+        char *str;
+    {
+        fgets (str, 1023, f);
+        str [strlen (str) - 1] = '\0';
+        if (!feof(f)) ungetc ('\n', f); 
+    }
+
 Open (fileNumber, mode)
     int  fileNumber;
     int mode;
@@ -414,3 +529,11 @@ PutInt (f, value, width)
         PutStr (f, &intBuf[12]-cp, cp, width);
     }
 
+char * NewStr (s)
+    char *s;
+    {
+        char *news;
+        news = (char *) malloc (256);
+        strncpy (news, s, 256);
+        return (news);
+    }

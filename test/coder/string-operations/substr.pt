@@ -1,0 +1,3 @@
+using output;
+put("hello world"/7:11);
+putln;

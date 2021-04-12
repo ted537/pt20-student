@@ -1,0 +1,4 @@
+using output;
+val x = 1;
+put(x:1);
+putln;

@@ -1,0 +1,4 @@
+using output;
+var x = 2;
+put(x:1);
+putln;

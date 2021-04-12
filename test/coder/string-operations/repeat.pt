@@ -1,0 +1,3 @@
+using output;
+put("hello"||2:1);
+putln;

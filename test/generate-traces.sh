@@ -1,7 +1,8 @@
 #!/bin/bash
 # generate all required ssltraces for evaluation
 
-semantic_test_dirs="$coder_test_dirs test/semantic test/examples test/coder"
+coder_test_dirs="test/coder"
+semantic_test_dirs="$coder_test_dirs test/semantic test/examples"
 parser_test_dirs="$semantic_test_dirs test/parser"
 scanner_test_dirs="$parser_test_dirs test/scanner"
 
@@ -15,4 +16,8 @@ done
 
 for test_case in $(./test/find_test_cases.sh $semantic_test_dirs); do
     ./test/semantic-trace.sh $test_case;
+done
+
+for test_case in $(./test/find_test_cases.sh $coder_test_dirs); do
+    ./test/coder-trace.sh $test_case;
 done

@@ -95,6 +95,7 @@ program Coder (output, coderSsl, tCode, object, options);
 
         { Machine word size }
         wordSize = 4;           { longword (4 bytes) on SUN }
+        stringSize = 256;
 
         { Temporary regs - %ebx, %ecx, %esi, %edi }
         firstTempReg = 1;       
@@ -1183,7 +1184,7 @@ program Coder (output, coderSsl, tCode, object, options);
     procedure OperandPushStringAddress;
         { Push an operand stack entry for the string's address }
         begin
-            Assert ( (compoundToken = tLiteralString), assert28);
+            { Assert ( (compoundToken = tStringData), assert28); }
             OperandPush (mStatic, compoundTokenValue, undefined, word);
         end { OperandPushStringAddress };
 
@@ -1403,6 +1404,8 @@ program Coder (output, coderSsl, tCode, object, options);
                     if operandStkLength[operandStkTop-1] = word then
                         { Convert a byte offset to a word offset }
                         subscript := subscript * wordSize;
+                    if operandStkLength[operandStkTop-1] = string then
+                        subscript := subscript * stringSize;
                     { Set the subscripted varable's address.  Note that the array variable's 
                       address points to the base of a 2 word descriptor (lower, upper bound). }
                     operandStkValue[operandStkTop-1] := 
@@ -1487,7 +1490,9 @@ program Coder (output, coderSsl, tCode, object, options);
                                         read (tCode, compoundTokenText[i]);
                                         i := i + 1
                                     end;
-                                nextTCodeAddress := nextTCodeAddress + compoundTokenLength;
+                                { read null terminator }
+                                read(tCode,i);
+                                nextTCodeAddress := nextTCodeAddress + compoundTokenLength + 1;
                             end;
                     end         { case compoundToken }
                 end;

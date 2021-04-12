@@ -1,0 +1,4 @@
+using output;
+var five = #"hello";
+put(five:1);
+putln;
