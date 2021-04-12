@@ -1214,16 +1214,22 @@ EmitDefaultCaseAbort:
     oFixSwapAddresses                   % (keep branch around case body on top)
     oEmitMergeSourceCoordinate
 
-    % Call case abort trap (never returns)
-    oOperandPushMode(mLineNum)          % ... n
+    oOperandPushMode(mLineNum)
     oOperandSetLength(word)
-    @OperandForceToStack                %       pushl   n
-    oOperandPop                         % ...
-    oOperandPushMode(mTrap)
-    oOperandSetValue(trCaseAbort)
-    oEmitSingle(iCall)                  %       call  caseAbort
-
-    oOperandPop;
+    @OperandForceToStack
+    oOperandPop
+    
+    [
+        | tCaseElse:
+            @Statements
+            tCaseElseEnd                        %       jmp    mN
+            oEmitCaseMergeBranch
+        | *:
+            oOperandPushMode(mTrap)
+            oOperandSetValue(trCaseAbort)
+            oEmitSingle(iCall)                  %       call  caseAbort
+            oOperandPop
+    ];
 
 
 EmitCaseSubscriptJump:
