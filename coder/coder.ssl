@@ -165,10 +165,12 @@ type Integer:
         trEoln = 15
         trEof = 16
 
+        trAssignStr=101
         trConcatenate=103
         trSubstring=104
         trLength=105
         trStringEq=107
+        trRepeatString=110
 
         % Data kinds
         byte = 1
@@ -794,7 +796,7 @@ Block:
                     oOperandSwap
                     @OperandAssignIntegerPopPop
                 | tStoreChar:
-                    oOperandSetLength(byte)
+                    oOperandSetLength(word)
                     oOperandSwap
                     @OperandAssignCharPopPop
                 | tStoreBoolean:
@@ -837,7 +839,7 @@ Routine:
                             oOperandSetLength(word)
                             @OperandAssignIntegerPopPop
                         | tStoreChar:
-                            oOperandSetLength(byte)
+                            oOperandSetLength(word)
                             @OperandAssignCharPopPop
                         | tStoreBoolean:
                             oOperandSetLength(byte)
@@ -1212,16 +1214,22 @@ EmitDefaultCaseAbort:
     oFixSwapAddresses                   % (keep branch around case body on top)
     oEmitMergeSourceCoordinate
 
-    % Call case abort trap (never returns)
-    oOperandPushMode(mLineNum)          % ... n
+    oOperandPushMode(mLineNum)
     oOperandSetLength(word)
-    @OperandForceToStack                %       pushl   n
-    oOperandPop                         % ...
-    oOperandPushMode(mTrap)
-    oOperandSetValue(trCaseAbort)
-    oEmitSingle(iCall)                  %       call  caseAbort
-
-    oOperandPop;
+    @OperandForceToStack
+    oOperandPop
+    
+    [
+        | tCaseElse:
+            @Statements
+            tCaseElseEnd                        %       jmp    mN
+            oEmitCaseMergeBranch
+        | *:
+            oOperandPushMode(mTrap)
+            oOperandSetValue(trCaseAbort)
+            oEmitSingle(iCall)                  %       call  caseAbort
+            oOperandPop
+    ];
 
 
 EmitCaseSubscriptJump:
@@ -1473,6 +1481,13 @@ TrapStmt:
             oOperandPop                                 
     ];
 
+EmitString:
+    % Emit string literal to data area
+    oEmitNone(iData)                    %       .data
+    tStringData
+    oEmitString                         % sNNN: .asciz  "SSSSS"
+    oEmitNone(iText)                    %       .text
+    ;
 
 OperandPushExpression:
     {[
@@ -1489,11 +1504,7 @@ OperandPushExpression:
             oOperandPushStringAddress
             @EmitStringAddress                  %       lea     sNNN, %T
         | tSkipString:
-            % Emit string literal to data area
-            oEmitNone(iData)                    %       .data
-            tStringData
-            oEmitString                         % sNNN: .asciz  "SSSSS"
-            oEmitNone(iText)                    %       .text
+            @EmitString
         | tNegate:
             @OperandNegate
         | tAdd:
@@ -1550,6 +1561,8 @@ OperandPushExpression:
             @OperandSubstrPopPopPop
         | tConcatenate:
             @OperandConcatenatePopPop
+        | tRepeatString:
+            @OperandRepeatStringPop
         | *:
             >
     ]};
@@ -1992,6 +2005,8 @@ OperandPushExpressionAssignPopPop:
         | tAssignBoolean:
             @OperandAssignBooleanPopPop
             >
+        | tSkipString:
+            @EmitString
         | tNegate:
             [
                 | tAssignInteger:
@@ -2816,12 +2831,18 @@ OperandAssignIntegerPopPop:
 OperandAssignCharPopPop:
     % Generate code to assign the right (top) operand's value to
     % the left (second) operand and pop both operands.
-
-    oOperandSetLength(byte)
-    @EmitMove                   %       movb    y, x
-    @OperandPopAndFreeTemp
-    @OperandPopAndFreeTemp;
-
+    % get the string on the stack
+    oOperandSetLength(string)
+    @OperandForceToStack
+    oOperandPop
+    oOperandSetLength(string)
+    @OperandForceToStack
+    oOperandPop
+    % emit assignment trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trAssignStr)
+    oEmitSingle(iCall)
+    oOperandPop;
 
 OperandAssignBooleanPopPop:
     % Generate code to assign the right (top) operand's value to
@@ -3096,6 +3117,33 @@ OperandConcatenatePopPop:
     @ScratchToTemp
     ;
 
+
+OperandRepeatStringPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trRepeatString)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop arguements
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(eight)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
 
 OperandGreaterPop:
     % Compare the top 2 operands to see if the left (second) operand
