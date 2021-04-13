@@ -165,10 +165,10 @@ type Integer:
         trEoln = 15
         trEof = 16
 
+        trConcatenate=103
         trSubstring=104
         trLength=105
         trStringEq=107
-		trConcatenate=103
 
         % Data kinds
         byte = 1
@@ -1548,8 +1548,8 @@ OperandPushExpression:
             @OperandStrEqPopPop
         | tSubstring:
             @OperandSubstrPopPopPop
-	| tConcatenate:
-	    @OperandConcatenatePopPop
+        | tConcatenate:
+            @OperandConcatenatePopPop
         | *:
             >
     ]};
@@ -3066,7 +3066,7 @@ OperandSubstrPopPopPop:
     @RestoreTempRegsFromStack
     @ScratchToTemp
     ;
-	
+    
 OperandConcatenatePopPop: 
     @SaveTempRegsToStack
     % First string
@@ -3079,18 +3079,18 @@ OperandConcatenatePopPop:
     % Concatenate String
     oOperandPushMode(mTrap)
     oOperandSetValue(trConcatenate)
-    oEmitSingle(iCall)				% call pttrap 103
+    oEmitSingle(iCall)              % call pttrap 103
     oOperandPop
-	
+    
     oOperandPushMode(mStackReg)
     oOperandSetLength(word)
     oOperandPushMode(mManifest)
     oOperandSetLength(word)
     oOperandSetValue(eight)
-    oEmitDouble(iAdd) 				% addl $8, %esp
+    oEmitDouble(iAdd)               % addl $8, %esp
     oOperandPop
     oOperandPop
-	
+    
     @TempToScratch
     @RestoreTempRegsFromStack
     @ScratchToTemp
