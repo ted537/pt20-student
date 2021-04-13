@@ -1634,8 +1634,8 @@ OperandSubscriptIntegerPop:
 
 
 OperandSubscriptCharPop:
-	% no manifest folding
-	@OperandSubscriptNonManifestCharPop
+    % no manifest folding
+    @OperandSubscriptNonManifestCharPop
     oOperandSetLength(byte);
 
 
@@ -1892,7 +1892,7 @@ OperandCheckedSubscriptNonManifestCharPop:
     % Scale subscript by string size              % ... arraydesc, %T
     oOperandPushMode(mManifest)
     oOperandSetLength(word)
-	oOperandSetValue(eight)
+    oOperandSetValue(eight)
     oEmitDouble(iShl)                           %       shll    $2, %T
     oOperandPop                                 % ... arraydesc, %T
 
