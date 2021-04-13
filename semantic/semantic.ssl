@@ -954,10 +954,11 @@ TypeTblEnterIfNew:
             | *:
         ];
 
-IndexType :
+IndexType : % push (lower,upper) to value stack
         % Accept and fill in index bounds of array type stack entry
         oValuePush(one) % lower bound always 1
         @ConstantValue % this will push the upper bound 
+		oTypeStkPop % assume constant is the right type
         [ oTypeStkVerifyBounds
             | yes:
                 oTypeStkEnterBounds
@@ -965,10 +966,7 @@ IndexType :
                 oValuePop
                 @ValuePushValuePlusOne
                 oTypeStkEnterBounds
-        ]
-        oTypeStkPop % array bound type
-        oValuePop       % subrange upper
-        oValuePop;      % lower bound
+        ];
 
 ComponentType :
         % Accept and fill in an  array or file component type
@@ -982,6 +980,12 @@ ComponentType :
                 oTypeStkLinkToStandardType(stdInteger)
             | *:
         ]
+		% grab bounds from index type
+		oTypeStkEnterBounds
+		oValuePop
+		oValuePop
+		
+		% put in table and reference
         @TypeTblEnterIfNew
         oTypeStkEnterComponentReference
         oTypeStkPop;
