@@ -3,7 +3,9 @@
 src=$1
 
 # generate assembly
-./bin/ptc -S -L lib/pt $src
+compile_messages=$(./bin/ptc -S -L lib/pt $src)
+echo $compile_messages
+echo $compile_messages > $src.compile
 mv -f *.s $(dirname $src)
 # generate executable
 # execute silently to avoid duplicate outputs for coder errors
