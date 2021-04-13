@@ -18,7 +18,6 @@
 %    stack during expression processing.  The coder translates Boolean
 %    expressions into control flow.
 
-
 Input:
         % T-code tokens - must match output tokens in semantic.ssl exactly!
 
@@ -167,6 +166,7 @@ type Integer:
         trEof = 16
 
         trAssignStr=101
+        trConcatenate=103
         trSubstring=104
         trLength=105
         trStringEq=107
@@ -1559,6 +1559,8 @@ OperandPushExpression:
             @OperandStrEqPopPop
         | tSubstring:
             @OperandSubstrPopPopPop
+        | tConcatenate:
+            @OperandConcatenatePopPop
         | tRepeatString:
             @OperandRepeatStringPop
         | *:
@@ -3085,6 +3087,36 @@ OperandSubstrPopPopPop:
     @RestoreTempRegsFromStack
     @ScratchToTemp
     ;
+    
+OperandConcatenatePopPop: 
+    @SaveTempRegsToStack
+    % First string
+    @OperandForceToStack
+    oOperandPop
+    % Second string
+    @OperandForceToStack
+    oOperandPop
+    
+    % Concatenate String
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trConcatenate)
+    oEmitSingle(iCall)              % call pttrap 103
+    oOperandPop
+    
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(eight)
+    oEmitDouble(iAdd)               % addl $8, %esp
+    oOperandPop
+    oOperandPop
+    
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+
 
 OperandRepeatStringPop:
     @SaveTempRegsToStack
