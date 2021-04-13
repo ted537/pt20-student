@@ -954,11 +954,12 @@ TypeTblEnterIfNew:
             | *:
         ];
 
-IndexType : % push (lower,upper) to value stack
+% push array to type stack
+IndexType :
         % Accept and fill in index bounds of array type stack entry
         oValuePush(one) % lower bound always 1
         @ConstantValue % this will push the upper bound 
-		oTypeStkPop % assume constant is the right type
+        oTypeStkPop % assume constant is the right type
         [ oTypeStkVerifyBounds
             | yes:
                 oTypeStkEnterBounds
@@ -966,7 +967,9 @@ IndexType : % push (lower,upper) to value stack
                 oValuePop
                 @ValuePushValuePlusOne
                 oTypeStkEnterBounds
-        ];
+        ]
+        oValuePop
+        oValuePop;
 
 ComponentType :
         % Accept and fill in an  array or file component type
@@ -980,12 +983,8 @@ ComponentType :
                 oTypeStkLinkToStandardType(stdInteger)
             | *:
         ]
-		% grab bounds from index type
-		oTypeStkEnterBounds
-		oValuePop
-		oValuePop
-		
-		% put in table and reference
+        
+        % put in table and reference
         @TypeTblEnterIfNew
         oTypeStkEnterComponentReference
         oTypeStkPop;
@@ -1331,7 +1330,7 @@ ProcedurePrologue :
         oCountPop;
 
 PackageDefinition :
-        sIdentifier  oSymbolStkPushLocalIdentifier	% package name
+        sIdentifier  oSymbolStkPushLocalIdentifier  % package name
         [ oSymbolStkChooseKind
             | syUndefined:
             | syExternal:
@@ -1345,18 +1344,18 @@ PackageDefinition :
 
         oSymbolStkSetKind(syPackage)
         oValuePushCodeAddress
-	
+    
         oSymbolStkEnterValue
         oValuePop
-	
+    
         oTypeStkPush(tpNull)
         oTypeStkSetRecursionFlag(yes)
         oTypeTblEnter
-	
+    
         oSymbolStkEnterTypeReference
         oSymbolTblEnter
 
-        oSymbolTblPushScope	% Package scope
+        oSymbolTblPushScope % Package scope
 
         @Block
 
