@@ -1,0 +1,5 @@
+using output;
+var ints [2]: like 1;
+ints[1]=4;
+put(ints[1]:1);
+putln;
