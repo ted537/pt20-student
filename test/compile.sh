@@ -6,5 +6,6 @@ src=$1
 ./bin/ptc -S -L lib/pt $src
 mv -f *.s $(dirname $src)
 # generate executable
-./bin/ptc -L lib/pt $1
+# execute silently to avoid duplicate outputs for coder errors
+./bin/ptc -L lib/pt $1 &> /dev/null
 mv -f *.out $(dirname $src)
