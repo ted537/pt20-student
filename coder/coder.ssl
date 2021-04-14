@@ -1634,24 +1634,8 @@ OperandSubscriptIntegerPop:
 
 
 OperandSubscriptCharPop:
-    % similar to above
-    [ oOperandChooseMode
-        | mManifest:
-            oOperandSwap
-            [ oOperandChooseMode
-                | mTempIndirect:
-                    oOperandSwap
-                    @OperandSubscriptNonManifestCharPop
-                | *:
-                    % tell the folder we are working on bytes
-                    oOperandSetLength(byte)     
-                    oOperandSwap
-                    oOperandFoldManifestSubscript
-                    oOperandPop
-            ]
-        | *:
-            @OperandSubscriptNonManifestCharPop
-    ]
+    % no manifest folding
+    @OperandSubscriptNonManifestCharPop
     oOperandSetLength(byte);
 
 
@@ -1905,6 +1889,13 @@ OperandCheckedSubscriptNonManifestCharPop:
     oOperandSwapLeftAndDest                     % ... arraydesc, %T, lower
     @OperandSubtractPop                         %       subl lower, %T
 
+    % Scale subscript by string size              % ... arraydesc, %T
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(eight)
+    oEmitDouble(iShl)                           %       shll    $2, %T
+    oOperandPop                                 % ... arraydesc, %T
+
     % Add normalized subscript to array address
     oOperandSwap                                % ... %T, arraydesc
     [ oOperandChooseMode
@@ -1934,7 +1925,7 @@ OperandCheckedSubscriptNonManifestCharPop:
 
     % Result element address is in %T
     oOperandSetMode(mTempIndirect)              % ... (%T)
-    oOperandSetLength(byte);
+    oOperandSetLength(string);
 
 
 OperandUncheckedSubscriptNonManifestCharPop:

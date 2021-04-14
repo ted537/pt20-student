@@ -125,3 +125,11 @@ case. If no else is found, the original rule is executed
 * This change was required as a default `else` case is new to Like and 
 it had to be handled
 
+In `coder.ssl` in the `OperandSubscriptCharPop` rule:
+* Since strings are always passed by reference, removed manifest folding
+```
+OperandSubscriptCharPop:
+    % no manifest folding
+    @OperandSubscriptNonManifestCharPop
+    oOperandSetLength(byte);
+```

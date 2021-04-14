@@ -1,0 +1,8 @@
+using output;
+var texts [2]: like "hello";
+texts[1]="hello ";
+texts[2]="world";
+put(texts[1]:1);
+putln;
+put(texts[2]:1);
+putln;
