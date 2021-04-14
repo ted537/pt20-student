@@ -1896,12 +1896,16 @@ OperandCheckedSubscriptNonManifestCharPop:
     oOperandSwapLeftAndDest                     % ... arraydesc, %T, lower
     @OperandSubtractPop                         %       subl lower, %T
 
-    % Scale subscript by string size              % ... arraydesc, %T
-    oOperandPushMode(mManifest)
-    oOperandSetLength(word)
-    oOperandSetValue(eight)
-    oEmitDouble(iShl)                           %       shll    $2, %T
-    oOperandPop                                 % ... arraydesc, %T
+    [ oOperandChooseLength
+        | string:
+            % Scale subscript by string size              % ... arraydesc, %T
+            oOperandPushMode(mManifest)
+            oOperandSetLength(word)
+            oOperandSetValue(eight)
+            oEmitDouble(iShl)                           %       shll    $2, %T
+            oOperandPop                                 % ... arraydesc, %T
+        | *: 
+    ]
 
     % Add normalized subscript to array address
     oOperandSwap                                % ... %T, arraydesc
