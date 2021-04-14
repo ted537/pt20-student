@@ -1,4 +1,4 @@
-# Phase $ Testing Documentation
+# Phase 4 Testing Documentation
 
 **All test cases for phase 4 are contained within the /test/coder directory**
 
@@ -71,3 +71,10 @@ a string to a variable
 repeat the string `n` times
 * `substr.pt` tests that the `/` string operation followed by a range `7:11`
 returns a substring between the provided range
+
+## errors
+The test cases conatined within this folder are to test error cases of new Like
+operations.
+* `bad-subscript.pt` tests that if a subscript is provided outside of the bounds
+of the array, an error is thrown to the user
+* `divide-by-0.pt` tests that if a user attempts to divide by 0, an error is thrown
