@@ -1,0 +1,8 @@
+using output;
+
+pkg package is 
+    var x = 2;
+end;
+
+put(x:1);
+putln;
