@@ -21,4 +21,5 @@ test/**/*.output
 *.semantic
 *.coder
 *.log
+*.compile
 test/coder/**/*.s

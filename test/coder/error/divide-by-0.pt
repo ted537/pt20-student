@@ -1,0 +1,4 @@
+using output;
+// parantheses required to specify field width instead of substring
+put((1/0):1);
+putln;
