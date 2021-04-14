@@ -1489,8 +1489,8 @@ EmitString:
     oEmitNone(iText)                    %       .text
     ;
 
-OperandPushExpression:
-    {[
+OperandPushOperand >> Boolean:
+    [
         | tLiteralAddress:
             @OperandPushVariable
         | tLiteralInteger:
@@ -1564,7 +1564,14 @@ OperandPushExpression:
         | tRepeatString:
             @OperandRepeatStringPop
         | *:
-            >
+            >> no
+    ]
+    >> yes;
+
+OperandPushExpression:
+    {[ @OperandPushOperand
+        | yes: 
+        | no: >
     ]};
 
 
@@ -1979,14 +1986,6 @@ OperandPushExpressionAssignPopPop:
     % the L-value).
 
     {[
-        | tLiteralAddress:
-            @OperandPushVariable
-        | tLiteralInteger:
-            oOperandPushInteger
-        | tLiteralChar:
-            oOperandPushChar
-        | tLiteralBoolean:
-            oOperandPushBoolean
         | tAssignInteger:
             @OperandAssignIntegerPopPop
             >
@@ -1996,8 +1995,6 @@ OperandPushExpressionAssignPopPop:
         | tAssignBoolean:
             @OperandAssignBooleanPopPop
             >
-        | tSkipString:
-            @EmitString
         | tNegate:
             [
                 | tAssignInteger:
@@ -2038,8 +2035,6 @@ OperandPushExpressionAssignPopPop:
                 | *:
                     @OperandDividePop
             ]
-        | tModulus:
-            @OperandModPop
         | tNot:
             [
                 | tAssignBoolean:
@@ -2048,40 +2043,12 @@ OperandPushExpressionAssignPopPop:
                 | *:
                     @OperandNot
             ]
-        | tInfixOr:
-            @OperandInfixOr
-        | tOr:
-            @OperandOrPop
-        | tInfixAnd:
-            @OperandNot
-            @OperandInfixOr
-        | tAnd:
-            @OperandNot
-            @OperandOrPop
-            @OperandNot
-        | tEQ:
-            @OperandEqualPop
-        | tNE:
-            @OperandEqualPop
-            @OperandNot
-        | tGT:
-            @OperandGreaterPop
-        | tGE:
-            @OperandLessPop
-            @OperandNot
-        | tLT:
-            @OperandLessPop
-        | tLE:
-            @OperandGreaterPop
-            @OperandNot
-        | tChr:
-            @OperandChr
-        | tOrd:
-            @OperandOrd
-        | tEoln:
-            @OperandEolnFunction
-        | tEOF:
-            @OperandEofFunction
+        | *:
+            [ @OperandPushOperand
+                | yes:
+                | no:
+                    >>
+            ]
     ]};
 
 
