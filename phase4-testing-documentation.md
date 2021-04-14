@@ -57,6 +57,8 @@ of simple features within Like. The test cases are aptly named.
 * `add.pt` tests that `put` statements can print the addition of two integers
 * `put.pt` ensures that `put` statements work within the Like language
 * `putstr.pt` tests that strings can be printed using `put` statements
+* `subscript-integer.pt` tests that integer subscripting gets the correct value
+* `subscript-string.pt` tests that string subscripting gets the correct value
 
 ## string-operations
 The tests cases contained within this folder are to test the functionality of
