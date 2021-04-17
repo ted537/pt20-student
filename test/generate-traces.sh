@@ -1,8 +1,8 @@
 #!/bin/bash
 # generate all required ssltraces for evaluation
 
-coder_test_dirs="test/coder"
-semantic_test_dirs="$coder_test_dirs test/semantic test/examples"
+coder_test_dirs="test/coder test/examples"
+semantic_test_dirs="$coder_test_dirs test/semantic"
 parser_test_dirs="$semantic_test_dirs test/parser"
 scanner_test_dirs="$parser_test_dirs test/scanner"
 

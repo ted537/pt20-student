@@ -22,4 +22,4 @@ test/**/*.output
 *.coder
 *.log
 *.compile
-test/coder/**/*.s
+test/**/*.s

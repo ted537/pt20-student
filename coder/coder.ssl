@@ -1489,8 +1489,8 @@ EmitString:
     oEmitNone(iText)                    %       .text
     ;
 
-OperandPushExpression:
-    {[
+OperandPushOperand >> Boolean:
+    [
         | tLiteralAddress:
             @OperandPushVariable
         | tLiteralInteger:
@@ -1564,7 +1564,14 @@ OperandPushExpression:
         | tRepeatString:
             @OperandRepeatStringPop
         | *:
-            >
+            >> no
+    ]
+    >> yes;
+
+OperandPushExpression:
+    {[ @OperandPushOperand
+        | yes: 
+        | no: >
     ]};
 
 
@@ -1889,12 +1896,16 @@ OperandCheckedSubscriptNonManifestCharPop:
     oOperandSwapLeftAndDest                     % ... arraydesc, %T, lower
     @OperandSubtractPop                         %       subl lower, %T
 
-    % Scale subscript by string size              % ... arraydesc, %T
-    oOperandPushMode(mManifest)
-    oOperandSetLength(word)
-    oOperandSetValue(eight)
-    oEmitDouble(iShl)                           %       shll    $2, %T
-    oOperandPop                                 % ... arraydesc, %T
+    [ oOperandChooseLength
+        | string:
+            % Scale subscript by string size              % ... arraydesc, %T
+            oOperandPushMode(mManifest)
+            oOperandSetLength(word)
+            oOperandSetValue(eight)
+            oEmitDouble(iShl)                           %       shll    $2, %T
+            oOperandPop                                 % ... arraydesc, %T
+        | *: 
+    ]
 
     % Add normalized subscript to array address
     oOperandSwap                                % ... %T, arraydesc
@@ -1979,14 +1990,6 @@ OperandPushExpressionAssignPopPop:
     % the L-value).
 
     {[
-        | tLiteralAddress:
-            @OperandPushVariable
-        | tLiteralInteger:
-            oOperandPushInteger
-        | tLiteralChar:
-            oOperandPushChar
-        | tLiteralBoolean:
-            oOperandPushBoolean
         | tAssignInteger:
             @OperandAssignIntegerPopPop
             >
@@ -1996,8 +1999,6 @@ OperandPushExpressionAssignPopPop:
         | tAssignBoolean:
             @OperandAssignBooleanPopPop
             >
-        | tSkipString:
-            @EmitString
         | tNegate:
             [
                 | tAssignInteger:
@@ -2038,8 +2039,6 @@ OperandPushExpressionAssignPopPop:
                 | *:
                     @OperandDividePop
             ]
-        | tModulus:
-            @OperandModPop
         | tNot:
             [
                 | tAssignBoolean:
@@ -2048,40 +2047,12 @@ OperandPushExpressionAssignPopPop:
                 | *:
                     @OperandNot
             ]
-        | tInfixOr:
-            @OperandInfixOr
-        | tOr:
-            @OperandOrPop
-        | tInfixAnd:
-            @OperandNot
-            @OperandInfixOr
-        | tAnd:
-            @OperandNot
-            @OperandOrPop
-            @OperandNot
-        | tEQ:
-            @OperandEqualPop
-        | tNE:
-            @OperandEqualPop
-            @OperandNot
-        | tGT:
-            @OperandGreaterPop
-        | tGE:
-            @OperandLessPop
-            @OperandNot
-        | tLT:
-            @OperandLessPop
-        | tLE:
-            @OperandGreaterPop
-            @OperandNot
-        | tChr:
-            @OperandChr
-        | tOrd:
-            @OperandOrd
-        | tEoln:
-            @OperandEolnFunction
-        | tEOF:
-            @OperandEofFunction
+        | *:
+            [ @OperandPushOperand
+                | yes:
+                | no:
+                    >>
+            ]
     ]};
 
 
