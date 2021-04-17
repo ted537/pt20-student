@@ -97,7 +97,7 @@ main (argc, argv)
 
     arg = 0;
 
-    fprintf (stderr, "PT Pascal v5.0 (c) 2020 Queen's University, (c) 1980 University of Toronto\n");
+    fprintf (stderr, "Like v1.0 (c) 2021 Queen's University, (c) 1980 University of Toronto\n");
 
     if (argc == 1)  useerror ();
 

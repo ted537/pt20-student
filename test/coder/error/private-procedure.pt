@@ -1,0 +1,10 @@
+using output;
+
+pkg localProcedure is 
+    fun sayhi is 
+        put("hello world");
+        putln;
+    end;
+end;
+
+sayhi();
