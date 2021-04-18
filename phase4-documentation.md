@@ -13,6 +13,9 @@ oValuePop
 * These changes were necessary for initial value declarations to work for
 Like variables
 
+In `semantic.ssl` in the `IndexType` rule:
+* Fixed a mistake from Phase 3 wherein the type bounds were entered to the wrong type stack entry
+
 ## Changes specific to phase 4 specifications
 
 **Please use this convention when explaining changes**
@@ -133,6 +136,3 @@ OperandSubscriptCharPop:
     @OperandSubscriptNonManifestCharPop
     oOperandSetLength(byte);
 ```
-
-In `semantic.ssl` in the `IndexType` rule:
-* Fixed a mistake from Phase 3 wherein the type bounds were entered to the wrong type stack entry
