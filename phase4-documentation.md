@@ -136,3 +136,217 @@ OperandSubscriptCharPop:
     @OperandSubscriptNonManifestCharPop
     oOperandSetLength(byte);
 ```
+
+##String Operations
+Implement string operations: Length, Repeat, Concatenate and Substring
+
+New Trap codes are added in declarations to handle the string operations
+```
+        trConcatenate=103
+        trSubstring=104
+        trLength=105
+        trStringEq=107
+        trRepeatString=110
+```
+
+In `coder.ssl` in the `OperandPushOperand` rule:
+* All string operations added as cases
+```
+        | tLength:
+            @OperandLengthPop
+        | tStringEq:
+            @OperandStrEqPopPop
+        | tSubstring:
+            @OperandSubstrPopPopPop
+        | tConcatenate:
+            @OperandConcatenatePopPop
+        | tRepeatString:
+            @OperandRepeatStringPop
+```
+* Each of these links to a seperate function that will handle the operation
+
+In `coder.ssl` in the new `TempToScratch` rule:
+```
+TempToScratch:
+    oOperandPushMode(mScratchReg1)
+    oOperandSetLength(word)
+    oOperandPushTemp
+    oEmitDouble(iMov)
+    oOperandPop
+    oOperandPop;
+```
+and the new `ScratchToTemp` rule:
+```
+ScratchToTemp:
+    @OperandPushTempWord
+    oOperandPushMode(mScratchReg1)
+    oEmitDouble(iMov)
+    oOperandPop;
+```
+* These rules are used in all substring operations since they require that the address of the string remain in the temp register so the temp registers are not cleared
+
+In`coder.ssl` in the new `OperandLengthPop` rule:
+```
+OperandLengthPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop 
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trLength)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop argument
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(four)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TemptoScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+```
+* Support added to handle the string length (#) operation
+
+In `coder.ssl` in the new `OperandStrEqPopPop` rule:
+```
+OperandStrEqPopPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trStringEq)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop argument
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(four)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+    % move to scratch register
+    oOperandPushMode(mScratchReg1)
+    oOperandSetLength(word)
+    oOperandPushTemp
+    oEmitDouble(iMov)
+    oOperandPop
+    oOperandPop
+    
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+```
+* Support added to handle the boolean equality of strings
+
+In `coder.ssl` in the new `OperandSubstrPopPopPop` rule:
+```
+OperandSubstrPopPopPop:
+    @SaveTempRegsToStack
+    % pop args from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trSubstring)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop args
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(twelve)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+```
+* Support added for the new substring operation for strings
+
+In `coder.ssl` in the new `OperandConcatenatePopPop` rule:
+```
+OperandConcatenatePopPop: 
+    @SaveTempRegsToStack
+    % First string
+    @OperandForceToStack
+    oOperandPop
+    % Second string
+    @OperandForceToStack
+    oOperandPop
+    
+    % Concatenate String
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trConcatenate)
+    oEmitSingle(iCall)              % call pttrap 103
+    oOperandPop
+    
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(eight)
+    oEmitDouble(iAdd)               % addl $8, %esp
+    oOperandPop
+    oOperandPop
+    
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+```
+* Added support for new string concatenate operation
+
+In `coder.ssl` in the new `OperandRepeatStringPop` rule:
+```
+OperandRepeatStringPop:
+    @SaveTempRegsToStack
+    % move string address from operand stack to runtime stack
+    @OperandForceToStack
+    oOperandPop
+    @OperandForceToStack
+    oOperandPop
+    % call trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trRepeatString)
+    oEmitSingle(iCall)
+    oOperandPop
+    % pop arguements
+    oOperandPushMode(mStackReg)
+    oOperandSetLength(word)
+    oOperandPushMode(mManifest)
+    oOperandSetLength(word)
+    oOperandSetValue(eight)
+    oEmitDouble(iAdd)
+    oOperandPop
+    oOperandPop
+
+    @TempToScratch
+    @RestoreTempRegsFromStack
+    @ScratchToTemp
+    ;
+
+```
+* Added support for the new string repeat operation
