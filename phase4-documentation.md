@@ -137,7 +137,7 @@ OperandSubscriptCharPop:
     oOperandSetLength(byte);
 ```
 
-##String Operations
+## String Operations
 Implement string operations: Length, Repeat, Concatenate and Substring
 
 New Trap codes are added in declarations to handle the string operations
