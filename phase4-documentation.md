@@ -137,6 +137,101 @@ OperandSubscriptCharPop:
     oOperandSetLength(byte);
 ```
 
+## Strings
+Removal of handling for `tLiteralChar` and `tLiteralString` from both `coder.ssl` and `coder.pt`
+Extraction of handling for `tFetchChar` into its own case within the `OperandPushVariable` rule in `coder.ssl`
+```
+    [
+        | tFetchInteger:
+        | tFetchBoolean:
+            oOperandSetLength(byte)
+        | tFetchChar:
+            oOperandSetLength(string)
+        | *: 
+            % Value is not to be loaded
+    ] ;
+```
+
+Functionality for checking result size/length of subscript type in `OperandCheckedSubscriptNonManifestIntegerPop` rule in `coder.ssl`
+```
+    [ oOperandChooseLength
+        | word, byte:
+            oOperandSetValue(two)               % ... arraydesc, %T, 2
+        | string:
+            oOperandSetValue(eight)
+    ]
+````
+
+Modification of `OperandForceIntoTemp` rule in `coder.ssl`
+```
+        | *:
+            [ oOperandChooseLength
+                | byte:
+                    @OperandPushTempByte
+                | word:
+                    @OperandPushTempWord
+                | string:
+                    @OperandForceAddressIntoTemp
+                    >>
+            ]
+            oOperandSwap
+            oEmitDouble(iMov)   % mov(b) operand, dN
+            @OperandPopAndFreeTemp
+            oOperandSetMode(mTemp)
+```
+
+Modification of `OperandForceToStack` rule in `coder.ssl`
+```
+    [ oOperandChooseLength
+        | byte:
+                % can't push a byte on x86
+                @OperandForceIntoTemp
+                oOperandSetLength(word)
+        | word:
+        | string:
+                @OperandForceAddressIntoTemp
+    ]
+```
+
+Implemented `EmitString` rule in `coder.ssl`
+```
+EmitString:
+    % Emit string literal to data area
+    oEmitNone(iData)                    %       .data
+    tStringData
+    oEmitString                         % sNNN: .asciz  "SSSSS"
+    oEmitNone(iText)                    %       .text
+    ;
+```
+
+Modificaiton of `tSkipString` case within `OperandPushExpression` to call newly created `EmitString` rule
+
+Modification of `OperandAssignCharPopPop` rule in `coder.ssl`
+```
+OperandAssignCharPopPop:
+    % Generate code to assign the right (top) operand's value to
+    % the left (second) operand and pop both operands.
+    % get the string on the stack
+    oOperandSetLength(string)
+    @OperandForceToStack
+    oOperandPop
+    oOperandSetLength(string)
+    @OperandForceToStack
+    oOperandPop
+    % emit assignment trap
+    oOperandPushMode(mTrap)
+    oOperandSetValue(trAssignStr)
+    oEmitSingle(iCall)
+    oOperandPop;
+```
+
+Additon of `stringSize` within `coder.pt`
+Implement proper scaling of string type subscripts in the `coder.pt`
+```
+    if operandStkLength[operandStkTop-1] = string then
+        subscript := subscript * stringSize;
+```
+
 ## String Operations
 Implement string operations: Length, Repeat, Concatenate and Substring
 
