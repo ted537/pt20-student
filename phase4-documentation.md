@@ -18,13 +18,6 @@ In `semantic.ssl` in the `IndexType` rule:
 
 ## Changes specific to phase 4 specifications
 
-**Please use this convention when explaining changes**
-```
-Where - what file and rule
-How - What was included, include code snippet if appropriate
-Why - To match specifications
-```
-
 In `coder.ssl` in the input section
 * Added in new t-code instructions from the semantic phase
   * For example:
